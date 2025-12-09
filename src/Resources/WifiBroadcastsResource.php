@@ -29,6 +29,10 @@ class WifiBroadcastsResource extends BaseResource
      * @param int|null $limit Number of results per page (optional)
      * @param string|null $filter Filter expression (optional)
      * @return Response
+     * @throws \RuntimeException If site ID is not set
+     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
+     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
+     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
      */
     public function list(?int $page = null, ?int $limit = null, ?string $filter = null): Response
     {
@@ -43,6 +47,10 @@ class WifiBroadcastsResource extends BaseResource
      *
      * @param string $wifiBroadcastId The WiFi broadcast UUID
      * @return Response
+     * @throws \RuntimeException If site ID is not set
+     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
+     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
+     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
      */
     public function get(string $wifiBroadcastId): Response
     {
@@ -57,6 +65,10 @@ class WifiBroadcastsResource extends BaseResource
      *
      * @param array $data The WiFi broadcast configuration data
      * @return Response
+     * @throws \RuntimeException If site ID is not set
+     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (bad request, validation error, etc.)
+     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
+     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
      */
     public function create(array $data): Response
     {
@@ -72,6 +84,10 @@ class WifiBroadcastsResource extends BaseResource
      * @param string $wifiBroadcastId The WiFi broadcast UUID
      * @param array $data The updated WiFi broadcast configuration data
      * @return Response
+     * @throws \RuntimeException If site ID is not set
+     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (not found, bad request, etc.)
+     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
+     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
      */
     public function update(string $wifiBroadcastId, array $data): Response
     {
@@ -87,6 +103,10 @@ class WifiBroadcastsResource extends BaseResource
      * @param string $wifiBroadcastId The WiFi broadcast UUID
      * @param bool $force Force deletion (optional)
      * @return Response
+     * @throws \RuntimeException If site ID is not set
+     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (not found, conflict, etc.)
+     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
+     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
      */
     public function delete(string $wifiBroadcastId, bool $force = false): Response
     {

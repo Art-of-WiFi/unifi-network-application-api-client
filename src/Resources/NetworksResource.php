@@ -29,6 +29,10 @@ class NetworksResource extends BaseResource
      * @param int|null $limit Number of results per page (optional)
      * @param string|null $filter Filter expression (optional)
      * @return Response
+     * @throws \RuntimeException If site ID is not set
+     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
+     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
+     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
      */
     public function list(?int $page = null, ?int $limit = null, ?string $filter = null): Response
     {
@@ -43,6 +47,10 @@ class NetworksResource extends BaseResource
      *
      * @param string $networkId The network UUID
      * @return Response
+     * @throws \RuntimeException If site ID is not set
+     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
+     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
+     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
      */
     public function get(string $networkId): Response
     {
@@ -57,6 +65,10 @@ class NetworksResource extends BaseResource
      *
      * @param array $data The network configuration data
      * @return Response
+     * @throws \RuntimeException If site ID is not set
+     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (bad request, validation error, etc.)
+     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
+     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
      */
     public function create(array $data): Response
     {
@@ -72,6 +84,10 @@ class NetworksResource extends BaseResource
      * @param string $networkId The network UUID
      * @param array $data The updated network configuration data
      * @return Response
+     * @throws \RuntimeException If site ID is not set
+     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (not found, bad request, etc.)
+     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
+     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
      */
     public function update(string $networkId, array $data): Response
     {
@@ -87,6 +103,10 @@ class NetworksResource extends BaseResource
      * @param string $networkId The network UUID
      * @param bool $force Force deletion (optional)
      * @return Response
+     * @throws \RuntimeException If site ID is not set
+     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (not found, conflict, etc.)
+     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
+     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
      */
     public function delete(string $networkId, bool $force = false): Response
     {

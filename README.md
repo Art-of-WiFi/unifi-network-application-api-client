@@ -83,7 +83,7 @@ That's it! You're now connected to your UniFi Network Application.
 
 ### Setting a Site Context
 
-Most UniFi API operations require a site ID. You can set this once and it will be used for all subsequent calls:
+Most UniFi API operations require a site ID. You can set this once, and it will be used for all subsequent calls:
 
 ```php
 <?php
@@ -117,9 +117,9 @@ $device = $apiClient->devices()->get('device-uuid-here');
 // Get device statistics
 $stats = $apiClient->devices()->getStatistics('device-uuid-here');
 
-// Execute an action on a device (e.g., reboot)
+// Execute an action on a device (only RESTART is documented)
 $apiClient->devices()->executeAction('device-uuid-here', [
-    'action' => 'reboot'
+    'action' => 'RESTART'
 ]);
 ```
 
@@ -137,8 +137,8 @@ $apiClient->clients()->get('client-uuid-or-mac');
 
 // Authorize a guest client
 $apiClient->clients()->executeAction('client-uuid', [
-    'action' => 'authorize-guest',
-    'minutes' => 60  // Grant access for 60 minutes
+    'action' => 'AUTHORIZE_GUEST_ACCESS',
+    'timeLimitMinutes' => 60  // Grant access for 60 minutes
 ]);
 ```
 
@@ -150,12 +150,12 @@ $apiClient->clients()->executeAction('client-uuid', [
 // List all networks
 $networks = $apiClient->networks()->list();
 
-// Create a new network
+// Create a new UNMANAGED network (simple VLAN)
 $apiClient->networks()->create([
+    'management' => 'UNMANAGED',
     'name' => 'Guest Network',
-    'vlan' => 10,
-    'dhcp_enabled' => true,
-    // ... additional configuration
+    'enabled' => true,
+    'vlanId' => 10
 ]);
 
 // Update a network
@@ -175,17 +175,12 @@ $apiClient->networks()->delete('network-uuid');
 // List all WiFi broadcasts (SSIDs)
 $wifiNetworks = $apiClient->wifiBroadcasts()->list();
 
-// Create a new WiFi network
-$apiClient->wifiBroadcasts()->create([
-    'name' => 'Guest WiFi',
-    'security' => 'wpa2',
-    'password' => 'SecurePassword123',
-    // ... additional configuration
-]);
+// Create a new WiFi network (requires complex nested structure - see examples)
+// Refer to examples/05-wifi-management.php for complete structure
 
 // Update WiFi settings
 $apiClient->wifiBroadcasts()->update('wifi-uuid', [
-    'password' => 'NewPassword456'
+    'name' => 'Updated WiFi Name'
 ]);
 
 // Delete a WiFi network
@@ -200,8 +195,8 @@ $apiClient->wifiBroadcasts()->delete('wifi-uuid');
 // Create vouchers for guest access
 $apiClient->hotspot()->createVouchers([
     'count' => 10,
-    'duration' => 480,  // Minutes
-    'quota' => 1        // Single use
+    'timeLimitMinutes' => 480,
+    'authorizedGuestLimit' => 1  // How many guests can use same voucher
 ]);
 
 // List all vouchers
@@ -254,17 +249,20 @@ $zones = $apiClient->firewall()->listZones();
 // Create a firewall zone
 $apiClient->firewall()->createZone([
     'name' => 'DMZ',
-    // ... configuration
+    'networkIds' => []  // Array of network UUIDs
 ]);
 
 // List ACL rules
 $rules = $apiClient->aclRules()->list();
 
-// Create an ACL rule
+// Create an ACL rule (requires complex structure - see API docs)
 $apiClient->aclRules()->create([
+    'type' => 'IPV4',  // or 'MAC'
     'name' => 'Block Social Media',
-    'action' => 'drop',
-    // ... rule configuration
+    'enabled' => true,
+    'action' => 'BLOCK',  // or 'ALLOW'
+    'index' => 1000,
+    // ... additional filters required
 ]);
 ```
 
@@ -298,11 +296,51 @@ $response = $apiClient->devices()->listAdopted(
     filter: "name.like('AP-*')"
 );
 
-// Filter clients by connection type
+// Filter clients by type and access (wireless guests only)
 $response = $apiClient->clients()->list(
-    filter: "and(is_wired.eq(false), is_guest.eq(true))"
+    filter: 'and(type.eq("WIRELESS"), access.type.eq("GUEST"))'
 );
 ```
+
+#### Client Filterable Properties
+
+According to the official API specification, the following properties are filterable for clients:
+
+- `id` (UUID) - `eq`, `ne`, `in`, `notIn`
+- `type` (STRING) - `eq`, `ne`, `in`, `notIn` (Valid values: `WIRED`, `WIRELESS`, `VPN`, `TELEPORT`)
+- `macAddress` (STRING) - `isNull`, `isNotNull`, `eq`, `ne`, `in`, `notIn`
+- `ipAddress` (STRING) - `isNull`, `isNotNull`, `eq`, `ne`, `in`, `notIn`
+- `connectedAt` (TIMESTAMP) - `isNull`, `isNotNull`, `eq`, `ne`, `gt`, `ge`, `lt`, `le`
+- `access.type` (STRING) - `eq`, `ne`, `in`, `notIn` (Valid values: `DEFAULT`, `GUEST`)
+- `access.authorized` (BOOLEAN) - `isNull`, `isNotNull`, `eq`, `ne`
+
+#### Device Filterable Properties
+
+According to the official API specification, the following properties are filterable for adopted devices:
+
+- `id` (UUID) - `eq`, `ne`, `in`, `notIn`
+- `macAddress` (STRING) - `eq`, `ne`, `in`, `notIn`
+- `ipAddress` (STRING) - `eq`, `ne`, `in`, `notIn`
+- `name` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`
+- `model` (STRING) - `eq`, `ne`, `in`, `notIn`
+- `state` (STRING) - `eq`, `ne`, `in`, `notIn`
+- `supported` (BOOLEAN) - `eq`, `ne`
+- `firmwareVersion` (STRING) - `isNull`, `isNotNull`, `eq`, `ne`, `gt`, `ge`, `lt`, `le`, `like`, `in`, `notIn`
+- `firmwareUpdatable` (BOOLEAN) - `eq`, `ne`
+- `features` (SET(STRING)) - `isEmpty`, `contains`, `containsAny`, `containsAll`, `containsExactly`
+- `interfaces` (SET(STRING)) - `isEmpty`, `contains`, `containsAny`, `containsAll`, `containsExactly`
+
+#### Network Filterable Properties
+
+According to the official API specification, the following properties are filterable for networks:
+
+- `management` (STRING) - `eq`, `ne`, `in`, `notIn`
+- `id` (UUID) - `eq`, `ne`, `in`, `notIn`
+- `name` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`
+- `enabled` (BOOLEAN) - `eq`, `ne`
+- `vlanId` (INTEGER) - `eq`, `ne`, `gt`, `ge`, `lt`, `le`, `in`, `notIn`
+- `deviceId` (UUID) - `eq`, `ne`, `in`, `notIn`, `isNull`, `isNotNull`
+- `metadata.origin` (STRING) - `eq`, `ne`, `in`, `notIn`
 
 For full filtering syntax documentation, see the [UniFi API Filtering Guide](https://developer.ui.com).
 

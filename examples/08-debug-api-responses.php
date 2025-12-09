@@ -8,9 +8,9 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$config = require_once __DIR__ . '/config.php';
-
 use ArtOfWiFi\UnifiNetworkApplicationApi\UnifiClient;
+
+$config = require_once __DIR__ . '/config.php';
 
 // Configuration - Update the values in the config.php file
 $controllerUrl = $config['base_url'];

@@ -27,7 +27,7 @@ echo str_repeat('=', 50) . "\n\n";
 // 1. Basic error handling
 echo "1. Basic Error Handling\n";
 try {
-    $apiClient = new UnifiClient($controllerUrl, $apiKey, false);
+    $apiClient = new UnifiClient($controllerUrl, $apiKey, $verifySsl);
     $apiClient->setSiteId($siteId);
 
     // Attempt to get a device with an invalid ID
@@ -56,7 +56,7 @@ echo "\n";
 // 2. Handling invalid site ID
 echo "2. Handling Invalid Site ID\n";
 try {
-    $apiClient = new UnifiClient($controllerUrl, $apiKey, false);
+    $apiClient = new UnifiClient($controllerUrl, $apiKey, $verifySsl);
     $apiClient->setSiteId('00000000-0000-0000-0000-000000000000');  // Invalid site ID
 
     echo "   Attempting to list devices for invalid site...\n";
@@ -75,7 +75,7 @@ echo "\n";
 // 3. Handling missing site ID
 echo "3. Handling Missing Site ID\n";
 try {
-    $apiClient = new UnifiClient($controllerUrl, $apiKey, false);
+    $apiClient = new UnifiClient($controllerUrl, $apiKey, $verifySsl);
     // Note: We're not setting a site ID here
 
     echo "   Attempting to list devices without setting site ID...\n";
@@ -95,7 +95,7 @@ echo "\n";
 // 4. Handling authentication errors
 echo "4. Handling Authentication Errors\n";
 try {
-    $badClient = new UnifiClient($controllerUrl, 'invalid-api-key-12345', false);
+    $badClient = new UnifiClient($controllerUrl, 'invalid-api-key-12345', $verifySsl);
     $badClient->setSiteId($siteId);
 
     echo "   Attempting to connect with invalid API key...\n";
@@ -136,7 +136,7 @@ function getDevicesSafely(UnifiClient $apiClient): array
     }
 }
 
-$apiClient = new UnifiClient($controllerUrl, $apiKey, false);
+$apiClient = new UnifiClient($controllerUrl, $apiKey, $verifySsl);
 $apiClient->setSiteId($siteId);
 
 $devices = getDevicesSafely($apiClient);
@@ -145,7 +145,7 @@ echo "   Retrieved " . count($devices) . " devices (with error handling)\n\n";
 // 6. Checking response status before processing
 echo "6. Checking Response Status\n";
 try {
-    $apiClient = new UnifiClient($controllerUrl, $apiKey, false);
+    $apiClient = new UnifiClient($controllerUrl, $apiKey, $verifySsl);
     $apiClient->setSiteId($siteId);
 
     $response = $apiClient->devices()->listAdopted();

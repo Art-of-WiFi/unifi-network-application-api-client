@@ -8,9 +8,9 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$config = require_once __DIR__ . '/config.php';
-
 use ArtOfWiFi\UnifiNetworkApplicationApi\UnifiClient;
+
+$config = require_once __DIR__ . '/config.php';
 
 // Configuration - Update the values in the config.php file
 $controllerUrl = $config['base_url'];
@@ -19,7 +19,7 @@ $siteId        = $config['site_id'];
 $verifySsl     = $config['verify_ssl'];
 
 // Initialize the API client
-$apiClient = new UnifiClient($controllerUrl, $apiKey, false);
+$apiClient = new UnifiClient($controllerUrl, $apiKey, $verifySsl);
 
 echo "UniFi API Client - Supporting Resources Example\n";
 echo str_repeat('=', 50) . "\n\n";
@@ -30,8 +30,12 @@ echo str_repeat('-', 50) . "\n\n";
 
 // 1. List DPI Categories
 echo "1. DPI (Deep Packet Inspection) Categories:\n";
-$categoriesResponse = $apiClient->supportingResources()->listDpiCategories(limit: 10);
-$categories = $categoriesResponse->json();
+try {
+    $categoriesResponse = $apiClient->supportingResources()->listDpiCategories(limit: 10);
+    $categories         = $categoriesResponse->json();
+} catch (Exception $e) {
+    echo "   Error: " . $e->getMessage() . "\n";
+}
 
 if (isset($categories['data']) && count($categories['data']) > 0) {
     echo "   Total categories: " . ($categories['totalCount'] ?? count($categories['data'])) . "\n";
@@ -48,8 +52,12 @@ echo "\n";
 
 // 2. List DPI Applications
 echo "2. DPI Applications (sample):\n";
-$appsResponse = $apiClient->supportingResources()->listDpiApplications(limit: 5);
-$apps = $appsResponse->json();
+try {
+    $appsResponse = $apiClient->supportingResources()->listDpiApplications(limit: 5);
+    $apps = $appsResponse->json();
+} catch (Exception $e) {
+    echo "   Error: " . $e->getMessage() . "\n";
+}
 
 if (isset($apps['data']) && count($apps['data']) > 0) {
     echo "   Total applications: " . ($apps['totalCount'] ?? count($apps['data'])) . "\n";
@@ -66,8 +74,12 @@ echo "\n";
 
 // 3. List Countries
 echo "3. Countries (ISO codes, sample):\n";
-$countriesResponse = $apiClient->supportingResources()->listCountries(limit: 10);
-$countries = $countriesResponse->json();
+try {
+    $countriesResponse = $apiClient->supportingResources()->listCountries(limit: 10);
+    $countries = $countriesResponse->json();
+} catch (Exception $e) {
+    echo "   Error: " . $e->getMessage() . "\n";
+}
 
 if (isset($countries['data']) && count($countries['data']) > 0) {
     echo "   Total countries: " . ($countries['totalCount'] ?? count($countries['data'])) . "\n";
@@ -105,7 +117,7 @@ try {
     } else {
         echo "   No WAN interfaces found.\n";
     }
-} catch (\Exception $e) {
+} catch (Exception $e) {
     echo "   Error: " . $e->getMessage() . "\n";
 }
 echo "\n";
@@ -125,7 +137,7 @@ try {
     } else {
         echo "   No RADIUS profiles found.\n";
     }
-} catch (\Exception $e) {
+} catch (Exception $e) {
     echo "   Error: " . $e->getMessage() . "\n";
 }
 echo "\n";
@@ -146,7 +158,7 @@ try {
     } else {
         echo "   No device tags found.\n";
     }
-} catch (\Exception $e) {
+} catch (Exception $e) {
     echo "   Error: " . $e->getMessage() . "\n";
 }
 echo "\n";
@@ -166,7 +178,7 @@ try {
     } else {
         echo "   No VPN tunnels found.\n";
     }
-} catch (\Exception $e) {
+} catch (Exception $e) {
     echo "   Error: " . $e->getMessage() . "\n";
 }
 echo "\n";
@@ -187,18 +199,28 @@ try {
     } else {
         echo "   No VPN servers found.\n";
     }
-} catch (\Exception $e) {
+} catch (Exception $e) {
     echo "   Error: " . $e->getMessage() . "\n";
 }
 echo "\n";
 
-// 9. Filtering example
-echo "9. Filtering Example:\n";
+// 9. Filtering examples
+echo "9. Filtering Examples (based on official API filterable properties):\n";
+
+echo "   Countries filterable properties: code (STRING), name (STRING)\n";
 echo "   Filter countries by name:\n";
 echo "   \$apiClient->supportingResources()->listCountries(filter: \"name.like('United*')\");\n\n";
 
-echo "   Filter DPI applications by category:\n";
-echo "   \$apiClient->supportingResources()->listDpiApplications(filter: \"category.eq('Social')\");\n\n";
+echo "   Filter countries by code:\n";
+echo "   \$apiClient->supportingResources()->listCountries(filter: 'code.eq(\"US\")');\n\n";
+
+echo "   DPI Applications filterable properties: id (INTEGER), name (STRING)\n";
+echo "   Filter DPI applications by name:\n";
+echo "   \$apiClient->supportingResources()->listDpiApplications(filter: \"name.like('Facebook%')\");\n\n";
+
+echo "   DPI Categories filterable properties: id (INTEGER), name (STRING)\n";
+echo "   Filter DPI categories by name:\n";
+echo "   \$apiClient->supportingResources()->listDpiCategories(filter: \"name.like('Social%')\");\n\n";
 
 echo str_repeat('=', 50) . "\n";
 echo "Example completed successfully!\n\n";

@@ -29,6 +29,10 @@ class HotspotResource extends BaseResource
      * @param int|null $limit Number of results per page (optional)
      * @param string|null $filter Filter expression (optional)
      * @return Response
+     * @throws \RuntimeException If site ID is not set
+     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
+     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
+     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
      */
     public function listVouchers(?int $page = null, ?int $limit = null, ?string $filter = null): Response
     {
@@ -43,6 +47,10 @@ class HotspotResource extends BaseResource
      *
      * @param string $voucherId The voucher UUID
      * @return Response
+     * @throws \RuntimeException If site ID is not set
+     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
+     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
+     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
      */
     public function getVoucher(string $voucherId): Response
     {
@@ -57,6 +65,10 @@ class HotspotResource extends BaseResource
      *
      * @param array $data The voucher configuration data
      * @return Response
+     * @throws \RuntimeException If site ID is not set
+     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (bad request, validation error, etc.)
+     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
+     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
      */
     public function createVouchers(array $data): Response
     {
@@ -71,6 +83,10 @@ class HotspotResource extends BaseResource
      *
      * @param string $voucherId The voucher UUID
      * @return Response
+     * @throws \RuntimeException If site ID is not set
+     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (not found, etc.)
+     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
+     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
      */
     public function deleteVoucher(string $voucherId): Response
     {
@@ -85,6 +101,10 @@ class HotspotResource extends BaseResource
      *
      * @param string|null $filter Filter expression (optional)
      * @return Response
+     * @throws \RuntimeException If site ID is not set
+     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (bad request, etc.)
+     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
+     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
      */
     public function deleteVouchers(?string $filter = null): Response
     {

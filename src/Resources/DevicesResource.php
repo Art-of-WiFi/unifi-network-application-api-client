@@ -29,6 +29,10 @@ class DevicesResource extends BaseResource
      * @param int|null $limit Number of results per page (optional)
      * @param string|null $filter Filter expression (optional)
      * @return Response
+     * @throws \RuntimeException If site ID is not set
+     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
+     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
+     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
      */
     public function listAdopted(?int $page = null, ?int $limit = null, ?string $filter = null): Response
     {
@@ -46,6 +50,9 @@ class DevicesResource extends BaseResource
      * @param int|null $limit Number of results per page (optional)
      * @param string|null $filter Filter expression (optional)
      * @return Response
+     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
+     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
+     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
      */
     public function listPending(?int $page = null, ?int $limit = null, ?string $filter = null): Response
     {
@@ -59,6 +66,10 @@ class DevicesResource extends BaseResource
      *
      * @param string $deviceId The device UUID
      * @return Response
+     * @throws \RuntimeException If site ID is not set
+     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
+     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
+     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
      */
     public function get(string $deviceId): Response
     {
@@ -73,6 +84,10 @@ class DevicesResource extends BaseResource
      *
      * @param string $deviceId The device UUID
      * @return Response
+     * @throws \RuntimeException If site ID is not set
+     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
+     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
+     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
      */
     public function getStatistics(string $deviceId): Response
     {
@@ -83,11 +98,16 @@ class DevicesResource extends BaseResource
     /**
      * Execute an action on a device
      *
-     * Executes an action on an adopted device (e.g., reboot, locate, upgrade).
+     * Executes an action on an adopted device. According to the API specification,
+     * the only officially documented action is RESTART.
      *
      * @param string $deviceId The device UUID
-     * @param array $action The action payload
+     * @param array $action The action payload (e.g., ['action' => 'RESTART'])
      * @return Response
+     * @throws \RuntimeException If site ID is not set
+     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (not found, bad request, etc.)
+     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
+     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
      */
     public function executeAction(string $deviceId, array $action): Response
     {
@@ -104,6 +124,10 @@ class DevicesResource extends BaseResource
      * @param int $portIdx The port index (0-based)
      * @param array $action The action payload
      * @return Response
+     * @throws \RuntimeException If site ID is not set
+     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (not found, bad request, etc.)
+     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
+     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
      */
     public function executePortAction(string $deviceId, int $portIdx, array $action): Response
     {
