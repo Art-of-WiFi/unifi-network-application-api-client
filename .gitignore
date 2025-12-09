@@ -12,8 +12,10 @@ composer.lock
 composer.phar
 
 # IDE & Editor files
-.idea/
-.vscode/
+.idea
+.idea/*
+.vscode
+.vscode/*
 *.sublime-project
 *.sublime-workspace
 .DS_Store
