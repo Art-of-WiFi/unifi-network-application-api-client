@@ -1,0 +1,50 @@
+{
+    "name": "art-of-wifi/unifi-network-application-api-client",
+    "description": "A PHP API client for the official UniFi Network Application API, built on Saloon with a fluent interface for easy integration",
+    "type": "library",
+    "keywords": [
+        "unifi",
+        "ubiquiti",
+        "network",
+        "api",
+        "api-client",
+        "saloon",
+        "unifi-controller",
+        "unifi-network"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Art of WiFi",
+            "email": "info@artofwifi.net"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "^7.5",
+        "saloonphp/saloon": "^3.14"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "phpstan/phpstan": "^1.10",
+        "friendsofphp/php-cs-fixer": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ArtOfWiFi\\UnifiNetworkApplicationApi\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ArtOfWiFi\\UnifiNetworkApplicationApi\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true,
+        "optimize-autoloader": true
+    }
+}
