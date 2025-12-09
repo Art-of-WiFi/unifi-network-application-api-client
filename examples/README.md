@@ -8,10 +8,7 @@ Before running these examples, make sure you have:
 
 1. Installed the package via Composer: `composer install`
 2. Generated an API key from your UniFi Network Application (Settings → Integrations)
-3. Updated the configuration variables in each example:
-   - `$controllerUrl` - Your UniFi Controller URL
-   - `$apiKey` - Your generated API key
-   - `$siteId` - Your site ID (obtain from example 01)
+3. Created a copy of the `config-template.php` file as `config.php` and updated it with your controller details.
 
 ## Examples Overview
 
@@ -106,21 +103,21 @@ These are commented out for your safety. **Read and understand the code before u
 
 ### Configuration
 
-Update the configuration variables at the top of each file:
+Update the configuration variables in your own copy of the config-template.php file:
 
 ```php
-$controllerUrl = 'https://192.168.1.1';  // Your controller URL
-$apiKey = 'your-api-key-here';            // Your API key
-$siteId = 'your-site-id-here';            // Your site ID (from example 01)
+return [
+    'base_url'   => 'https://mycontroller.com:443', // Your UniFi Controller URL
+    'api_key'    => 'your-api-key-here', // Your API key from the Integrations page
+    'site_id'    => 'your-site-id-here', // The UUID of the site to use in specific examples (from example 01)
+    'verify_ssl' => false // Set to true if you have a valid SSL certificate installed on the controller
+];
 ```
 
 ### SSL Verification
 
-The examples use `verifySsl: false` for local development with self-signed certificates. For production environments with valid SSL certificates, set this to `true`:
+The examples use the `verify_ssl` value from your config.php. For local development with self-signed certificates we recommend setting that value to `false`. For production environments with valid SSL certificates, set this to `true`:
 
-```php
-$apiClient = new UnifiClient($controllerUrl, $apiKey, verifySsl: true);
-```
 
 ## Need Help?
 

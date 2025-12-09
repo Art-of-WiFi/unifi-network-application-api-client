@@ -33,7 +33,7 @@ try {
     // Attempt to get a device with an invalid ID
     echo "   Attempting to get device with invalid ID...\n";
     $response = $apiClient->devices()->get('invalid-uuid-12345');
-    $device = $response->json();
+    $device   = $response->json();
 
     echo "   Success! Device found.\n";
 } catch (ClientException $e) {
@@ -61,7 +61,7 @@ try {
 
     echo "   Attempting to list devices for invalid site...\n";
     $response = $apiClient->devices()->listAdopted();
-    $devices = $response->json();
+    $devices  = $response->json();
 
     echo "   Success! Found " . count($devices['data'] ?? []) . " devices.\n";
 } catch (ClientException $e) {
@@ -80,7 +80,7 @@ try {
 
     echo "   Attempting to list devices without setting site ID...\n";
     $response = $apiClient->devices()->listAdopted();
-    $devices = $response->json();
+    $devices  = $response->json();
 
     echo "   Success! Found " . count($devices['data'] ?? []) . " devices.\n";
 } catch (\RuntimeException $e) {
@@ -100,7 +100,7 @@ try {
 
     echo "   Attempting to connect with invalid API key...\n";
     $response = $badClient->sites()->list();
-    $sites = $response->json();
+    $sites    = $response->json();
 
     echo "   Success! Found " . count($sites['data'] ?? []) . " sites.\n";
 } catch (ClientException $e) {

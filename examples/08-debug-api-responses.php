@@ -96,15 +96,15 @@ curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_SSL_VERIFYPEER => $verifySsl,
     CURLOPT_SSL_VERIFYHOST => $verifySsl ? 2 : 0,
-    CURLOPT_HTTPHEADER => [
+    CURLOPT_HTTPHEADER     => [
         'X-API-KEY: ' . $apiKey,
         'Accept: application/json',
     ],
 ]);
 
 $curlResponse = curl_exec($ch);
-$curlInfo = curl_getinfo($ch);
-$curlError = curl_error($ch);
+$curlInfo     = curl_getinfo($ch);
+$curlError    = curl_error($ch);
 curl_close($ch);
 
 echo "cURL HTTP Code: " . $curlInfo['http_code'] . "\n";

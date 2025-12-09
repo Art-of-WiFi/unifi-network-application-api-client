@@ -42,7 +42,7 @@ if (isset($categories['data']) && count($categories['data']) > 0) {
     echo "   First 10 categories:\n";
     foreach (array_slice($categories['data'], 0, 10) as $category) {
         $name = $category['name'] ?? 'Unknown';
-        $id = $category['id'] ?? 'N/A';
+        $id   = $category['id'] ?? 'N/A';
         echo "   - {$name} (ID: {$id})\n";
     }
 } else {
@@ -54,7 +54,7 @@ echo "\n";
 echo "2. DPI Applications (sample):\n";
 try {
     $appsResponse = $apiClient->supportingResources()->listDpiApplications(limit: 5);
-    $apps = $appsResponse->json();
+    $apps         = $appsResponse->json();
 } catch (Exception $e) {
     echo "   Error: " . $e->getMessage() . "\n";
 }
@@ -63,7 +63,7 @@ if (isset($apps['data']) && count($apps['data']) > 0) {
     echo "   Total applications: " . ($apps['totalCount'] ?? count($apps['data'])) . "\n";
     echo "   Sample applications:\n";
     foreach (array_slice($apps['data'], 0, 5) as $app) {
-        $name = $app['name'] ?? 'Unknown';
+        $name     = $app['name'] ?? 'Unknown';
         $category = $app['category'] ?? 'N/A';
         echo "   - {$name} (Category: {$category})\n";
     }
@@ -76,7 +76,7 @@ echo "\n";
 echo "3. Countries (ISO codes, sample):\n";
 try {
     $countriesResponse = $apiClient->supportingResources()->listCountries(limit: 10);
-    $countries = $countriesResponse->json();
+    $countries         = $countriesResponse->json();
 } catch (Exception $e) {
     echo "   Error: " . $e->getMessage() . "\n";
 }
@@ -105,12 +105,12 @@ $apiClient->setSiteId($siteId);
 echo "4. WAN Interfaces:\n";
 try {
     $wansResponse = $apiClient->supportingResources()->listWanInterfaces();
-    $wans = $wansResponse->json();
+    $wans         = $wansResponse->json();
 
     if (isset($wans['data']) && count($wans['data']) > 0) {
         foreach ($wans['data'] as $wan) {
             $name = $wan['name'] ?? 'Unknown';
-            $id = $wan['id'] ?? 'N/A';
+            $id   = $wan['id'] ?? 'N/A';
             $type = $wan['type'] ?? 'N/A';
             echo "   - {$name} (ID: {$id}, Type: {$type})\n";
         }
@@ -131,7 +131,7 @@ try {
     if (isset($radiusProfiles['data']) && count($radiusProfiles['data']) > 0) {
         foreach ($radiusProfiles['data'] as $profile) {
             $name = $profile['name'] ?? 'Unknown';
-            $id = $profile['id'] ?? 'N/A';
+            $id   = $profile['id'] ?? 'N/A';
             echo "   - {$name} (ID: {$id})\n";
         }
     } else {
@@ -146,12 +146,12 @@ echo "\n";
 echo "6. Device Tags:\n";
 try {
     $tagsResponse = $apiClient->supportingResources()->listDeviceTags();
-    $tags = $tagsResponse->json();
+    $tags         = $tagsResponse->json();
 
     if (isset($tags['data']) && count($tags['data']) > 0) {
         foreach ($tags['data'] as $tag) {
-            $name = $tag['name'] ?? 'Unknown';
-            $id = $tag['id'] ?? 'N/A';
+            $name  = $tag['name'] ?? 'Unknown';
+            $id    = $tag['id'] ?? 'N/A';
             $color = $tag['color'] ?? 'N/A';
             echo "   - {$name} (ID: {$id}, Color: {$color})\n";
         }
@@ -167,7 +167,7 @@ echo "\n";
 echo "7. Site-to-Site VPN Tunnels:\n";
 try {
     $tunnelsResponse = $apiClient->supportingResources()->listSiteToSiteVpnTunnels();
-    $tunnels = $tunnelsResponse->json();
+    $tunnels         = $tunnelsResponse->json();
 
     if (isset($tunnels['data']) && count($tunnels['data']) > 0) {
         foreach ($tunnels['data'] as $tunnel) {
@@ -187,12 +187,12 @@ echo "\n";
 echo "8. VPN Servers:\n";
 try {
     $serversResponse = $apiClient->supportingResources()->listVpnServers();
-    $servers = $serversResponse->json();
+    $servers         = $serversResponse->json();
 
     if (isset($servers['data']) && count($servers['data']) > 0) {
         foreach ($servers['data'] as $server) {
-            $name = $server['name'] ?? 'Unknown';
-            $type = $server['type'] ?? 'N/A';
+            $name    = $server['name'] ?? 'Unknown';
+            $type    = $server['type'] ?? 'N/A';
             $enabled = ($server['enabled'] ?? false) ? 'Enabled' : 'Disabled';
             echo "   - {$name} (Type: {$type}, Status: {$enabled})\n";
         }
