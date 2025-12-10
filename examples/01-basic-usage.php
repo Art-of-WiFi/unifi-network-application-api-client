@@ -41,7 +41,7 @@ try {
             echo '   ' . str_repeat('-', 50) . "\n";
             echo "   Site: {$site['name']}\n";
             echo '   ' . str_repeat('-', 50) . "\n";
-            echo "   ID: {$site['id']})\n";
+            echo "   ID: {$site['id']}\n";
             echo "   Description: " . ($site['description'] ?? 'No description') . "\n";
 
             $siteId = $site['id'];

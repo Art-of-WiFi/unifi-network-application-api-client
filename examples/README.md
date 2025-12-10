@@ -85,6 +85,28 @@ Working with reference data endpoints:
 - Listing device tags
 - Viewing VPN configurations
 
+### 08. Debug API Responses
+**File:** `08-debug-api-responses.php`
+
+Debugging and inspecting API responses:
+- Viewing raw API response data
+- Understanding response structure
+- Debugging connection issues
+- Inspecting headers and status codes
+
+### 09. Filter Builders (NEW!)
+**File:** `09-filter-builders.php`
+
+Using type-safe filter builders for better code:
+- **Countries filter** (easy to test - no site ID required!)
+- Device filters with property-specific methods
+- Client filters with type-safe enums
+- Complex filters with AND/OR logic
+- Preset filters for common use cases
+- Comparison of raw strings vs filter builders
+
+**This example works immediately without site configuration - perfect for testing!**
+
 ## Running the Examples
 
 Each example is a standalone PHP script that can be run from the command line:
