@@ -7,6 +7,11 @@ namespace ArtOfWiFi\UnifiNetworkApplicationApi\Resources;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Clients\GetConnectedClientsRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Clients\GetClientDetailsRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Clients\ExecuteClientActionRequest;
+use RuntimeException;
+use Saloon\Exceptions\Request\ClientException;
+use Saloon\Exceptions\Request\FatalRequestException;
+use Saloon\Exceptions\Request\RequestException;
+use Saloon\Exceptions\Request\ServerException;
 use Saloon\Http\Response;
 
 /**
@@ -26,10 +31,10 @@ class ClientsResource extends BaseResource
      * @param int|null $limit Number of results per page (optional)
      * @param string|null $filter Filter expression (optional)
      * @return Response
-     * @throws \RuntimeException If site ID is not set
-     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
-     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function list(?int $page = null, ?int $limit = null, ?string $filter = null): Response
     {
@@ -44,10 +49,10 @@ class ClientsResource extends BaseResource
      *
      * @param string $clientId The client UUID or MAC address
      * @return Response
-     * @throws \RuntimeException If site ID is not set
-     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
-     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
-     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function get(string $clientId): Response
     {
@@ -65,10 +70,10 @@ class ClientsResource extends BaseResource
      * @param string $clientId The client UUID or MAC address
      * @param array $action The action payload (e.g., ['action' => 'AUTHORIZE_GUEST_ACCESS', 'timeLimitMinutes' => 480])
      * @return Response
-     * @throws \RuntimeException If site ID is not set
-     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (not found, bad request, etc.)
-     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
-     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (not found, bad request, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function executeAction(string $clientId, array $action): Response
     {

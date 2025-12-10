@@ -29,7 +29,7 @@ try {
     $appInfo = $apiClient->applicationInfo()->get();
     $info    = $appInfo->json();
 
-    echo "   Controller Version: " . ($info['version'] ?? 'Unknown') . "\n";
+    echo "   Controller Version: " . ($info['applicationVersion'] ?? 'Unknown') . "\n";
     echo "   Status: Connected\n\n";// List all sites
     echo "2. Listing all sites...\n";
 
@@ -61,10 +61,11 @@ try {
             if ($deviceCount > 0) {
                 echo "     Devices:\n";
                 foreach ($devices['data'] as $device) {
-                    $name  = $device['name'] ?? 'Unnamed Device';
-                    $model = $device['model'] ?? 'Unknown Model';
-                    $type  = $device['type'] ?? 'Unknown Type';
-                    echo "     - {$name} ({$model}, {$type})\n";
+                    $name     = $device['name'] ?? 'Unnamed Device';
+                    $model    = $device['model'] ?? 'Unknown Model';
+                    $state    = $device['state'] ?? 'Unknown State';
+                    $firmware = $device['firmwareVersion'] ?? 'Unknown Firmware';
+                    echo "     - {$name} ({$model}, {$state}, {$firmware})\n";
                 }
             }
 

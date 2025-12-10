@@ -270,15 +270,33 @@ $apiClient->aclRules()->create([
 
 ### Pagination
 
-Many list endpoints support pagination:
+Many list endpoints support pagination. Most endpoints use `page` for pagination, but some use `offset`:
 
+**Endpoints using `page` parameter:**
 ```php
 <?php
 
-// Get page 2 with 50 results per page
+// Most endpoints use page-based pagination
 $response = $apiClient->devices()->listAdopted(
     page: 2,
     limit: 50
+);
+```
+
+**Endpoints using `offset` parameter:**
+```php
+<?php
+
+// These specific endpoints use offset-based pagination:
+// - sites()->list()
+// - devices()->listPending()
+// - supportingResources()->listCountries()
+// - supportingResources()->listDpiCategories()
+// - supportingResources()->listDpiApplications()
+
+$response = $apiClient->sites()->list(
+    offset: 100,  // Skip first 100 results
+    limit: 50     // Get 50 results
 );
 
 $data = $response->json();
@@ -342,7 +360,7 @@ According to the official API specification, the following properties are filter
 - `deviceId` (UUID) - `eq`, `ne`, `in`, `notIn`, `isNull`, `isNotNull`
 - `metadata.origin` (STRING) - `eq`, `ne`, `in`, `notIn`
 
-For full filtering syntax documentation, see the [UniFi API Filtering Guide](https://developer.ui.com).
+For full filtering syntax documentation, see the Network Application API documentation in your controller.
 
 ### Working with Responses
 
@@ -478,7 +496,7 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 If you encounter any issues or have questions:
 
 - Check the [examples directory](examples/) for working code samples
-- Review the [official UniFi API documentation](https://developer.ui.com)
+- Review the official UniFi API documentation within your controller
 - Open an issue on [GitHub](https://github.com/Art-of-WiFi/unifi-network-application-api-client)
 
 ## Credits

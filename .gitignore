@@ -5,6 +5,7 @@ open-api-docs/*
 # Claude code files
 .claude
 CLAUDE*.md
+PROJECT_SUMMARY.md
 
 # Composer
 /vendor/

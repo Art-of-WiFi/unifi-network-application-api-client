@@ -12,6 +12,11 @@ use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources\GetDeviceT
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources\GetDpiCategoriesRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources\GetDpiApplicationsRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources\GetCountriesRequest;
+use RuntimeException;
+use Saloon\Exceptions\Request\ClientException;
+use Saloon\Exceptions\Request\FatalRequestException;
+use Saloon\Exceptions\Request\RequestException;
+use Saloon\Exceptions\Request\ServerException;
 use Saloon\Http\Response;
 
 /**
@@ -31,10 +36,10 @@ class SupportingResourcesResource extends BaseResource
      * @param int|null $page Page number (optional)
      * @param int|null $limit Number of results per page (optional)
      * @return Response
-     * @throws \RuntimeException If site ID is not set
-     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
-     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function listWanInterfaces(?int $page = null, ?int $limit = null): Response
     {
@@ -51,10 +56,10 @@ class SupportingResourcesResource extends BaseResource
      * @param int|null $limit Number of results per page (optional)
      * @param string|null $filter Filter expression (optional)
      * @return Response
-     * @throws \RuntimeException If site ID is not set
-     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
-     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function listSiteToSiteVpnTunnels(?int $page = null, ?int $limit = null, ?string $filter = null): Response
     {
@@ -71,10 +76,10 @@ class SupportingResourcesResource extends BaseResource
      * @param int|null $limit Number of results per page (optional)
      * @param string|null $filter Filter expression (optional)
      * @return Response
-     * @throws \RuntimeException If site ID is not set
-     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
-     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function listVpnServers(?int $page = null, ?int $limit = null, ?string $filter = null): Response
     {
@@ -91,10 +96,10 @@ class SupportingResourcesResource extends BaseResource
      * @param int|null $limit Number of results per page (optional)
      * @param string|null $filter Filter expression (optional)
      * @return Response
-     * @throws \RuntimeException If site ID is not set
-     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
-     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function listRadiusProfiles(?int $page = null, ?int $limit = null, ?string $filter = null): Response
     {
@@ -111,10 +116,10 @@ class SupportingResourcesResource extends BaseResource
      * @param int|null $limit Number of results per page (optional)
      * @param string|null $filter Filter expression (optional)
      * @return Response
-     * @throws \RuntimeException If site ID is not set
-     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
-     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function listDeviceTags(?int $page = null, ?int $limit = null, ?string $filter = null): Response
     {
@@ -130,17 +135,17 @@ class SupportingResourcesResource extends BaseResource
      *
      * Note: This endpoint does not require a site ID.
      *
-     * @param int|null $page Page number (optional)
+     * @param int|null $offset Pagination offset (optional, default: 0)
      * @param int|null $limit Number of results per page (optional)
      * @param string|null $filter Filter expression (optional)
      * @return Response
-     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
-     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
+     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
-    public function listDpiCategories(?int $page = null, ?int $limit = null, ?string $filter = null): Response
+    public function listDpiCategories(?int $offset = null, ?int $limit = null, ?string $filter = null): Response
     {
-        return $this->connector->send(new GetDpiCategoriesRequest($page, $limit, $filter));
+        return $this->connector->send(new GetDpiCategoriesRequest($offset, $limit, $filter));
     }
 
     /**
@@ -151,17 +156,17 @@ class SupportingResourcesResource extends BaseResource
      *
      * Note: This endpoint does not require a site ID.
      *
-     * @param int|null $page Page number (optional)
+     * @param int|null $offset Pagination offset (optional, default: 0)
      * @param int|null $limit Number of results per page (optional)
      * @param string|null $filter Filter expression (optional)
      * @return Response
-     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
-     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
+     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
-    public function listDpiApplications(?int $page = null, ?int $limit = null, ?string $filter = null): Response
+    public function listDpiApplications(?int $offset = null, ?int $limit = null, ?string $filter = null): Response
     {
-        return $this->connector->send(new GetDpiApplicationsRequest($page, $limit, $filter));
+        return $this->connector->send(new GetDpiApplicationsRequest($offset, $limit, $filter));
     }
 
     /**
@@ -172,16 +177,16 @@ class SupportingResourcesResource extends BaseResource
      *
      * Note: This endpoint does not require a site ID.
      *
-     * @param int|null $page Page number (optional)
+     * @param int|null $offset Pagination offset (optional, default: 0)
      * @param int|null $limit Number of results per page (optional)
      * @param string|null $filter Filter expression (optional)
      * @return Response
-     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
-     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
+     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
-    public function listCountries(?int $page = null, ?int $limit = null, ?string $filter = null): Response
+    public function listCountries(?int $offset = null, ?int $limit = null, ?string $filter = null): Response
     {
-        return $this->connector->send(new GetCountriesRequest($page, $limit, $filter));
+        return $this->connector->send(new GetCountriesRequest($offset, $limit, $filter));
     }
 }

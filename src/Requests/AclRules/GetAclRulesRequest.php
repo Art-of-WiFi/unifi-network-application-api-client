@@ -21,7 +21,7 @@ class GetAclRulesRequest extends Request
 
     public function resolveEndpoint(): string
     {
-        return "/v1/sites/{$this->siteId}/acl/rules";
+        return "/v1/sites/{$this->siteId}/acl-rules";
     }
 
     protected function defaultQuery(): array

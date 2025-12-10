@@ -19,6 +19,6 @@ class GetAclRuleRequest extends Request
 
     public function resolveEndpoint(): string
     {
-        return "/v1/sites/{$this->siteId}/acl/rules/{$this->ruleId}";
+        return "/v1/sites/{$this->siteId}/acl-rules/{$this->ruleId}";
     }
 }

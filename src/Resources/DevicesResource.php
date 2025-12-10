@@ -10,6 +10,11 @@ use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Devices\GetDeviceStatisticsReq
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Devices\GetPendingDevicesRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Devices\ExecuteDeviceActionRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Devices\ExecutePortActionRequest;
+use RuntimeException;
+use Saloon\Exceptions\Request\ClientException;
+use Saloon\Exceptions\Request\FatalRequestException;
+use Saloon\Exceptions\Request\RequestException;
+use Saloon\Exceptions\Request\ServerException;
 use Saloon\Http\Response;
 
 /**
@@ -29,10 +34,10 @@ class DevicesResource extends BaseResource
      * @param int|null $limit Number of results per page (optional)
      * @param string|null $filter Filter expression (optional)
      * @return Response
-     * @throws \RuntimeException If site ID is not set
-     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
-     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function listAdopted(?int $page = null, ?int $limit = null, ?string $filter = null): Response
     {
@@ -46,17 +51,17 @@ class DevicesResource extends BaseResource
      * Retrieves a paginated list of all pending (not yet adopted) devices.
      * Note: This endpoint is global and does not require a site ID.
      *
-     * @param int|null $page Page number (optional)
+     * @param int|null $offset Pagination offset (optional, default: 0)
      * @param int|null $limit Number of results per page (optional)
      * @param string|null $filter Filter expression (optional)
      * @return Response
-     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
-     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
+     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
-    public function listPending(?int $page = null, ?int $limit = null, ?string $filter = null): Response
+    public function listPending(?int $offset = null, ?int $limit = null, ?string $filter = null): Response
     {
-        return $this->connector->send(new GetPendingDevicesRequest($page, $limit, $filter));
+        return $this->connector->send(new GetPendingDevicesRequest($offset, $limit, $filter));
     }
 
     /**
@@ -66,10 +71,10 @@ class DevicesResource extends BaseResource
      *
      * @param string $deviceId The device UUID
      * @return Response
-     * @throws \RuntimeException If site ID is not set
-     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
-     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
-     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function get(string $deviceId): Response
     {
@@ -84,10 +89,10 @@ class DevicesResource extends BaseResource
      *
      * @param string $deviceId The device UUID
      * @return Response
-     * @throws \RuntimeException If site ID is not set
-     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
-     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
-     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function getStatistics(string $deviceId): Response
     {
@@ -104,10 +109,10 @@ class DevicesResource extends BaseResource
      * @param string $deviceId The device UUID
      * @param array $action The action payload (e.g., ['action' => 'RESTART'])
      * @return Response
-     * @throws \RuntimeException If site ID is not set
-     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (not found, bad request, etc.)
-     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
-     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (not found, bad request, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function executeAction(string $deviceId, array $action): Response
     {
@@ -124,10 +129,10 @@ class DevicesResource extends BaseResource
      * @param int $portIdx The port index (0-based)
      * @param array $action The action payload
      * @return Response
-     * @throws \RuntimeException If site ID is not set
-     * @throws \Saloon\Exceptions\Request\ClientException If the request fails with a 4xx error (not found, bad request, etc.)
-     * @throws \Saloon\Exceptions\Request\ServerException If the request fails with a 5xx error (server error)
-     * @throws \Saloon\Exceptions\Request\RequestException If the request fails due to network issues or timeout
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (not found, bad request, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function executePortAction(string $deviceId, int $portIdx, array $action): Response
     {
