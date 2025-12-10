@@ -304,7 +304,132 @@ $data = $response->json();
 
 ### Filtering
 
-The UniFi API supports advanced filtering on many endpoints:
+The UniFi API supports advanced filtering on many endpoints. You can use either raw filter strings or the type-safe filter builders.
+
+#### Filter Builders (Recommended)
+
+For type-safe, IDE-friendly filtering with autocomplete, use the fluent filter builders:
+
+```php
+<?php
+
+use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Devices\DeviceFilter;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Clients\ClientFilter;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Enums\ClientType;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Enums\ClientAccessType;
+
+// Simple filtering - find access points
+$devices = $apiClient->devices()->listAdopted(
+    filter: DeviceFilter::name()->like('AP-*')
+);
+
+// Find devices by model
+$devices = $apiClient->devices()->listAdopted(
+    filter: DeviceFilter::model()->in(['U6-LR', 'U6-PRO', 'U6-ENTERPRISE'])
+);
+
+// Complex filtering with AND - wireless guest clients
+$clients = $apiClient->clients()->list(
+    filter: ClientFilter::and(
+        ClientFilter::type()->equals(ClientType::WIRELESS),
+        ClientFilter::accessType()->equals(ClientAccessType::GUEST)
+    )
+);
+
+// Complex filtering with OR - APs or Switches
+$devices = $apiClient->devices()->listAdopted(
+    filter: DeviceFilter::or(
+        DeviceFilter::model()->like('U6*'),
+        DeviceFilter::model()->like('USW*')
+    )
+);
+
+// Multiple conditions - devices needing updates
+$devices = $apiClient->devices()->listAdopted(
+    filter: DeviceFilter::and(
+        DeviceFilter::firmwareUpdatable()->equals(true),
+        DeviceFilter::supported()->equals(true)
+    )
+);
+
+// Null checks - clients with IP addresses
+$clients = $apiClient->clients()->list(
+    filter: ClientFilter::ipAddress()->isNotNull()
+);
+
+// Set operations - devices with WiFi 6
+$devices = $apiClient->devices()->listAdopted(
+    filter: DeviceFilter::features()->contains('wifi6')
+);
+
+// Preset filters for common use cases
+$aps = $apiClient->devices()->listAdopted(
+    filter: DeviceFilter::accessPoints()
+);
+
+$wirelessGuests = $apiClient->clients()->list(
+    filter: ClientFilter::wirelessGuests()
+);
+```
+
+**Countries Filter (Easy to Test!):**
+
+The Countries endpoint is perfect for testing filters as it works without needing a site ID and has lots of data:
+
+```php
+use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\SupportingResources\CountriesFilter;
+
+// Find United States
+$countries = $apiClient->supportingResources()->listCountries(
+    filter: CountriesFilter::unitedStates()
+);
+
+// Find countries with "Kingdom" in the name
+$countries = $apiClient->supportingResources()->listCountries(
+    filter: CountriesFilter::name()->like('*Kingdom*')
+);
+
+// Find multiple specific countries
+$countries = $apiClient->supportingResources()->listCountries(
+    filter: CountriesFilter::code()->in(['US', 'GB', 'CA', 'AU'])
+);
+
+// Find North American countries
+$countries = $apiClient->supportingResources()->listCountries(
+    filter: CountriesFilter::northAmerica()
+);
+```
+
+**Available Filter Classes:**
+- `DeviceFilter` - For device filtering
+- `ClientFilter` - For client filtering
+- `NetworkFilter` - For network filtering
+- `SitesFilter` - For site filtering
+
+**SupportingResources Filters:**
+- `CountriesFilter` - For country filtering (easy to test!)
+- `DpiCategoriesFilter` - For DPI category filtering
+- `DpiApplicationsFilter` - For DPI application filtering
+- `SiteToSiteVpnTunnelsFilter` - For VPN tunnel filtering
+- `VpnServersFilter` - For VPN server filtering
+- `RadiusProfilesFilter` - For RADIUS profile filtering
+- `DeviceTagsFilter` - For device tag filtering
+
+**Available Enums:**
+- `ClientType` - WIRED, WIRELESS, VPN, TELEPORT
+- `ClientAccessType` - DEFAULT, GUEST
+
+**Benefits of Filter Builders:**
+- Full IDE autocomplete support
+- Type safety - catches errors at development time
+- Better readability for complex filters
+- Property-specific methods for easy discovery
+- Preset filters for common use cases
+- Automatic value escaping and formatting
+
+#### Raw Filter Strings (Legacy)
+
+You can still use raw filter strings if preferred:
 
 ```php
 <?php
@@ -387,6 +512,59 @@ $contentType = $response->header('Content-Type');
 // Get raw body
 $body = $response->body();
 ```
+
+#### Response Structure: List vs Single Item
+
+**IMPORTANT:** The UniFi API returns different response structures depending on the endpoint type:
+
+**List Endpoints** (e.g., `list()`, `listAdopted()`, `listVouchers()`) return paginated data:
+```php
+<?php
+
+// List endpoints return data in a 'data' array with pagination metadata
+$response = $apiClient->devices()->listAdopted();
+$result = $response->json();
+
+// Access the array of items
+$devices = $result['data'];  // Array of devices
+
+// Pagination metadata is also available
+$total = $result['total'] ?? null;
+$offset = $result['offset'] ?? null;
+$limit = $result['limit'] ?? null;
+
+// Iterate through items
+foreach ($result['data'] as $device) {
+    echo $device['name'];
+}
+```
+
+**Single Item Endpoints** (e.g., `get($id)`, `getVoucher($id)`) return the object directly:
+```php
+<?php
+
+// Single item endpoints return the object WITHOUT a 'data' wrapper
+$response = $apiClient->devices()->get($deviceId);
+$device = $response->json();
+
+// Access properties directly (NO 'data' key!)
+echo $device['name'];           // ✓ Correct
+echo $device['ipAddress'];      // ✓ Correct
+
+// NOT like this:
+// echo $device['data']['name']; // ✗ Wrong! Will cause errors
+```
+
+**Key Differences:**
+- **List endpoints:** Use `$result['data']` to access items + pagination metadata
+- **Single item endpoints:** Access properties directly, no `data` wrapper, no pagination metadata
+
+**Quick Reference:**
+
+| Method Type | Response Structure | Example Access |
+|-------------|-------------------|----------------|
+| `list()`, `listAdopted()`, etc. | `{ "data": [...], "total": X, ... }` | `$response->json()['data'][0]` |
+| `get($id)`, `getVoucher($id)`, etc. | `{ "id": "...", "name": "...", ... }` | `$response->json()['name']` |
 
 ### Error Handling
 

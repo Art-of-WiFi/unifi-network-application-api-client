@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources;
 
+use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Filter;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
@@ -14,7 +15,7 @@ class GetDpiApplicationsRequest extends Request
     public function __construct(
         protected ?int $offset = null,
         protected ?int $limit = null,
-        protected ?string $filter = null
+        protected string|Filter|null $filter = null
     ) {
     }
 
@@ -36,7 +37,10 @@ class GetDpiApplicationsRequest extends Request
         }
 
         if ($this->filter !== null) {
-            $query['filter'] = $this->filter;
+            $filterString = $this->filter instanceof Filter
+                ? $this->filter->toString()
+                : $this->filter;
+            $query['filter'] = $filterString;
         }
 
         return $query;
