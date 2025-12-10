@@ -128,10 +128,10 @@ try {
     // $apiClient->networks()->delete($networkId);
     // 6. Pagination example
     echo "6. Pagination Example:\n";
-    echo "   Get first page with 10 networks:\n";
-    echo "   \$apiClient->networks()->list(page: 1, limit: 10);\n\n";
+    echo "   Get first 10 networks:\n";
+    echo "   \$apiClient->networks()->list(offset: 0, limit: 10);\n\n";
 
-    $paginatedResponse = $apiClient->networks()->list(page: 1, limit: 10);
+    $paginatedResponse = $apiClient->networks()->list(offset: 0, limit: 10);
     $paginated         = $paginatedResponse->json();
     $count             = isset($paginated['data']) ? count($paginated['data']) : 0;
 

@@ -31,7 +31,7 @@ class DevicesResource extends BaseResource
      *
      * Retrieves a paginated list of all adopted (online) devices on the specified site.
      *
-     * @param int|null $page Page number (optional)
+     * @param int|null $offset Pagination offset (optional)
      * @param int|null $limit Number of results per page (optional)
      * @param string|Filter|null $filter Filter expression or Filter object (optional)
      * @return Response
@@ -40,10 +40,10 @@ class DevicesResource extends BaseResource
      * @throws ServerException If the request fails with a 5xx error (server error)
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
-    public function listAdopted(?int $page = null, ?int $limit = null, string|Filter|null $filter = null): Response
+    public function listAdopted(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
     {
         $siteId = $this->requireSiteId();
-        return $this->connector->send(new GetAdoptedDevicesRequest($siteId, $page, $limit, $filter));
+        return $this->connector->send(new GetAdoptedDevicesRequest($siteId, $offset, $limit, $filter));
     }
 
     /**

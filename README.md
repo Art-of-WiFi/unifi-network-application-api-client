@@ -1,8 +1,17 @@
-# UniFi Network Application API Client (Saloon-based)
+# UniFi Network Application API Client
 
-A modern PHP API client for the official UniFi Network Application API, built on [Saloon](https://docs.saloon.dev/) with a fluent interface for easy integration and powerful features.
+A modern PHP API client for the official UniFi Network Application API, built on [Saloon](https://docs.saloon.dev/) with a fluent interface
+for easy integration and powerful features.
 
-This client provides a clean, intuitive way to interact with your UniFi Network Application, supporting all major operations including site management, device control, client monitoring, network configuration, WiFi management, and more.
+This client provides a clean, intuitive way to interact with your UniFi Network Application, supporting all major
+operations including site management, device control, client monitoring, network configuration, WiFi management, and
+more.
+
+It is not a direct successor to the [UniFi API client](https://github.com/Art-of-WiFi/UniFi-API-client) which has been
+developed for the legacy, "unofficial" UniFi API. At this point in time, the "unofficial" API supports more endpoints
+than the official API. If your integration requirements can be met with the official API, we recommend using this
+client. For a richer set of features, we currently recommend using the [legacy UniFi API client](https://github.com/Art-of-WiFi/UniFi-API-client).
+
 
 ## Features
 
@@ -15,12 +24,14 @@ This client provides a clean, intuitive way to interact with your UniFi Network 
 - Well-documented with inline PHPDoc for IDE auto-completion
 - PSR-4 autoloading
 
+
 ## Requirements
 
 - PHP 8.1 or higher
 - Composer
-- A UniFi Network Application (Controller) with API key access
+- A UniFi OS Server or UniFi OS console with API key access to the Network Application
 - Network access to your UniFi Controller
+
 
 ## Installation
 
@@ -37,8 +48,8 @@ composer require art-of-wifi/unifi-network-application-api-client
 You **must** generate an API key from your UniFi Network Application to use this client:
 
 1. Log into your UniFi Network Application
-2. Navigate to **Settings** → **Integrations**
-3. Click **Create API Key**
+2. Navigate to **Settings** → **Integrations** or straight to **Integrations** from the sidebar with the latest versions of the UI
+3. Click **Create New API Key**
 4. Give it a descriptive name and save the key securely
 5. Use this key when initializing the client
 
@@ -48,6 +59,7 @@ You **must** generate an API key from your UniFi Network Application to use this
 - The account generating the API key must have appropriate permissions
 - API keys can be revoked at any time from the Integrations page
 - For local controllers with self-signed certificates, you may need to disable SSL verification (not recommended for production)
+
 
 ## Quick Start
 
@@ -78,6 +90,7 @@ foreach ($sites['data'] ?? [] as $site) {
 ```
 
 That's it! You're now connected to your UniFi Network Application.
+
 
 ## Basic Usage
 
@@ -133,10 +146,13 @@ $response = $apiClient->clients()->list();
 $clients = $response->json();
 
 // Get details for a specific client
-$apiClient->clients()->get('client-uuid-or-mac');
+$apiClient->clients()->get('client-uuid-here');
 
 // Authorize a guest client
-$apiClient->clients()->executeAction('client-uuid', [
+// Requires a lookup for the client's MAC address using $apiClient->clients()->list() with an appropriate filter first.
+// Until the Official API supports client device creation, this approach does imply you cannot pre-authorize guests using
+// the API because they need to be connected to the network first.
+$apiClient->clients()->executeAction('client-uuid-here', [
     'action' => 'AUTHORIZE_GUEST_ACCESS',
     'timeLimitMinutes' => 60  // Grant access for 60 minutes
 ]);
@@ -159,12 +175,12 @@ $apiClient->networks()->create([
 ]);
 
 // Update a network
-$apiClient->networks()->update('network-uuid', [
+$apiClient->networks()->update('network-uuid-here', [
     'name' => 'Updated Guest Network'
 ]);
 
 // Delete a network
-$apiClient->networks()->delete('network-uuid');
+$apiClient->networks()->delete('network-uuid-here');
 ```
 
 ### WiFi Management
@@ -184,7 +200,7 @@ $apiClient->wifiBroadcasts()->update('wifi-uuid', [
 ]);
 
 // Delete a WiFi network
-$apiClient->wifiBroadcasts()->delete('wifi-uuid');
+$apiClient->wifiBroadcasts()->delete('wifi-uuid-here');
 ```
 
 ### Hotspot Vouchers
@@ -203,12 +219,12 @@ $apiClient->hotspot()->createVouchers([
 $vouchers = $apiClient->hotspot()->listVouchers();
 
 // Delete a voucher
-$apiClient->hotspot()->deleteVoucher('voucher-uuid');
+$apiClient->hotspot()->deleteVoucher('voucher-uuid-here');
 ```
 
 ### Supporting Resources
 
-Access reference data for configuration:
+Access a variety of resources for the UniFi Network Application configuration:
 
 ```php
 <?php
@@ -266,41 +282,35 @@ $apiClient->aclRules()->create([
 ]);
 ```
 
+
 ## Advanced Usage
 
 ### Pagination
 
-Many list endpoints support pagination. Most endpoints use `page` for pagination, but some use `offset`:
+All list endpoints use offset-based pagination:
 
-**Endpoints using `page` parameter:**
 ```php
 <?php
 
-// Most endpoints use page-based pagination
+// Example: List adopted devices with pagination
 $response = $apiClient->devices()->listAdopted(
-    page: 2,
-    limit: 50
-);
-```
-
-**Endpoints using `offset` parameter:**
-```php
-<?php
-
-// These specific endpoints use offset-based pagination:
-// - sites()->list()
-// - devices()->listPending()
-// - supportingResources()->listCountries()
-// - supportingResources()->listDpiCategories()
-// - supportingResources()->listDpiApplications()
-
-$response = $apiClient->sites()->list(
     offset: 100,  // Skip first 100 results
     limit: 50     // Get 50 results
 );
 
 $data = $response->json();
+
+// Response structure for list endpoints:
+// {
+//   "offset": 100,
+//   "limit": 50,
+//   "count": 50,        // Number of items in current response
+//   "totalCount": 1000, // Total items available
+//   "data": [...]       // Array of results
+// }
 ```
+
+The `offset` parameter specifies how many results to skip, while `limit` specifies the maximum number of results to return. All paginated endpoints follow this pattern.
 
 ### Filtering
 
@@ -405,8 +415,6 @@ $countries = $apiClient->supportingResources()->listCountries(
 - `ClientFilter` - For client filtering
 - `NetworkFilter` - For network filtering
 - `SitesFilter` - For site filtering
-
-**SupportingResources Filters:**
 - `CountriesFilter` - For country filtering (easy to test!)
 - `DpiCategoriesFilter` - For DPI category filtering
 - `DpiApplicationsFilter` - For DPI application filtering
@@ -427,9 +435,9 @@ $countries = $apiClient->supportingResources()->listCountries(
 - Preset filters for common use cases
 - Automatic value escaping and formatting
 
-#### Raw Filter Strings (Legacy)
+#### Raw Filter Strings
 
-You can still use raw filter strings if preferred:
+If preferred, you can also use raw filter strings from the Network Application API documentation in your controller:
 
 ```php
 <?php
@@ -513,7 +521,7 @@ $contentType = $response->header('Content-Type');
 $body = $response->body();
 ```
 
-#### Response Structure: List vs Single Item
+### Response Structure: List vs Single Item
 
 **IMPORTANT:** The UniFi API returns different response structures depending on the endpoint type:
 
@@ -539,7 +547,7 @@ foreach ($result['data'] as $device) {
 }
 ```
 
-**Single Item Endpoints** (e.g., `get($id)`, `getVoucher($id)`) return the object directly:
+**Single Item Endpoints** (e.g., `get($uuid)`, `getVoucher($uuid)`) return the object directly:
 ```php
 <?php
 
@@ -578,7 +586,7 @@ use Saloon\Exceptions\Request\ClientException;
 use Saloon\Exceptions\Request\ServerException;
 
 try {
-    $response = $apiClient->devices()->get('invalid-uuid');
+    $response = $apiClient->devices()->get('invalid-uuid-here');
     $device = $response->json();
 } catch (ClientException $e) {
     // 4xx errors (client errors like 404 Not Found)
@@ -637,6 +645,7 @@ The client provides access to the following resources:
 | `trafficMatchingLists()` | Port and IP address lists for firewall policies |
 | `supportingResources()` | Reference data (WAN interfaces, DPI categories, countries, RADIUS profiles, device tags) |
 
+
 ## Examples
 
 See the [`examples/`](examples/) directory for complete working examples:
@@ -669,6 +678,7 @@ The main differences:
 
 Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
+
 ## Support
 
 If you encounter any issues or have questions:
@@ -677,11 +687,13 @@ If you encounter any issues or have questions:
 - Review the official UniFi API documentation within your controller
 - Open an issue on [GitHub](https://github.com/Art-of-WiFi/unifi-network-application-api-client)
 
+
 ## Credits
 
-This library is developed and maintained by [Art of WiFi](https://artofwifi.net) and is the successor to the [UniFi API client](https://github.com/Art-of-WiFi/UniFi-API-client).
+This library is developed and maintained by [Art of WiFi](https://artofwifi.net) and is developed for the official UniFi Network Application API.
 
 Built with [Saloon](https://docs.saloon.dev/) by Sammyjo20.
+
 
 ## License
 

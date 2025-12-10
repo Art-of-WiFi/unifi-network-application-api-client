@@ -33,7 +33,7 @@ class SupportingResourcesResource extends BaseResource
      * Returns available WAN interface definitions for a given site,
      * including identifiers and names. Useful for network and NAT configuration.
      *
-     * @param int|null $page Page number (optional)
+     * @param int|null $offset Pagination offset (optional)
      * @param int|null $limit Number of results per page (optional)
      * @return Response
      * @throws RuntimeException If site ID is not set
@@ -41,10 +41,10 @@ class SupportingResourcesResource extends BaseResource
      * @throws ServerException If the request fails with a 5xx error (server error)
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
-    public function listWanInterfaces(?int $page = null, ?int $limit = null): Response
+    public function listWanInterfaces(?int $offset = null, ?int $limit = null): Response
     {
         $siteId = $this->requireSiteId();
-        return $this->connector->send(new GetWanInterfacesRequest($siteId, $page, $limit));
+        return $this->connector->send(new GetWanInterfacesRequest($siteId, $offset, $limit));
     }
 
     /**
@@ -52,7 +52,7 @@ class SupportingResourcesResource extends BaseResource
      *
      * Retrieves a paginated list of all site-to-site VPN tunnels on a site.
      *
-     * @param int|null $page Page number (optional)
+     * @param int|null $offset Pagination offset (optional)
      * @param int|null $limit Number of results per page (optional)
      * @param string|Filter|null $filter Filter expression or Filter object (optional)
      * @return Response
@@ -61,10 +61,10 @@ class SupportingResourcesResource extends BaseResource
      * @throws ServerException If the request fails with a 5xx error (server error)
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
-    public function listSiteToSiteVpnTunnels(?int $page = null, ?int $limit = null, string|Filter|null $filter = null): Response
+    public function listSiteToSiteVpnTunnels(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
     {
         $siteId = $this->requireSiteId();
-        return $this->connector->send(new GetSiteToSiteVpnTunnelsRequest($siteId, $page, $limit, $filter));
+        return $this->connector->send(new GetSiteToSiteVpnTunnelsRequest($siteId, $offset, $limit, $filter));
     }
 
     /**
@@ -72,7 +72,7 @@ class SupportingResourcesResource extends BaseResource
      *
      * Retrieves a paginated list of all VPN servers on a site.
      *
-     * @param int|null $page Page number (optional)
+     * @param int|null $offset Pagination offset (optional)
      * @param int|null $limit Number of results per page (optional)
      * @param string|Filter|null $filter Filter expression or Filter object (optional)
      * @return Response
@@ -81,10 +81,10 @@ class SupportingResourcesResource extends BaseResource
      * @throws ServerException If the request fails with a 5xx error (server error)
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
-    public function listVpnServers(?int $page = null, ?int $limit = null, string|Filter|null $filter = null): Response
+    public function listVpnServers(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
     {
         $siteId = $this->requireSiteId();
-        return $this->connector->send(new GetVpnServersRequest($siteId, $page, $limit, $filter));
+        return $this->connector->send(new GetVpnServersRequest($siteId, $offset, $limit, $filter));
     }
 
     /**
@@ -92,7 +92,7 @@ class SupportingResourcesResource extends BaseResource
      *
      * Returns available RADIUS authentication profiles, including configuration origin metadata.
      *
-     * @param int|null $page Page number (optional)
+     * @param int|null $offset Pagination offset (optional)
      * @param int|null $limit Number of results per page (optional)
      * @param string|Filter|null $filter Filter expression or Filter object (optional)
      * @return Response
@@ -101,10 +101,10 @@ class SupportingResourcesResource extends BaseResource
      * @throws ServerException If the request fails with a 5xx error (server error)
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
-    public function listRadiusProfiles(?int $page = null, ?int $limit = null, string|Filter|null $filter = null): Response
+    public function listRadiusProfiles(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
     {
         $siteId = $this->requireSiteId();
-        return $this->connector->send(new GetRadiusProfilesRequest($siteId, $page, $limit, $filter));
+        return $this->connector->send(new GetRadiusProfilesRequest($siteId, $offset, $limit, $filter));
     }
 
     /**
@@ -112,7 +112,7 @@ class SupportingResourcesResource extends BaseResource
      *
      * Retrieves a paginated list of all device tags on a site.
      *
-     * @param int|null $page Page number (optional)
+     * @param int|null $offset Pagination offset (optional)
      * @param int|null $limit Number of results per page (optional)
      * @param string|Filter|null $filter Filter expression or Filter object (optional)
      * @return Response
@@ -121,10 +121,10 @@ class SupportingResourcesResource extends BaseResource
      * @throws ServerException If the request fails with a 5xx error (server error)
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
-    public function listDeviceTags(?int $page = null, ?int $limit = null, string|Filter|null $filter = null): Response
+    public function listDeviceTags(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
     {
         $siteId = $this->requireSiteId();
-        return $this->connector->send(new GetDeviceTagsRequest($siteId, $page, $limit, $filter));
+        return $this->connector->send(new GetDeviceTagsRequest($siteId, $offset, $limit, $filter));
     }
 
     /**

@@ -30,7 +30,7 @@ class FirewallResource extends BaseResource
      *
      * Retrieves a paginated list of all firewall zones on the specified site.
      *
-     * @param int|null $page Page number (optional)
+     * @param int|null $offset Pagination offset (optional)
      * @param int|null $limit Number of results per page (optional)
      * @param string|null $filter Filter expression (optional)
      * @return Response
@@ -39,10 +39,10 @@ class FirewallResource extends BaseResource
      * @throws ServerException If the request fails with a 5xx error (server error)
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
-    public function listZones(?int $page = null, ?int $limit = null, ?string $filter = null): Response
+    public function listZones(?int $offset = null, ?int $limit = null, ?string $filter = null): Response
     {
         $siteId = $this->requireSiteId();
-        return $this->connector->send(new GetFirewallZonesRequest($siteId, $page, $limit, $filter));
+        return $this->connector->send(new GetFirewallZonesRequest($siteId, $offset, $limit, $filter));
     }
 
     /**

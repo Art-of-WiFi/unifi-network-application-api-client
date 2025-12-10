@@ -28,7 +28,7 @@ class ClientsResource extends BaseResource
      *
      * Retrieves a paginated list of all connected clients on the specified site.
      *
-     * @param int|null $page Page number (optional)
+     * @param int|null $offset Pagination offset (optional)
      * @param int|null $limit Number of results per page (optional)
      * @param string|Filter|null $filter Filter expression or Filter object (optional)
      * @return Response
@@ -37,10 +37,10 @@ class ClientsResource extends BaseResource
      * @throws ServerException If the request fails with a 5xx error (server error)
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
-    public function list(?int $page = null, ?int $limit = null, string|Filter|null $filter = null): Response
+    public function list(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
     {
         $siteId = $this->requireSiteId();
-        return $this->connector->send(new GetConnectedClientsRequest($siteId, $page, $limit, $filter));
+        return $this->connector->send(new GetConnectedClientsRequest($siteId, $offset, $limit, $filter));
     }
 
     /**

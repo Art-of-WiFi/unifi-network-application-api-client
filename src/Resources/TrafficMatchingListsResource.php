@@ -29,7 +29,7 @@ class TrafficMatchingListsResource extends BaseResource
      *
      * Retrieves a paginated list of all traffic matching lists on the specified site.
      *
-     * @param int|null $page Page number (optional)
+     * @param int|null $offset Pagination offset (optional)
      * @param int|null $limit Number of results per page (optional)
      * @param string|null $filter Filter expression (optional)
      * @return Response
@@ -38,10 +38,10 @@ class TrafficMatchingListsResource extends BaseResource
      * @throws ServerException If the request fails with a 5xx error (server error)
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
-    public function list(?int $page = null, ?int $limit = null, ?string $filter = null): Response
+    public function list(?int $offset = null, ?int $limit = null, ?string $filter = null): Response
     {
         $siteId = $this->requireSiteId();
-        return $this->connector->send(new GetTrafficMatchingListsRequest($siteId, $page, $limit, $filter));
+        return $this->connector->send(new GetTrafficMatchingListsRequest($siteId, $offset, $limit, $filter));
     }
 
     /**

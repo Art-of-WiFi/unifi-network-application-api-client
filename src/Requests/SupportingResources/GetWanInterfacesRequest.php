@@ -13,7 +13,7 @@ class GetWanInterfacesRequest extends Request
 
     public function __construct(
         protected string $siteId,
-        protected ?int $page = null,
+        protected ?int $offset = null,
         protected ?int $limit = null
     ) {
     }
@@ -27,8 +27,8 @@ class GetWanInterfacesRequest extends Request
     {
         $query = [];
 
-        if ($this->page !== null) {
-            $query['page'] = $this->page;
+        if ($this->offset !== null) {
+            $query['offset'] = $this->offset;
         }
 
         if ($this->limit !== null) {
