@@ -33,6 +33,8 @@ Comprehensive device operations:
 - Listing pending (unadopted) devices
 - Executing device actions (reboot, locate, upgrade)
 - Working with device ports
+- Adopting pending devices by MAC address
+- Removing (unadopting) devices
 
 ### 03. Client Operations
 **File:** `03-client-operations.php`
@@ -106,6 +108,18 @@ Using type-safe filter builders for better code:
 - Comparison of raw strings vs filter builders
 
 **This example works immediately without site configuration - perfect for testing!**
+
+### 10. Firewall Policies, ACL Ordering & DNS Policies
+**File:** `10-firewall-dns-policies.php`
+
+Working with firewall policies, ACL rule ordering, and DNS policies:
+- Listing and filtering firewall policies (with FirewallPolicyFilter builder)
+- Creating, updating (PUT and PATCH), and deleting firewall policies
+- Managing firewall policy ordering between zones
+- Getting and updating ACL rule ordering
+- Listing and filtering DNS policies (with DnsPolicyFilter builder and presets)
+- Creating DNS records (A, AAAA, CNAME, MX, TXT, SRV)
+- Updating and deleting DNS policies
 
 ## Running the Examples
 

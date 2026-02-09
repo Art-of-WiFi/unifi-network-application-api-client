@@ -17,7 +17,7 @@ client. For a richer set of features, we currently recommend using the [legacy U
 
 - Built on Saloon v3 for robust HTTP communication
 - Fluent interface with method chaining for elegant code
-- Full support for the official UniFi Network Application API (v10.1.39+)
+- Full support for the official UniFi Network Application API (v10.1.84+)
 - Comprehensive coverage of all API endpoints
 - Strongly typed using PHP 8.1+ features
 - Easy to use for beginners, flexible for advanced users
@@ -134,6 +134,15 @@ $stats = $apiClient->devices()->getStatistics('device-uuid-here');
 $apiClient->devices()->executeAction('device-uuid-here', [
     'action' => 'RESTART'
 ]);
+
+// Adopt a pending device by MAC address
+$apiClient->devices()->adopt('00:11:22:33:44:55');
+
+// Adopt a device, ignoring the device limit
+$apiClient->devices()->adopt('00:11:22:33:44:55', ignoreDeviceLimit: true);
+
+// Remove (unadopt) a device
+$apiClient->devices()->remove('device-uuid-here');
 ```
 
 ### Managing Clients
@@ -268,6 +277,34 @@ $apiClient->firewall()->createZone([
     'networkIds' => []  // Array of network UUIDs
 ]);
 
+// List firewall policies
+$policies = $apiClient->firewall()->listPolicies();
+
+// Create a firewall policy
+$apiClient->firewall()->createPolicy([
+    'name' => 'Block IoT to LAN',
+    'enabled' => true,
+    'action' => 'BLOCK',
+    'source' => ['zoneId' => 'source-zone-uuid'],
+    'destination' => ['zoneId' => 'destination-zone-uuid'],
+]);
+
+// Partially update a firewall policy (PATCH - only send changed fields)
+$apiClient->firewall()->patchPolicy('policy-uuid', [
+    'enabled' => false
+]);
+
+// Get/update firewall policy ordering between two zones
+$ordering = $apiClient->firewall()->getPolicyOrdering(
+    sourceFirewallZoneId: 'source-zone-uuid',
+    destinationFirewallZoneId: 'destination-zone-uuid'
+);
+$apiClient->firewall()->updatePolicyOrdering(
+    sourceFirewallZoneId: 'source-zone-uuid',
+    destinationFirewallZoneId: 'destination-zone-uuid',
+    data: ['orderedFirewallPolicyIds' => ['policy-1-uuid', 'policy-2-uuid']]
+);
+
 // List ACL rules
 $rules = $apiClient->aclRules()->list();
 
@@ -280,6 +317,48 @@ $apiClient->aclRules()->create([
     'index' => 1000,
     // ... additional filters required
 ]);
+
+// Get/update ACL rule ordering
+$ordering = $apiClient->aclRules()->getOrdering();
+$apiClient->aclRules()->updateOrdering([
+    'orderedAclRuleIds' => ['rule-1-uuid', 'rule-2-uuid', 'rule-3-uuid']
+]);
+```
+
+### DNS Policies
+
+```php
+<?php
+
+// List all DNS policies
+$policies = $apiClient->dnsPolicies()->list();
+
+// Create a DNS A record
+$apiClient->dnsPolicies()->create([
+    'type' => 'A',
+    'enabled' => true,
+    'domain' => 'myapp.local',
+    'ipv4Address' => '192.168.1.100',
+    'ttlSeconds' => 3600,
+]);
+
+// Create a DNS CNAME record
+$apiClient->dnsPolicies()->create([
+    'type' => 'CNAME',
+    'enabled' => true,
+    'domain' => 'alias.local',
+    'targetDomain' => 'myapp.local',
+    'ttlSeconds' => 3600,
+]);
+
+// Update a DNS policy
+$apiClient->dnsPolicies()->update('dns-policy-uuid', [
+    'enabled' => false,
+    'ipv4Address' => '192.168.1.200',
+]);
+
+// Delete a DNS policy
+$apiClient->dnsPolicies()->delete('dns-policy-uuid');
 ```
 
 
@@ -415,6 +494,8 @@ $countries = $apiClient->supportingResources()->listCountries(
 - `ClientFilter` - For client filtering
 - `NetworkFilter` - For network filtering
 - `SitesFilter` - For site filtering
+- `FirewallPolicyFilter` - For firewall policy filtering
+- `DnsPolicyFilter` - For DNS policy filtering (with presets for record types)
 - `CountriesFilter` - For country filtering (easy to test!)
 - `DpiCategoriesFilter` - For DPI category filtering
 - `DpiApplicationsFilter` - For DPI application filtering
@@ -492,6 +573,38 @@ According to the official API specification, the following properties are filter
 - `vlanId` (INTEGER) - `eq`, `ne`, `gt`, `ge`, `lt`, `le`, `in`, `notIn`
 - `deviceId` (UUID) - `eq`, `ne`, `in`, `notIn`, `isNull`, `isNotNull`
 - `metadata.origin` (STRING) - `eq`, `ne`, `in`, `notIn`
+
+#### Firewall Policy Filterable Properties
+
+According to the official API specification, the following properties are filterable for firewall policies:
+
+- `id` (UUID) - `eq`, `ne`, `in`, `notIn`
+- `name` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`
+- `source.zoneId` (UUID) - `eq`, `ne`, `in`, `notIn`
+- `destination.zoneId` (UUID) - `eq`, `ne`, `in`, `notIn`
+- `metadata.origin` (STRING) - `eq`, `ne`, `in`, `notIn`
+
+#### DNS Policy Filterable Properties
+
+According to the official API specification, the following properties are filterable for DNS policies:
+
+- `type` (STRING) - `eq`, `ne`, `in`, `notIn` (Valid values: `A`, `AAAA`, `CNAME`, `MX`, `TXT`, `SRV`, `FORWARD_DOMAIN`)
+- `id` (UUID) - `eq`, `ne`, `in`, `notIn`
+- `enabled` (BOOLEAN) - `eq`, `ne`
+- `domain` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`
+- `ipv4Address` (STRING) - `eq`, `ne`, `in`, `notIn`
+- `ipv6Address` (STRING) - `eq`, `ne`, `in`, `notIn`
+- `targetDomain` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`
+- `mailServerDomain` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`
+- `text` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`
+- `serverDomain` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`
+- `ipAddress` (STRING) - `eq`, `ne`, `in`, `notIn`
+- `ttlSeconds` (INTEGER) - `eq`, `ne`, `gt`, `ge`, `lt`, `le`
+- `priority` (INTEGER) - `eq`, `ne`, `gt`, `ge`, `lt`, `le`
+- `service` (STRING) - `eq`, `ne`, `in`, `notIn`
+- `protocol` (STRING) - `eq`, `ne`, `in`, `notIn`
+- `port` (INTEGER) - `eq`, `ne`, `gt`, `ge`, `lt`, `le`
+- `weight` (INTEGER) - `eq`, `ne`, `gt`, `ge`, `lt`, `le`
 
 For full filtering syntax documentation, see the Network Application API documentation in your controller.
 
@@ -635,13 +748,14 @@ The client provides access to the following resources:
 |----------|-------------|
 | `applicationInfo()` | General application information and metadata |
 | `sites()` | Site management and listing |
-| `devices()` | Device management, monitoring, and actions |
+| `devices()` | Device management, monitoring, actions, adoption, and removal |
 | `clients()` | Connected client management and guest authorization |
 | `networks()` | Network configuration (VLANs, DHCP, etc.) |
 | `wifiBroadcasts()` | WiFi network (SSID) management |
 | `hotspot()` | Guest voucher management |
-| `firewall()` | Firewall zone configuration |
-| `aclRules()` | Access Control List (ACL) rule management |
+| `firewall()` | Firewall zone and policy management, including policy ordering |
+| `aclRules()` | Access Control List (ACL) rule management, including rule ordering |
+| `dnsPolicies()` | DNS policy management (A, AAAA, CNAME, MX, TXT, SRV, forward domains) |
 | `trafficMatchingLists()` | Port and IP address lists for firewall policies |
 | `supportingResources()` | Reference data (WAN interfaces, DPI categories, countries, RADIUS profiles, device tags) |
 
@@ -651,11 +765,12 @@ The client provides access to the following resources:
 See the [`examples/`](examples/) directory for complete working examples:
 
 - [Basic Usage](examples/01-basic-usage.php) - Getting started with the client
-- [Device Management](examples/02-device-management.php) - Working with UniFi devices
+- [Device Management](examples/02-device-management.php) - Working with UniFi devices (including adopt/remove)
 - [Client Operations](examples/03-client-operations.php) - Managing connected clients
 - [Network Configuration](examples/04-network-configuration.php) - Creating and managing networks
 - [WiFi Management](examples/05-wifi-management.php) - WiFi broadcast configuration
 - [Error Handling](examples/06-error-handling.php) - Proper exception handling
+- [Firewall Policies & DNS Policies](examples/10-firewall-dns-policies.php) - Firewall policies, ACL ordering, and DNS policies
 
 ## Migrating from the Legacy Client
 

@@ -14,6 +14,7 @@ use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\FirewallResource;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\AclRulesResource;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\TrafficMatchingListsResource;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\ApplicationInfoResource;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\DnsPoliciesResource;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\SupportingResourcesResource;
 
 /**
@@ -154,7 +155,7 @@ class UnifiClient
     }
 
     /**
-     * Access firewall zone management endpoints
+     * Access firewall zone and policy management endpoints
      *
      * @return FirewallResource
      */
@@ -181,6 +182,16 @@ class UnifiClient
     public function trafficMatchingLists(): TrafficMatchingListsResource
     {
         return new TrafficMatchingListsResource($this->connector, $this->siteId);
+    }
+
+    /**
+     * Access DNS policy management endpoints
+     *
+     * @return DnsPoliciesResource
+     */
+    public function dnsPolicies(): DnsPoliciesResource
+    {
+        return new DnsPoliciesResource($this->connector, $this->siteId);
     }
 
     /**

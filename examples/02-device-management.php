@@ -107,6 +107,25 @@ try {
     echo "     \$apiClient->devices()->executeAction(\$deviceId, ['action' => 'RESTART']);\n";
     echo "\n";// Uncomment to actually execute an action:
     // $apiClient->devices()->executeAction($deviceId, ['action' => 'RESTART']);
+
+    // 7. Adopting a pending device (commented out for safety)
+    echo "7. Adopting a Device (example - commented out for safety)\n";
+    echo "   Adopt a pending device by MAC address:\n";
+    echo "   \$apiClient->devices()->adopt('00:11:22:33:44:55');\n\n";
+    echo "   Adopt and ignore the device limit:\n";
+    echo "   \$apiClient->devices()->adopt('00:11:22:33:44:55', ignoreDeviceLimit: true);\n\n";
+
+    // Uncomment to actually adopt a device:
+    // $apiClient->devices()->adopt('00:11:22:33:44:55');
+
+    // 8. Removing (unadopting) a device (commented out for safety)
+    echo "8. Removing a Device (example - commented out for safety)\n";
+    echo "   Remove (unadopt) an adopted device:\n";
+    echo "   \$apiClient->devices()->remove(\$deviceId);\n\n";
+
+    // Uncomment to actually remove a device:
+    // $apiClient->devices()->remove($deviceId);
+
     echo str_repeat('=', 50) . "\n";
     echo "Example completed successfully!\n";
 } catch (Exception $e) {

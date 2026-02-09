@@ -9,8 +9,10 @@ use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Devices\GetAdoptedDevicesReque
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Devices\GetDeviceDetailsRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Devices\GetDeviceStatisticsRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Devices\GetPendingDevicesRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Devices\AdoptDeviceRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Devices\ExecuteDeviceActionRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Devices\ExecutePortActionRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Devices\RemoveDeviceRequest;
 use RuntimeException;
 use Saloon\Exceptions\Request\ClientException;
 use Saloon\Exceptions\Request\FatalRequestException;
@@ -139,5 +141,42 @@ class DevicesResource extends BaseResource
     {
         $siteId = $this->requireSiteId();
         return $this->connector->send(new ExecutePortActionRequest($siteId, $deviceId, $portIdx, $action));
+    }
+
+    /**
+     * Adopt a device
+     *
+     * Adopts a pending device to the specified site using its MAC address.
+     *
+     * @param string $macAddress The MAC address of the device to adopt
+     * @param bool $ignoreDeviceLimit Whether to ignore the device limit for the site (optional)
+     * @return Response
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
+     */
+    public function adopt(string $macAddress, bool $ignoreDeviceLimit = false): Response
+    {
+        $siteId = $this->requireSiteId();
+        return $this->connector->send(new AdoptDeviceRequest($siteId, $macAddress, $ignoreDeviceLimit));
+    }
+
+    /**
+     * Remove (unadopt) a device
+     *
+     * Removes an adopted device from the specified site.
+     *
+     * @param string $deviceId The device UUID
+     * @return Response
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
+     */
+    public function remove(string $deviceId): Response
+    {
+        $siteId = $this->requireSiteId();
+        return $this->connector->send(new RemoveDeviceRequest($siteId, $deviceId));
     }
 }

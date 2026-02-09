@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace ArtOfWiFi\UnifiNetworkApplicationApi\Resources;
 
-use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\AclRules\GetAclRulesRequest;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\AclRules\GetAclRuleRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\AclRules\CreateAclRuleRequest;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\AclRules\UpdateAclRuleRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\AclRules\DeleteAclRuleRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\AclRules\GetAclRuleOrderingRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\AclRules\GetAclRuleRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\AclRules\GetAclRulesRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\AclRules\UpdateAclRuleOrderingRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\AclRules\UpdateAclRuleRequest;
 use RuntimeException;
 use Saloon\Exceptions\Request\ClientException;
 use Saloon\Exceptions\Request\FatalRequestException;
@@ -117,5 +119,42 @@ class AclRulesResource extends BaseResource
     {
         $siteId = $this->requireSiteId();
         return $this->connector->send(new DeleteAclRuleRequest($siteId, $ruleId, $force));
+    }
+
+    // ===== ACL Rule Ordering =====
+
+    /**
+     * Get ACL rule ordering
+     *
+     * Retrieves the current ordering of ACL rules on the specified site.
+     *
+     * @return Response
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
+     */
+    public function getOrdering(): Response
+    {
+        $siteId = $this->requireSiteId();
+        return $this->connector->send(new GetAclRuleOrderingRequest($siteId));
+    }
+
+    /**
+     * Update ACL rule ordering
+     *
+     * Updates the ordering of ACL rules on the specified site.
+     *
+     * @param array $data The ordering data (e.g., ['orderedAclRuleIds' => [...]])
+     * @return Response
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
+     */
+    public function updateOrdering(array $data): Response
+    {
+        $siteId = $this->requireSiteId();
+        return $this->connector->send(new UpdateAclRuleOrderingRequest($siteId, $data));
     }
 }

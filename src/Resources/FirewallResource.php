@@ -4,11 +4,20 @@ declare(strict_types=1);
 
 namespace ArtOfWiFi\UnifiNetworkApplicationApi\Resources;
 
-use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Firewall\GetFirewallZonesRequest;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Firewall\GetFirewallZoneRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Filter;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Firewall\CreateFirewallPolicyRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Firewall\CreateFirewallZoneRequest;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Firewall\UpdateFirewallZoneRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Firewall\DeleteFirewallPolicyRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Firewall\DeleteFirewallZoneRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Firewall\GetFirewallPoliciesRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Firewall\GetFirewallPolicyOrderingRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Firewall\GetFirewallPolicyRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Firewall\GetFirewallZoneRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Firewall\GetFirewallZonesRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Firewall\PatchFirewallPolicyRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Firewall\UpdateFirewallPolicyOrderingRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Firewall\UpdateFirewallPolicyRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Firewall\UpdateFirewallZoneRequest;
 use RuntimeException;
 use Saloon\Exceptions\Request\ClientException;
 use Saloon\Exceptions\Request\FatalRequestException;
@@ -19,7 +28,7 @@ use Saloon\Http\Response;
 /**
  * Firewall Resource
  *
- * Provides access to firewall zone management endpoints.
+ * Provides access to firewall zone and policy management endpoints.
  * Allows managing custom firewall zones and policies to define network
  * segmentation and security boundaries.
  */
@@ -117,5 +126,159 @@ class FirewallResource extends BaseResource
     {
         $siteId = $this->requireSiteId();
         return $this->connector->send(new DeleteFirewallZoneRequest($siteId, $zoneId, $force));
+    }
+
+    // ===== Firewall Policies =====
+
+    /**
+     * List all firewall policies
+     *
+     * Retrieves a paginated list of all firewall policies on the specified site.
+     *
+     * @param int|null $offset Pagination offset (optional)
+     * @param int|null $limit Number of results per page (optional)
+     * @param string|Filter|null $filter Filter expression or Filter object (optional)
+     * @return Response
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
+     */
+    public function listPolicies(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
+    {
+        $siteId = $this->requireSiteId();
+        return $this->connector->send(new GetFirewallPoliciesRequest($siteId, $offset, $limit, $filter));
+    }
+
+    /**
+     * Get firewall policy details
+     *
+     * Retrieves detailed information about a specific firewall policy.
+     *
+     * @param string $firewallPolicyId The firewall policy UUID
+     * @return Response
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
+     */
+    public function getPolicy(string $firewallPolicyId): Response
+    {
+        $siteId = $this->requireSiteId();
+        return $this->connector->send(new GetFirewallPolicyRequest($siteId, $firewallPolicyId));
+    }
+
+    /**
+     * Create a new firewall policy
+     *
+     * Creates a new firewall policy on the specified site.
+     *
+     * @param array $data The firewall policy configuration data
+     * @return Response
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (bad request, validation error, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
+     */
+    public function createPolicy(array $data): Response
+    {
+        $siteId = $this->requireSiteId();
+        return $this->connector->send(new CreateFirewallPolicyRequest($siteId, $data));
+    }
+
+    /**
+     * Update a firewall policy
+     *
+     * Fully updates an existing firewall policy configuration (PUT).
+     *
+     * @param string $firewallPolicyId The firewall policy UUID
+     * @param array $data The complete updated firewall policy configuration data
+     * @return Response
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (not found, bad request, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
+     */
+    public function updatePolicy(string $firewallPolicyId, array $data): Response
+    {
+        $siteId = $this->requireSiteId();
+        return $this->connector->send(new UpdateFirewallPolicyRequest($siteId, $firewallPolicyId, $data));
+    }
+
+    /**
+     * Partially update a firewall policy
+     *
+     * Partially updates an existing firewall policy configuration (PATCH).
+     * Only the fields provided in the data array will be updated.
+     *
+     * @param string $firewallPolicyId The firewall policy UUID
+     * @param array $data The partial firewall policy configuration data to update
+     * @return Response
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (not found, bad request, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
+     */
+    public function patchPolicy(string $firewallPolicyId, array $data): Response
+    {
+        $siteId = $this->requireSiteId();
+        return $this->connector->send(new PatchFirewallPolicyRequest($siteId, $firewallPolicyId, $data));
+    }
+
+    /**
+     * Delete a firewall policy
+     *
+     * Deletes an existing firewall policy from the specified site.
+     *
+     * @param string $firewallPolicyId The firewall policy UUID
+     * @return Response
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (not found, conflict, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
+     */
+    public function deletePolicy(string $firewallPolicyId): Response
+    {
+        $siteId = $this->requireSiteId();
+        return $this->connector->send(new DeleteFirewallPolicyRequest($siteId, $firewallPolicyId));
+    }
+
+    /**
+     * Get firewall policy ordering
+     *
+     * Retrieves the ordering of firewall policies between two zones.
+     *
+     * @param string $sourceFirewallZoneId The source firewall zone UUID
+     * @param string $destinationFirewallZoneId The destination firewall zone UUID
+     * @return Response
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
+     */
+    public function getPolicyOrdering(string $sourceFirewallZoneId, string $destinationFirewallZoneId): Response
+    {
+        $siteId = $this->requireSiteId();
+        return $this->connector->send(new GetFirewallPolicyOrderingRequest($siteId, $sourceFirewallZoneId, $destinationFirewallZoneId));
+    }
+
+    /**
+     * Update firewall policy ordering
+     *
+     * Updates the ordering of firewall policies between two zones.
+     *
+     * @param string $sourceFirewallZoneId The source firewall zone UUID
+     * @param string $destinationFirewallZoneId The destination firewall zone UUID
+     * @param array $data The ordering data (e.g., ['orderedFirewallPolicyIds' => [...]])
+     * @return Response
+     * @throws RuntimeException If site ID is not set
+     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
+     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
+     */
+    public function updatePolicyOrdering(string $sourceFirewallZoneId, string $destinationFirewallZoneId, array $data): Response
+    {
+        $siteId = $this->requireSiteId();
+        return $this->connector->send(new UpdateFirewallPolicyOrderingRequest($siteId, $sourceFirewallZoneId, $destinationFirewallZoneId, $data));
     }
 }
