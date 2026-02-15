@@ -7,6 +7,9 @@ namespace ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Hotspot;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
+/**
+ * Deletes a specific hotspot voucher.
+ */
 class DeleteVoucherRequest extends Request
 {
     protected Method $method = Method::DELETE;
@@ -14,8 +17,7 @@ class DeleteVoucherRequest extends Request
     public function __construct(
         protected string $siteId,
         protected string $voucherId
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

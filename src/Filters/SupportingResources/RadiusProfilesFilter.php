@@ -31,8 +31,6 @@ class RadiusProfilesFilter extends Filter
      * Filter by profile ID (UUID)
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function id(): static
     {
@@ -43,8 +41,6 @@ class RadiusProfilesFilter extends Filter
      * Filter by profile name
      *
      * Supported operators: eq, ne, in, notIn, like
-     *
-     * @return static
      */
     public static function name(): static
     {
@@ -55,8 +51,6 @@ class RadiusProfilesFilter extends Filter
      * Filter by metadata origin
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function metadataOrigin(): static
     {

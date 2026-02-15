@@ -36,8 +36,6 @@ class VpnServersFilter extends Filter
      * Filter by VPN server type
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function type(): static
     {
@@ -48,8 +46,6 @@ class VpnServersFilter extends Filter
      * Filter by server ID (UUID)
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function id(): static
     {
@@ -60,8 +56,6 @@ class VpnServersFilter extends Filter
      * Filter by server name
      *
      * Supported operators: eq, ne, in, notIn, like
-     *
-     * @return static
      */
     public static function name(): static
     {
@@ -72,8 +66,6 @@ class VpnServersFilter extends Filter
      * Filter by enabled status
      *
      * Supported operators: eq, ne
-     *
-     * @return static
      */
     public static function enabled(): static
     {
@@ -84,8 +76,6 @@ class VpnServersFilter extends Filter
      * Filter by metadata origin
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function metadataOrigin(): static
     {
@@ -96,8 +86,6 @@ class VpnServersFilter extends Filter
 
     /**
      * Filter for enabled VPN servers only
-     *
-     * @return static
      */
     public static function enabledOnly(): static
     {
@@ -106,8 +94,6 @@ class VpnServersFilter extends Filter
 
     /**
      * Filter for disabled VPN servers only
-     *
-     * @return static
      */
     public static function disabledOnly(): static
     {

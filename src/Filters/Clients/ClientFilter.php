@@ -46,8 +46,6 @@ class ClientFilter extends Filter
      * Filter by client ID (UUID)
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function id(): static
     {
@@ -59,8 +57,6 @@ class ClientFilter extends Filter
      *
      * Supported operators: eq, ne, in, notIn
      * Values: WIRED, WIRELESS, VPN, TELEPORT
-     *
-     * @return static
      */
     public static function type(): static
     {
@@ -71,8 +67,6 @@ class ClientFilter extends Filter
      * Filter by client MAC address
      *
      * Supported operators: isNull, isNotNull, eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function macAddress(): static
     {
@@ -83,8 +77,6 @@ class ClientFilter extends Filter
      * Filter by client IP address
      *
      * Supported operators: isNull, isNotNull, eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function ipAddress(): static
     {
@@ -95,8 +87,6 @@ class ClientFilter extends Filter
      * Filter by connection timestamp
      *
      * Supported operators: isNull, isNotNull, eq, ne, gt, ge, lt, le
-     *
-     * @return static
      */
     public static function connectedAt(): static
     {
@@ -108,8 +98,6 @@ class ClientFilter extends Filter
      *
      * Supported operators: eq, ne, in, notIn
      * Values: DEFAULT, GUEST
-     *
-     * @return static
      */
     public static function accessType(): static
     {
@@ -120,8 +108,6 @@ class ClientFilter extends Filter
      * Filter by authorization status
      *
      * Supported operators: isNull, isNotNull, eq, ne
-     *
-     * @return static
      */
     public static function accessAuthorized(): static
     {
@@ -132,8 +118,6 @@ class ClientFilter extends Filter
 
     /**
      * Filter for wireless clients only
-     *
-     * @return static
      */
     public static function wireless(): static
     {
@@ -142,8 +126,6 @@ class ClientFilter extends Filter
 
     /**
      * Filter for wired clients only
-     *
-     * @return static
      */
     public static function wired(): static
     {
@@ -152,8 +134,6 @@ class ClientFilter extends Filter
 
     /**
      * Filter for VPN clients only
-     *
-     * @return static
      */
     public static function vpn(): static
     {
@@ -162,8 +142,6 @@ class ClientFilter extends Filter
 
     /**
      * Filter for Teleport clients only
-     *
-     * @return static
      */
     public static function teleport(): static
     {
@@ -172,8 +150,6 @@ class ClientFilter extends Filter
 
     /**
      * Filter for guest clients only
-     *
-     * @return static
      */
     public static function guests(): static
     {
@@ -182,8 +158,6 @@ class ClientFilter extends Filter
 
     /**
      * Filter for default/standard access clients only
-     *
-     * @return static
      */
     public static function defaultAccess(): static
     {
@@ -192,8 +166,6 @@ class ClientFilter extends Filter
 
     /**
      * Filter for wireless guest clients
-     *
-     * @return static
      */
     public static function wirelessGuests(): static
     {
@@ -205,8 +177,6 @@ class ClientFilter extends Filter
 
     /**
      * Filter for wired guest clients
-     *
-     * @return static
      */
     public static function wiredGuests(): static
     {
@@ -218,8 +188,6 @@ class ClientFilter extends Filter
 
     /**
      * Filter for authorized guest clients
-     *
-     * @return static
      */
     public static function authorizedGuests(): static
     {
@@ -231,8 +199,6 @@ class ClientFilter extends Filter
 
     /**
      * Filter for unauthorized guest clients
-     *
-     * @return static
      */
     public static function unauthorizedGuests(): static
     {
@@ -244,8 +210,6 @@ class ClientFilter extends Filter
 
     /**
      * Filter for clients with assigned IP addresses
-     *
-     * @return static
      */
     public static function withIpAddress(): static
     {
@@ -254,8 +218,6 @@ class ClientFilter extends Filter
 
     /**
      * Filter for clients without IP addresses
-     *
-     * @return static
      */
     public static function withoutIpAddress(): static
     {

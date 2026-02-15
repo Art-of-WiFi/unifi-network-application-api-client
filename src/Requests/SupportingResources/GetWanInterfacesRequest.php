@@ -7,6 +7,9 @@ namespace ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
+/**
+ * Retrieves a list of WAN interfaces for a specific site.
+ */
 class GetWanInterfacesRequest extends Request
 {
     protected Method $method = Method::GET;
@@ -15,8 +18,7 @@ class GetWanInterfacesRequest extends Request
         protected string $siteId,
         protected ?int $offset = null,
         protected ?int $limit = null
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

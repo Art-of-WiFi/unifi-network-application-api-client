@@ -48,8 +48,6 @@ class DnsPolicyFilter extends Filter
      * Filter by record type (A, AAAA, CNAME, MX, TXT, SRV, FORWARD_DOMAIN)
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function type(): static
     {
@@ -60,8 +58,6 @@ class DnsPolicyFilter extends Filter
      * Filter by policy ID (UUID)
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function id(): static
     {
@@ -72,8 +68,6 @@ class DnsPolicyFilter extends Filter
      * Filter by enabled status
      *
      * Supported operators: eq, ne
-     *
-     * @return static
      */
     public static function enabled(): static
     {
@@ -84,8 +78,6 @@ class DnsPolicyFilter extends Filter
      * Filter by domain name
      *
      * Supported operators: eq, ne, in, notIn, like
-     *
-     * @return static
      */
     public static function domain(): static
     {
@@ -96,8 +88,6 @@ class DnsPolicyFilter extends Filter
      * Filter by IPv4 address
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function ipv4Address(): static
     {
@@ -108,8 +98,6 @@ class DnsPolicyFilter extends Filter
      * Filter by IPv6 address
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function ipv6Address(): static
     {
@@ -120,8 +108,6 @@ class DnsPolicyFilter extends Filter
      * Filter by target domain (CNAME records)
      *
      * Supported operators: eq, ne, in, notIn, like
-     *
-     * @return static
      */
     public static function targetDomain(): static
     {
@@ -132,8 +118,6 @@ class DnsPolicyFilter extends Filter
      * Filter by mail server domain (MX records)
      *
      * Supported operators: eq, ne, in, notIn, like
-     *
-     * @return static
      */
     public static function mailServerDomain(): static
     {
@@ -144,8 +128,6 @@ class DnsPolicyFilter extends Filter
      * Filter by text content (TXT records)
      *
      * Supported operators: eq, ne, in, notIn, like
-     *
-     * @return static
      */
     public static function text(): static
     {
@@ -156,8 +138,6 @@ class DnsPolicyFilter extends Filter
      * Filter by server domain (SRV records)
      *
      * Supported operators: eq, ne, in, notIn, like
-     *
-     * @return static
      */
     public static function serverDomain(): static
     {
@@ -168,8 +148,6 @@ class DnsPolicyFilter extends Filter
      * Filter by IP address
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function ipAddress(): static
     {
@@ -180,8 +158,6 @@ class DnsPolicyFilter extends Filter
      * Filter by TTL in seconds
      *
      * Supported operators: eq, ne, gt, ge, lt, le
-     *
-     * @return static
      */
     public static function ttlSeconds(): static
     {
@@ -192,8 +168,6 @@ class DnsPolicyFilter extends Filter
      * Filter by priority (MX/SRV records)
      *
      * Supported operators: eq, ne, gt, ge, lt, le
-     *
-     * @return static
      */
     public static function priority(): static
     {
@@ -204,8 +178,6 @@ class DnsPolicyFilter extends Filter
      * Filter by service name (SRV records)
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function service(): static
     {
@@ -216,8 +188,6 @@ class DnsPolicyFilter extends Filter
      * Filter by protocol (SRV records)
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function protocol(): static
     {
@@ -228,8 +198,6 @@ class DnsPolicyFilter extends Filter
      * Filter by port number (SRV records)
      *
      * Supported operators: eq, ne, gt, ge, lt, le
-     *
-     * @return static
      */
     public static function port(): static
     {
@@ -240,8 +208,6 @@ class DnsPolicyFilter extends Filter
      * Filter by weight (SRV records)
      *
      * Supported operators: eq, ne, gt, ge, lt, le
-     *
-     * @return static
      */
     public static function weight(): static
     {
@@ -252,8 +218,6 @@ class DnsPolicyFilter extends Filter
 
     /**
      * Filter for A records only
-     *
-     * @return static
      */
     public static function aRecords(): static
     {
@@ -262,8 +226,6 @@ class DnsPolicyFilter extends Filter
 
     /**
      * Filter for AAAA records only
-     *
-     * @return static
      */
     public static function aaaaRecords(): static
     {
@@ -272,8 +234,6 @@ class DnsPolicyFilter extends Filter
 
     /**
      * Filter for CNAME records only
-     *
-     * @return static
      */
     public static function cnameRecords(): static
     {
@@ -282,8 +242,6 @@ class DnsPolicyFilter extends Filter
 
     /**
      * Filter for MX records only
-     *
-     * @return static
      */
     public static function mxRecords(): static
     {
@@ -292,8 +250,6 @@ class DnsPolicyFilter extends Filter
 
     /**
      * Filter for TXT records only
-     *
-     * @return static
      */
     public static function txtRecords(): static
     {
@@ -302,8 +258,6 @@ class DnsPolicyFilter extends Filter
 
     /**
      * Filter for SRV records only
-     *
-     * @return static
      */
     public static function srvRecords(): static
     {
@@ -312,8 +266,6 @@ class DnsPolicyFilter extends Filter
 
     /**
      * Filter for forward domain entries only
-     *
-     * @return static
      */
     public static function forwardDomains(): static
     {
@@ -322,8 +274,6 @@ class DnsPolicyFilter extends Filter
 
     /**
      * Filter for enabled policies only
-     *
-     * @return static
      */
     public static function enabledOnly(): static
     {

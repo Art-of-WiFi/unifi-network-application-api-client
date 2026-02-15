@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ArtOfWiFi\UnifiNetworkApplicationApi\Resources;
 
+use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Filter;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\AclRules\CreateAclRuleRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\AclRules\DeleteAclRuleRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\AclRules\GetAclRuleOrderingRequest;
@@ -32,18 +33,19 @@ class AclRulesResource extends BaseResource
      *
      * Retrieves a paginated list of all ACL rules on the specified site.
      *
-     * @param int|null $offset Pagination offset (optional)
-     * @param int|null $limit Number of results per page (optional)
-     * @param string|null $filter Filter expression (optional)
-     * @return Response
+     * @param  int|null  $offset  Pagination offset (optional)
+     * @param  int|null  $limit  Number of results per page (optional)
+     * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
-    public function list(?int $offset = null, ?int $limit = null, ?string $filter = null): Response
+    public function list(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new GetAclRulesRequest($siteId, $offset, $limit, $filter));
     }
 
@@ -52,8 +54,8 @@ class AclRulesResource extends BaseResource
      *
      * Retrieves detailed information about a specific ACL rule.
      *
-     * @param string $ruleId The ACL rule UUID
-     * @return Response
+     * @param  string  $ruleId  The ACL rule UUID
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -62,6 +64,7 @@ class AclRulesResource extends BaseResource
     public function get(string $ruleId): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new GetAclRuleRequest($siteId, $ruleId));
     }
 
@@ -70,8 +73,8 @@ class AclRulesResource extends BaseResource
      *
      * Creates a new ACL rule on the specified site.
      *
-     * @param array $data The ACL rule configuration data
-     * @return Response
+     * @param  array  $data  The ACL rule configuration data
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (bad request, validation error, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -80,6 +83,7 @@ class AclRulesResource extends BaseResource
     public function create(array $data): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new CreateAclRuleRequest($siteId, $data));
     }
 
@@ -88,9 +92,9 @@ class AclRulesResource extends BaseResource
      *
      * Updates an existing ACL rule configuration.
      *
-     * @param string $ruleId The ACL rule UUID
-     * @param array $data The updated ACL rule configuration data
-     * @return Response
+     * @param  string  $ruleId  The ACL rule UUID
+     * @param  array  $data  The updated ACL rule configuration data
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (not found, bad request, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -99,6 +103,7 @@ class AclRulesResource extends BaseResource
     public function update(string $ruleId, array $data): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new UpdateAclRuleRequest($siteId, $ruleId, $data));
     }
 
@@ -107,9 +112,9 @@ class AclRulesResource extends BaseResource
      *
      * Deletes an existing ACL rule from the specified site.
      *
-     * @param string $ruleId The ACL rule UUID
-     * @param bool $force Force deletion (optional)
-     * @return Response
+     * @param  string  $ruleId  The ACL rule UUID
+     * @param  bool  $force  Force deletion (optional)
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (not found, conflict, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -118,6 +123,7 @@ class AclRulesResource extends BaseResource
     public function delete(string $ruleId, bool $force = false): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new DeleteAclRuleRequest($siteId, $ruleId, $force));
     }
 
@@ -128,7 +134,6 @@ class AclRulesResource extends BaseResource
      *
      * Retrieves the current ordering of ACL rules on the specified site.
      *
-     * @return Response
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -137,6 +142,7 @@ class AclRulesResource extends BaseResource
     public function getOrdering(): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new GetAclRuleOrderingRequest($siteId));
     }
 
@@ -145,8 +151,8 @@ class AclRulesResource extends BaseResource
      *
      * Updates the ordering of ACL rules on the specified site.
      *
-     * @param array $data The ordering data (e.g., ['orderedAclRuleIds' => [...]])
-     * @return Response
+     * @param  array  $data  The ordering data (e.g., ['orderedAclRuleIds' => [...]])
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -155,6 +161,7 @@ class AclRulesResource extends BaseResource
     public function updateOrdering(array $data): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new UpdateAclRuleOrderingRequest($siteId, $data));
     }
 }

@@ -15,19 +15,16 @@ use ArtOfWiFi\UnifiNetworkApplicationApi\UnifiConnector;
 abstract class BaseResource
 {
     /**
-     * @param UnifiConnector $connector The Saloon connector instance
-     * @param string|null $siteId The site ID for API calls that require it
+     * @param  UnifiConnector  $connector  The Saloon connector instance
+     * @param  string|null  $siteId  The site ID for API calls that require it
      */
     public function __construct(
         protected UnifiConnector $connector,
         protected ?string $siteId = null
-    ) {
-    }
+    ) {}
 
     /**
      * Get the connector instance
-     *
-     * @return UnifiConnector
      */
     public function getConnector(): UnifiConnector
     {
@@ -36,8 +33,6 @@ abstract class BaseResource
 
     /**
      * Get the site ID
-     *
-     * @return string|null
      */
     public function getSiteId(): ?string
     {
@@ -53,7 +48,7 @@ abstract class BaseResource
     {
         if ($this->siteId === null) {
             throw new \RuntimeException(
-                'Site ID is required for this operation. ' .
+                'Site ID is required for this operation. '.
                 'Please call setSiteId() on the client before using this endpoint.'
             );
         }

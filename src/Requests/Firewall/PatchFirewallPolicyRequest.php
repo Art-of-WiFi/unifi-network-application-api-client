@@ -9,6 +9,9 @@ use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Traits\Body\HasJsonBody;
 
+/**
+ * Partially updates a firewall policy configuration (PATCH).
+ */
 class PatchFirewallPolicyRequest extends Request implements HasBody
 {
     use HasJsonBody;
@@ -19,8 +22,7 @@ class PatchFirewallPolicyRequest extends Request implements HasBody
         protected string $siteId,
         protected string $firewallPolicyId,
         protected array $data
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

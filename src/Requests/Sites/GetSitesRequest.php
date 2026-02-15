@@ -8,9 +8,7 @@ use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
 /**
- * Get Sites Request
- *
- * Retrieves a paginated list of all sites.
+ * Retrieves a paginated list of all sites managed by the UniFi Network Application.
  */
 class GetSitesRequest extends Request
 {
@@ -20,8 +18,7 @@ class GetSitesRequest extends Request
         protected ?int $offset = null,
         protected ?int $limit = null,
         protected ?string $filter = null
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

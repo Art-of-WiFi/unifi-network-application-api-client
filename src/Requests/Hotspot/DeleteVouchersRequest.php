@@ -7,15 +7,17 @@ namespace ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Hotspot;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
+/**
+ * Deletes multiple hotspot vouchers matching a required filter expression.
+ */
 class DeleteVouchersRequest extends Request
 {
     protected Method $method = Method::DELETE;
 
     public function __construct(
         protected string $siteId,
-        protected ?string $filter = null
-    ) {
-    }
+        protected string $filter
+    ) {}
 
     public function resolveEndpoint(): string
     {
@@ -24,6 +26,6 @@ class DeleteVouchersRequest extends Request
 
     protected function defaultQuery(): array
     {
-        return $this->filter !== null ? ['filter' => $this->filter] : [];
+        return ['filter' => $this->filter];
     }
 }

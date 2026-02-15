@@ -7,6 +7,9 @@ namespace ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Devices;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
+/**
+ * Retrieves performance statistics for a specific adopted device.
+ */
 class GetDeviceStatisticsRequest extends Request
 {
     protected Method $method = Method::GET;
@@ -14,8 +17,7 @@ class GetDeviceStatisticsRequest extends Request
     public function __construct(
         protected string $siteId,
         protected string $deviceId
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

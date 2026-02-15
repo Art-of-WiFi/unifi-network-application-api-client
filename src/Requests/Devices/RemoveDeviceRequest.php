@@ -7,6 +7,9 @@ namespace ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Devices;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
+/**
+ * Removes (unadopts) a device from a specific site.
+ */
 class RemoveDeviceRequest extends Request
 {
     protected Method $method = Method::DELETE;
@@ -14,8 +17,7 @@ class RemoveDeviceRequest extends Request
     public function __construct(
         protected string $siteId,
         protected string $deviceId
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

@@ -24,10 +24,10 @@ class SitesResource extends BaseResource
      *
      * Retrieves a paginated list of all sites within your UniFi Network application.
      *
-     * @param int|null $offset Pagination offset (optional, default: 0)
-     * @param int|null $limit Number of results per page (optional)
-     * @param string|null $filter Filter expression (optional)
-     * @return Response
+     * @param  int|null  $offset  Pagination offset (optional, default: 0)
+     * @param  int|null  $limit  Number of results per page (optional)
+     * @param  string|null  $filter  Filter expression (optional)
+     *
      * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
@@ -40,10 +40,10 @@ class SitesResource extends BaseResource
     /**
      * Alias for list() method
      *
-     * @param int|null $offset Pagination offset (optional, default: 0)
-     * @param int|null $limit Number of results per page (optional)
-     * @param string|null $filter Filter expression (optional)
-     * @return Response
+     * @param  int|null  $offset  Pagination offset (optional, default: 0)
+     * @param  int|null  $limit  Number of results per page (optional)
+     * @param  string|null  $filter  Filter expression (optional)
+     *
      * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout

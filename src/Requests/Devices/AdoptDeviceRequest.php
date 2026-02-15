@@ -9,6 +9,9 @@ use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Traits\Body\HasJsonBody;
 
+/**
+ * Initiates adoption of a pending device into a specific site.
+ */
 class AdoptDeviceRequest extends Request implements HasBody
 {
     use HasJsonBody;
@@ -19,8 +22,7 @@ class AdoptDeviceRequest extends Request implements HasBody
         protected string $siteId,
         protected string $macAddress,
         protected bool $ignoreDeviceLimit = false
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

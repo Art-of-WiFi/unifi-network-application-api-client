@@ -7,6 +7,9 @@ namespace ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Devices;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
+/**
+ * Retrieves a list of devices pending adoption across all sites.
+ */
 class GetPendingDevicesRequest extends Request
 {
     protected Method $method = Method::GET;
@@ -15,8 +18,7 @@ class GetPendingDevicesRequest extends Request
         protected ?int $offset = null,
         protected ?int $limit = null,
         protected ?string $filter = null
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

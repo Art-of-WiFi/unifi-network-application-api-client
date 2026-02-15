@@ -7,6 +7,9 @@ namespace ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Networks;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
+/**
+ * Deletes an existing network from a specific site.
+ */
 class DeleteNetworkRequest extends Request
 {
     protected Method $method = Method::DELETE;
@@ -15,8 +18,7 @@ class DeleteNetworkRequest extends Request
         protected string $siteId,
         protected string $networkId,
         protected bool $force = false
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

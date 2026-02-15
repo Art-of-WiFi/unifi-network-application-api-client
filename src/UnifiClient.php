@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace ArtOfWiFi\UnifiNetworkApplicationApi;
 
-use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\SitesResource;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\DevicesResource;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\ClientsResource;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\NetworksResource;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\WifiBroadcastsResource;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\HotspotResource;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\FirewallResource;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\AclRulesResource;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\TrafficMatchingListsResource;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\ApplicationInfoResource;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\ClientsResource;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\DevicesResource;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\DnsPoliciesResource;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\FirewallResource;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\HotspotResource;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\NetworksResource;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\SitesResource;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\SupportingResourcesResource;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\TrafficMatchingListsResource;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\WifiBroadcastsResource;
 
 /**
  * UniFi API Client - Main Entry Point
@@ -32,14 +32,15 @@ use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\SupportingResourcesResource;
 class UnifiClient
 {
     protected UnifiConnector $connector;
+
     protected ?string $siteId = null;
 
     /**
      * Create a new UniFi API client instance
      *
-     * @param string $baseUrl The base URL of your UniFi controller (e.g., 'https://192.168.1.1')
-     * @param string $apiKey Your UniFi API key (generate this in the Integrations section of your UniFi application)
-     * @param bool $verifySsl Whether to verify SSL certificates (set to false for self-signed certificates)
+     * @param  string  $baseUrl  The base URL of your UniFi controller (e.g., 'https://192.168.1.1')
+     * @param  string  $apiKey  Your UniFi API key (generate this in the Integrations section of your UniFi application)
+     * @param  bool  $verifySsl  Whether to verify SSL certificates (set to false for self-signed certificates)
      */
     public function __construct(
         string $baseUrl,
@@ -51,8 +52,6 @@ class UnifiClient
 
     /**
      * Get the underlying Saloon connector
-     *
-     * @return UnifiConnector
      */
     public function getConnector(): UnifiConnector
     {
@@ -65,19 +64,18 @@ class UnifiClient
      * Many UniFi API endpoints require a site ID. Use this method to set the site ID
      * that will be used for all subsequent API calls.
      *
-     * @param string $siteId The UUID of the site
+     * @param  string  $siteId  The UUID of the site
      * @return self Returns the client instance for method chaining
      */
     public function setSiteId(string $siteId): self
     {
         $this->siteId = $siteId;
+
         return $this;
     }
 
     /**
      * Get the currently set site ID
-     *
-     * @return string|null
      */
     public function getSiteId(): ?string
     {
@@ -86,8 +84,6 @@ class UnifiClient
 
     /**
      * Access application info endpoints
-     *
-     * @return ApplicationInfoResource
      */
     public function applicationInfo(): ApplicationInfoResource
     {
@@ -96,8 +92,6 @@ class UnifiClient
 
     /**
      * Access site management endpoints
-     *
-     * @return SitesResource
      */
     public function sites(): SitesResource
     {
@@ -106,8 +100,6 @@ class UnifiClient
 
     /**
      * Access device management endpoints
-     *
-     * @return DevicesResource
      */
     public function devices(): DevicesResource
     {
@@ -116,8 +108,6 @@ class UnifiClient
 
     /**
      * Access client management endpoints
-     *
-     * @return ClientsResource
      */
     public function clients(): ClientsResource
     {
@@ -126,8 +116,6 @@ class UnifiClient
 
     /**
      * Access network management endpoints
-     *
-     * @return NetworksResource
      */
     public function networks(): NetworksResource
     {
@@ -136,8 +124,6 @@ class UnifiClient
 
     /**
      * Access WiFi broadcast (SSID) management endpoints
-     *
-     * @return WifiBroadcastsResource
      */
     public function wifiBroadcasts(): WifiBroadcastsResource
     {
@@ -146,8 +132,6 @@ class UnifiClient
 
     /**
      * Access hotspot voucher management endpoints
-     *
-     * @return HotspotResource
      */
     public function hotspot(): HotspotResource
     {
@@ -156,8 +140,6 @@ class UnifiClient
 
     /**
      * Access firewall zone and policy management endpoints
-     *
-     * @return FirewallResource
      */
     public function firewall(): FirewallResource
     {
@@ -166,8 +148,6 @@ class UnifiClient
 
     /**
      * Access ACL rule management endpoints
-     *
-     * @return AclRulesResource
      */
     public function aclRules(): AclRulesResource
     {
@@ -176,8 +156,6 @@ class UnifiClient
 
     /**
      * Access traffic matching list endpoints
-     *
-     * @return TrafficMatchingListsResource
      */
     public function trafficMatchingLists(): TrafficMatchingListsResource
     {
@@ -186,8 +164,6 @@ class UnifiClient
 
     /**
      * Access DNS policy management endpoints
-     *
-     * @return DnsPoliciesResource
      */
     public function dnsPolicies(): DnsPoliciesResource
     {
@@ -199,8 +175,6 @@ class UnifiClient
      *
      * Provides access to read-only reference data such as WAN interfaces,
      * DPI categories, country codes, RADIUS profiles, and device tags.
-     *
-     * @return SupportingResourcesResource
      */
     public function supportingResources(): SupportingResourcesResource
     {

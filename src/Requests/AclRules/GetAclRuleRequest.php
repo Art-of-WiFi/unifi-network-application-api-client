@@ -7,6 +7,9 @@ namespace ArtOfWiFi\UnifiNetworkApplicationApi\Requests\AclRules;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
+/**
+ * Retrieves detailed information about a specific ACL rule.
+ */
 class GetAclRuleRequest extends Request
 {
     protected Method $method = Method::GET;
@@ -14,8 +17,7 @@ class GetAclRuleRequest extends Request
     public function __construct(
         protected string $siteId,
         protected string $ruleId
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

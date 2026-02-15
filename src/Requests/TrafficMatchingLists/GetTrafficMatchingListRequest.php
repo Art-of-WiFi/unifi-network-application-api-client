@@ -7,6 +7,9 @@ namespace ArtOfWiFi\UnifiNetworkApplicationApi\Requests\TrafficMatchingLists;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
+/**
+ * Retrieves detailed information about a specific traffic matching list.
+ */
 class GetTrafficMatchingListRequest extends Request
 {
     protected Method $method = Method::GET;
@@ -14,8 +17,7 @@ class GetTrafficMatchingListRequest extends Request
     public function __construct(
         protected string $siteId,
         protected string $listId
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

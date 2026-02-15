@@ -7,6 +7,9 @@ namespace ArtOfWiFi\UnifiNetworkApplicationApi\Requests\TrafficMatchingLists;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
+/**
+ * Deletes a traffic matching list from a specific site.
+ */
 class DeleteTrafficMatchingListRequest extends Request
 {
     protected Method $method = Method::DELETE;
@@ -15,8 +18,7 @@ class DeleteTrafficMatchingListRequest extends Request
         protected string $siteId,
         protected string $listId,
         protected bool $force = false
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

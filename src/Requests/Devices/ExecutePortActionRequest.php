@@ -9,6 +9,9 @@ use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Traits\Body\HasJsonBody;
 
+/**
+ * Executes an action on a specific port of a device (e.g., power cycle PoE).
+ */
 class ExecutePortActionRequest extends Request implements HasBody
 {
     use HasJsonBody;
@@ -20,8 +23,7 @@ class ExecutePortActionRequest extends Request implements HasBody
         protected string $deviceId,
         protected int $portIdx,
         protected array $action
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

@@ -36,8 +36,6 @@ class SiteToSiteVpnTunnelsFilter extends Filter
      * Filter by VPN tunnel type
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function type(): static
     {
@@ -48,8 +46,6 @@ class SiteToSiteVpnTunnelsFilter extends Filter
      * Filter by tunnel ID (UUID)
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function id(): static
     {
@@ -60,8 +56,6 @@ class SiteToSiteVpnTunnelsFilter extends Filter
      * Filter by tunnel name
      *
      * Supported operators: eq, ne, in, notIn, like
-     *
-     * @return static
      */
     public static function name(): static
     {
@@ -72,8 +66,6 @@ class SiteToSiteVpnTunnelsFilter extends Filter
      * Filter by metadata origin
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function metadataOrigin(): static
     {
@@ -84,8 +76,6 @@ class SiteToSiteVpnTunnelsFilter extends Filter
      * Filter by metadata source
      *
      * Supported operators: eq, ne, in, notIn, isNull, isNotNull
-     *
-     * @return static
      */
     public static function metadataSource(): static
     {

@@ -48,8 +48,6 @@ class DeviceFilter extends Filter
      * Filter by device ID (UUID)
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function id(): static
     {
@@ -60,8 +58,6 @@ class DeviceFilter extends Filter
      * Filter by device MAC address
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function macAddress(): static
     {
@@ -72,8 +68,6 @@ class DeviceFilter extends Filter
      * Filter by device IP address
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function ipAddress(): static
     {
@@ -84,8 +78,6 @@ class DeviceFilter extends Filter
      * Filter by device name
      *
      * Supported operators: eq, ne, in, notIn, like
-     *
-     * @return static
      */
     public static function name(): static
     {
@@ -96,8 +88,6 @@ class DeviceFilter extends Filter
      * Filter by device model
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function model(): static
     {
@@ -108,8 +98,6 @@ class DeviceFilter extends Filter
      * Filter by device state
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function state(): static
     {
@@ -120,8 +108,6 @@ class DeviceFilter extends Filter
      * Filter by supported status
      *
      * Supported operators: eq, ne
-     *
-     * @return static
      */
     public static function supported(): static
     {
@@ -132,8 +118,6 @@ class DeviceFilter extends Filter
      * Filter by firmware version
      *
      * Supported operators: isNull, isNotNull, eq, ne, gt, ge, lt, le, like, in, notIn
-     *
-     * @return static
      */
     public static function firmwareVersion(): static
     {
@@ -144,8 +128,6 @@ class DeviceFilter extends Filter
      * Filter by firmware updatable status
      *
      * Supported operators: eq, ne
-     *
-     * @return static
      */
     public static function firmwareUpdatable(): static
     {
@@ -156,8 +138,6 @@ class DeviceFilter extends Filter
      * Filter by device features (set operations)
      *
      * Supported operators: isEmpty, contains, containsAny, containsAll, containsExactly
-     *
-     * @return static
      */
     public static function features(): static
     {
@@ -168,8 +148,6 @@ class DeviceFilter extends Filter
      * Filter by device interfaces (set operations)
      *
      * Supported operators: isEmpty, contains, containsAny, containsAll, containsExactly
-     *
-     * @return static
      */
     public static function interfaces(): static
     {
@@ -179,43 +157,7 @@ class DeviceFilter extends Filter
     // ===== Preset Filters =====
 
     /**
-     * Filter for access points
-     *
-     * @return static
-     */
-    public static function accessPoints(): static
-    {
-        return static::model()->like('U6*')
-            ->or(static::model()->like('UAP*'))
-            ->or(static::model()->like('U7*'));
-    }
-
-    /**
-     * Filter for switches
-     *
-     * @return static
-     */
-    public static function switches(): static
-    {
-        return static::model()->like('USW*');
-    }
-
-    /**
-     * Filter for gateways/routers
-     *
-     * @return static
-     */
-    public static function gateways(): static
-    {
-        return static::model()->like('UDM*')
-            ->or(static::model()->like('UXG*'))
-            ->or(static::model()->like('USG*'));
-    }
-
-    /**
      * Filter for devices needing firmware updates
-     *
-     * @return static
      */
     public static function needsFirmwareUpdate(): static
     {
@@ -224,8 +166,6 @@ class DeviceFilter extends Filter
 
     /**
      * Filter for supported devices only
-     *
-     * @return static
      */
     public static function supportedOnly(): static
     {
@@ -234,8 +174,6 @@ class DeviceFilter extends Filter
 
     /**
      * Filter for devices with WiFi 6 support
-     *
-     * @return static
      */
     public static function wifi6Capable(): static
     {
@@ -244,8 +182,6 @@ class DeviceFilter extends Filter
 
     /**
      * Filter for PoE-capable devices
-     *
-     * @return static
      */
     public static function poeCapable(): static
     {

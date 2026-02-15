@@ -9,6 +9,9 @@ use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Traits\Body\HasJsonBody;
 
+/**
+ * Updates an existing ACL rule configuration.
+ */
 class UpdateAclRuleRequest extends Request implements HasBody
 {
     use HasJsonBody;
@@ -19,8 +22,7 @@ class UpdateAclRuleRequest extends Request implements HasBody
         protected string $siteId,
         protected string $ruleId,
         protected array $data
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

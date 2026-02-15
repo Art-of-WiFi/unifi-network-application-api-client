@@ -10,6 +10,8 @@ namespace ArtOfWiFi\UnifiNetworkApplicationApi\Filters;
  * Provides a fluent, type-safe interface for building UniFi API filters.
  * This class should be extended by resource-specific filter classes.
  *
+ * @phpstan-consistent-constructor
+ *
  * @example
  * ```php
  * // Simple filter
@@ -31,62 +33,62 @@ namespace ArtOfWiFi\UnifiNetworkApplicationApi\Filters;
 abstract class Filter
 {
     protected array $conditions = [];
+
     protected ?string $currentProperty = null;
 
     /**
      * Start a new filter on a property
      *
-     * @param string $property The property to filter on
-     * @return static
+     * @param  string  $property  The property to filter on
      */
     public static function where(string $property): static
     {
-        $instance = new static();
+        $instance = new static; // @phpstan-ignore new.static
         $instance->currentProperty = $property;
+
         return $instance;
     }
 
     /**
      * Combine multiple filters with AND logic
      *
-     * @param Filter ...$filters Filters to combine
-     * @return static
+     * @param  Filter  ...$filters  Filters to combine
      */
     public static function and(Filter ...$filters): static
     {
-        $instance = new static();
+        $instance = new static; // @phpstan-ignore new.static
         $instance->conditions[] = [
             'type' => 'logical',
             'operator' => 'and',
-            'filters' => $filters
+            'filters' => $filters,
         ];
+
         return $instance;
     }
 
     /**
      * Combine multiple filters with OR logic
      *
-     * @param Filter ...$filters Filters to combine
-     * @return static
+     * @param  Filter  ...$filters  Filters to combine
      */
     public static function or(Filter ...$filters): static
     {
-        $instance = new static();
+        $instance = new static; // @phpstan-ignore new.static
         $instance->conditions[] = [
             'type' => 'logical',
             'operator' => 'or',
-            'filters' => $filters
+            'filters' => $filters,
         ];
+
         return $instance;
     }
 
     /**
      * Equals operator (eq)
      *
-     * @param string|int|bool $value Value to compare
-     * @return static
+     * @param  string|int|bool|\BackedEnum  $value  Value to compare
      */
-    public function equals(string|int|bool $value): static
+    public function equals(string|int|bool|\BackedEnum $value): static
     {
         return $this->addCondition('eq', $value);
     }
@@ -94,10 +96,9 @@ abstract class Filter
     /**
      * Shorthand for equals()
      *
-     * @param string|int|bool $value Value to compare
-     * @return static
+     * @param  string|int|bool|\BackedEnum  $value  Value to compare
      */
-    public function eq(string|int|bool $value): static
+    public function eq(string|int|bool|\BackedEnum $value): static
     {
         return $this->equals($value);
     }
@@ -105,10 +106,9 @@ abstract class Filter
     /**
      * Not equals operator (ne)
      *
-     * @param string|int|bool $value Value to compare
-     * @return static
+     * @param  string|int|bool|\BackedEnum  $value  Value to compare
      */
-    public function notEquals(string|int|bool $value): static
+    public function notEquals(string|int|bool|\BackedEnum $value): static
     {
         return $this->addCondition('ne', $value);
     }
@@ -116,10 +116,9 @@ abstract class Filter
     /**
      * Shorthand for notEquals()
      *
-     * @param string|int|bool $value Value to compare
-     * @return static
+     * @param  string|int|bool|\BackedEnum  $value  Value to compare
      */
-    public function ne(string|int|bool $value): static
+    public function ne(string|int|bool|\BackedEnum $value): static
     {
         return $this->notEquals($value);
     }
@@ -127,8 +126,7 @@ abstract class Filter
     /**
      * Greater than operator (gt)
      *
-     * @param string|int $value Value to compare
-     * @return static
+     * @param  string|int  $value  Value to compare
      */
     public function greaterThan(string|int $value): static
     {
@@ -138,8 +136,7 @@ abstract class Filter
     /**
      * Shorthand for greaterThan()
      *
-     * @param string|int $value Value to compare
-     * @return static
+     * @param  string|int  $value  Value to compare
      */
     public function gt(string|int $value): static
     {
@@ -149,8 +146,7 @@ abstract class Filter
     /**
      * Greater than or equal operator (ge)
      *
-     * @param string|int $value Value to compare
-     * @return static
+     * @param  string|int  $value  Value to compare
      */
     public function greaterThanOrEqual(string|int $value): static
     {
@@ -160,8 +156,7 @@ abstract class Filter
     /**
      * Shorthand for greaterThanOrEqual()
      *
-     * @param string|int $value Value to compare
-     * @return static
+     * @param  string|int  $value  Value to compare
      */
     public function gte(string|int $value): static
     {
@@ -171,8 +166,7 @@ abstract class Filter
     /**
      * Less than operator (lt)
      *
-     * @param string|int $value Value to compare
-     * @return static
+     * @param  string|int  $value  Value to compare
      */
     public function lessThan(string|int $value): static
     {
@@ -182,8 +176,7 @@ abstract class Filter
     /**
      * Shorthand for lessThan()
      *
-     * @param string|int $value Value to compare
-     * @return static
+     * @param  string|int  $value  Value to compare
      */
     public function lt(string|int $value): static
     {
@@ -193,8 +186,7 @@ abstract class Filter
     /**
      * Less than or equal operator (le)
      *
-     * @param string|int $value Value to compare
-     * @return static
+     * @param  string|int  $value  Value to compare
      */
     public function lessThanOrEqual(string|int $value): static
     {
@@ -204,8 +196,7 @@ abstract class Filter
     /**
      * Shorthand for lessThanOrEqual()
      *
-     * @param string|int $value Value to compare
-     * @return static
+     * @param  string|int  $value  Value to compare
      */
     public function lte(string|int $value): static
     {
@@ -215,8 +206,7 @@ abstract class Filter
     /**
      * LIKE operator for pattern matching
      *
-     * @param string $pattern Pattern to match (use * as wildcard)
-     * @return static
+     * @param  string  $pattern  Pattern to match (use * as wildcard)
      */
     public function like(string $pattern): static
     {
@@ -226,8 +216,7 @@ abstract class Filter
     /**
      * IN operator - value must be in the given array
      *
-     * @param array $values Array of values
-     * @return static
+     * @param  array  $values  Array of values
      */
     public function in(array $values): static
     {
@@ -237,8 +226,7 @@ abstract class Filter
     /**
      * NOT IN operator - value must not be in the given array
      *
-     * @param array $values Array of values
-     * @return static
+     * @param  array  $values  Array of values
      */
     public function notIn(array $values): static
     {
@@ -247,8 +235,6 @@ abstract class Filter
 
     /**
      * IS NULL operator - property has no value
-     *
-     * @return static
      */
     public function isNull(): static
     {
@@ -257,8 +243,6 @@ abstract class Filter
 
     /**
      * IS NOT NULL operator - property has a value
-     *
-     * @return static
      */
     public function isNotNull(): static
     {
@@ -269,8 +253,7 @@ abstract class Filter
      * CONTAINS operator - for set operations
      * Checks if a set contains the specified value
      *
-     * @param string $value Value to check
-     * @return static
+     * @param  string  $value  Value to check
      */
     public function contains(string $value): static
     {
@@ -281,8 +264,7 @@ abstract class Filter
      * CONTAINS ANY operator - for set operations
      * Checks if a set contains any of the specified values
      *
-     * @param array $values Values to check
-     * @return static
+     * @param  array  $values  Values to check
      */
     public function containsAny(array $values): static
     {
@@ -293,8 +275,7 @@ abstract class Filter
      * CONTAINS ALL operator - for set operations
      * Checks if a set contains all of the specified values
      *
-     * @param array $values Values to check
-     * @return static
+     * @param  array  $values  Values to check
      */
     public function containsAll(array $values): static
     {
@@ -305,8 +286,7 @@ abstract class Filter
      * CONTAINS EXACTLY operator - for set operations
      * Checks if a set contains exactly the specified values
      *
-     * @param array $values Values to check
-     * @return static
+     * @param  array  $values  Values to check
      */
     public function containsExactly(array $values): static
     {
@@ -316,8 +296,6 @@ abstract class Filter
     /**
      * IS EMPTY operator - for set operations
      * Checks if a set is empty
-     *
-     * @return static
      */
     public function isEmpty(): static
     {
@@ -327,19 +305,17 @@ abstract class Filter
     /**
      * Add another condition to the current filter with AND logic
      *
-     * @param string $property Property to filter on
-     * @return static
+     * @param  string  $property  Property to filter on
      */
     public function andWhere(string $property): static
     {
         $this->currentProperty = $property;
+
         return $this;
     }
 
     /**
      * Convert filter to API string format
-     *
-     * @return string
      */
     public function toString(): string
     {
@@ -348,8 +324,6 @@ abstract class Filter
 
     /**
      * Allow casting to string
-     *
-     * @return string
      */
     public function __toString(): string
     {
@@ -359,9 +333,8 @@ abstract class Filter
     /**
      * Add a condition to the filter
      *
-     * @param string $operator The operator to use
-     * @param mixed $value The value to compare (null for operators like isNull)
-     * @return static
+     * @param  string  $operator  The operator to use
+     * @param  mixed  $value  The value to compare (null for operators like isNull)
      */
     protected function addCondition(string $operator, mixed $value): static
     {
@@ -373,7 +346,7 @@ abstract class Filter
             'type' => 'comparison',
             'property' => $this->currentProperty,
             'operator' => $operator,
-            'value' => $value
+            'value' => $value,
         ];
 
         return $this;
@@ -382,8 +355,7 @@ abstract class Filter
     /**
      * Recursively build filter string from conditions
      *
-     * @param array $conditions Conditions to build
-     * @return string
+     * @param  array  $conditions  Conditions to build
      */
     protected function buildFilterString(array $conditions): string
     {
@@ -398,10 +370,11 @@ abstract class Filter
             if ($condition['type'] === 'logical') {
                 $operator = $condition['operator'];
                 $subFilters = array_map(
-                    fn($filter) => $filter->toString(),
+                    fn ($filter) => $filter->toString(),
                     $condition['filters']
                 );
-                return $operator . '(' . implode(', ', $subFilters) . ')';
+
+                return $operator.'('.implode(', ', $subFilters).')';
             }
 
             // Handle comparison operators
@@ -410,19 +383,19 @@ abstract class Filter
 
         // Multiple conditions - implicit AND
         $filters = array_map(
-            fn($condition) => $condition['type'] === 'logical'
+            fn ($condition) => $condition['type'] === 'logical'
                 ? $this->buildFilterString([$condition])
                 : $this->buildComparisonString($condition),
             $conditions
         );
-        return 'and(' . implode(', ', $filters) . ')';
+
+        return 'and('.implode(', ', $filters).')';
     }
 
     /**
      * Build comparison string for a single condition
      *
-     * @param array $condition Condition to build
-     * @return string
+     * @param  array  $condition  Condition to build
      */
     protected function buildComparisonString(array $condition): string
     {
@@ -439,22 +412,23 @@ abstract class Filter
         // Handle array values (in, notIn, containsAny, containsAll, containsExactly)
         if (is_array($value)) {
             $formattedValues = array_map(
-                fn($v) => $this->formatValue($v),
+                fn ($v) => $this->formatValue($v),
                 $value
             );
-            return "{$property}.{$operator}(" . implode(', ', $formattedValues) . ")";
+
+            return "{$property}.{$operator}(".implode(', ', $formattedValues).')';
         }
 
         // Handle single values
         $formattedValue = $this->formatValue($value);
+
         return "{$property}.{$operator}({$formattedValue})";
     }
 
     /**
      * Format value for filter string
      *
-     * @param mixed $value Value to format
-     * @return string
+     * @param  mixed  $value  Value to format
      */
     protected function formatValue(mixed $value): string
     {
@@ -477,6 +451,7 @@ abstract class Filter
 
         // String - escape single quotes and wrap in single quotes
         $escaped = str_replace("'", "\\'", (string) $value);
+
         return "'{$escaped}'";
     }
 }

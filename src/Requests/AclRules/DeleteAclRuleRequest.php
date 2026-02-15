@@ -7,6 +7,9 @@ namespace ArtOfWiFi\UnifiNetworkApplicationApi\Requests\AclRules;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
+/**
+ * Deletes an ACL rule from a specific site.
+ */
 class DeleteAclRuleRequest extends Request
 {
     protected Method $method = Method::DELETE;
@@ -15,8 +18,7 @@ class DeleteAclRuleRequest extends Request
         protected string $siteId,
         protected string $ruleId,
         protected bool $force = false
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

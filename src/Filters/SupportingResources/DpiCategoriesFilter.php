@@ -33,8 +33,6 @@ class DpiCategoriesFilter extends Filter
      * Filter by category ID
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function id(): static
     {
@@ -45,8 +43,6 @@ class DpiCategoriesFilter extends Filter
      * Filter by category name
      *
      * Supported operators: eq, ne, in, notIn, like
-     *
-     * @return static
      */
     public static function name(): static
     {
@@ -57,8 +53,6 @@ class DpiCategoriesFilter extends Filter
 
     /**
      * Filter for social media categories
-     *
-     * @return static
      */
     public static function socialMedia(): static
     {
@@ -67,8 +61,6 @@ class DpiCategoriesFilter extends Filter
 
     /**
      * Filter for streaming categories
-     *
-     * @return static
      */
     public static function streaming(): static
     {
@@ -77,8 +69,6 @@ class DpiCategoriesFilter extends Filter
 
     /**
      * Filter for gaming categories
-     *
-     * @return static
      */
     public static function gaming(): static
     {

@@ -9,6 +9,9 @@ use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Traits\Body\HasJsonBody;
 
+/**
+ * Updates an existing WiFi broadcast configuration.
+ */
 class UpdateWifiBroadcastRequest extends Request implements HasBody
 {
     use HasJsonBody;
@@ -19,8 +22,7 @@ class UpdateWifiBroadcastRequest extends Request implements HasBody
         protected string $siteId,
         protected string $wifiBroadcastId,
         protected array $data
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

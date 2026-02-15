@@ -36,8 +36,6 @@ class CountriesFilter extends Filter
      * Filter by country code (ISO standard)
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function code(): static
     {
@@ -48,8 +46,6 @@ class CountriesFilter extends Filter
      * Filter by country name
      *
      * Supported operators: eq, ne, in, notIn, like
-     *
-     * @return static
      */
     public static function name(): static
     {
@@ -60,8 +56,6 @@ class CountriesFilter extends Filter
 
     /**
      * Filter for United States
-     *
-     * @return static
      */
     public static function unitedStates(): static
     {
@@ -70,8 +64,6 @@ class CountriesFilter extends Filter
 
     /**
      * Filter for United Kingdom
-     *
-     * @return static
      */
     public static function unitedKingdom(): static
     {
@@ -80,8 +72,6 @@ class CountriesFilter extends Filter
 
     /**
      * Filter for Canada
-     *
-     * @return static
      */
     public static function canada(): static
     {
@@ -90,8 +80,6 @@ class CountriesFilter extends Filter
 
     /**
      * Filter for Australia
-     *
-     * @return static
      */
     public static function australia(): static
     {
@@ -100,22 +88,18 @@ class CountriesFilter extends Filter
 
     /**
      * Filter for European Union countries (common ones)
-     *
-     * @return static
      */
     public static function europeanUnion(): static
     {
         return static::code()->in([
             'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR',
             'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL',
-            'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE'
+            'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE',
         ]);
     }
 
     /**
      * Filter for North American countries
-     *
-     * @return static
      */
     public static function northAmerica(): static
     {

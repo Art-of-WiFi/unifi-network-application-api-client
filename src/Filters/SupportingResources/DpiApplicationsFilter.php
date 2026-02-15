@@ -33,8 +33,6 @@ class DpiApplicationsFilter extends Filter
      * Filter by application ID
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function id(): static
     {
@@ -45,8 +43,6 @@ class DpiApplicationsFilter extends Filter
      * Filter by application name
      *
      * Supported operators: eq, ne, in, notIn, like
-     *
-     * @return static
      */
     public static function name(): static
     {
@@ -57,8 +53,6 @@ class DpiApplicationsFilter extends Filter
 
     /**
      * Filter for Netflix
-     *
-     * @return static
      */
     public static function netflix(): static
     {
@@ -67,8 +61,6 @@ class DpiApplicationsFilter extends Filter
 
     /**
      * Filter for YouTube
-     *
-     * @return static
      */
     public static function youtube(): static
     {
@@ -77,8 +69,6 @@ class DpiApplicationsFilter extends Filter
 
     /**
      * Filter for Facebook
-     *
-     * @return static
      */
     public static function facebook(): static
     {
@@ -87,8 +77,6 @@ class DpiApplicationsFilter extends Filter
 
     /**
      * Filter for streaming services
-     *
-     * @return static
      */
     public static function streamingServices(): static
     {

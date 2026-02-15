@@ -20,23 +20,22 @@ class UnifiConnector extends Connector
     /**
      * Create a new UniFi API connector instance
      *
-     * @param string $baseUrl The base URL of your UniFi controller (e.g., 'https://192.168.1.1')
-     * @param string $apiKey Your UniFi API key (generate this in the Integrations section of your UniFi application)
-     * @param bool $verifySsl Whether to verify SSL certificates (set to false for self-signed certificates)
+     * @param  string  $baseUrl  The base URL of your UniFi controller (e.g., 'https://192.168.1.1')
+     * @param  string  $apiKey  Your UniFi API key (generate this in the Integrations section of your UniFi application)
+     * @param  bool  $verifySsl  Whether to verify SSL certificates (set to false for self-signed certificates)
      */
     public function __construct(
         protected string $baseUrl,
         protected string $apiKey,
         protected bool $verifySsl = true
-    ) {
-    }
+    ) {}
 
     /**
      * Define the base URL for the connector
      */
     public function resolveBaseUrl(): string
     {
-        return rtrim($this->baseUrl, '/') . '/proxy/network/integration';
+        return rtrim($this->baseUrl, '/').'/proxy/network/integration';
     }
 
     /**

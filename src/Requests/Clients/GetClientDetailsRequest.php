@@ -7,6 +7,9 @@ namespace ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Clients;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
+/**
+ * Retrieves detailed information about a specific connected client.
+ */
 class GetClientDetailsRequest extends Request
 {
     protected Method $method = Method::GET;
@@ -14,8 +17,7 @@ class GetClientDetailsRequest extends Request
     public function __construct(
         protected string $siteId,
         protected string $clientId
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

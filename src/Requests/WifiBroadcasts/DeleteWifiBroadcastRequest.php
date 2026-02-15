@@ -7,6 +7,9 @@ namespace ArtOfWiFi\UnifiNetworkApplicationApi\Requests\WifiBroadcasts;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
+/**
+ * Deletes a WiFi broadcast from a specific site.
+ */
 class DeleteWifiBroadcastRequest extends Request
 {
     protected Method $method = Method::DELETE;
@@ -15,8 +18,7 @@ class DeleteWifiBroadcastRequest extends Request
         protected string $siteId,
         protected string $wifiBroadcastId,
         protected bool $force = false
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

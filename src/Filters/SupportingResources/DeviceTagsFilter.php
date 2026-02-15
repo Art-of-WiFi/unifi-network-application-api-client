@@ -34,8 +34,6 @@ class DeviceTagsFilter extends Filter
      * Filter by tag ID (UUID)
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function id(): static
     {
@@ -46,8 +44,6 @@ class DeviceTagsFilter extends Filter
      * Filter by tag name
      *
      * Supported operators: eq, ne, in, notIn, like
-     *
-     * @return static
      */
     public static function name(): static
     {
@@ -58,8 +54,6 @@ class DeviceTagsFilter extends Filter
      * Filter by device IDs (set operations)
      *
      * Supported operators: contains, containsAny, containsAll, containsExactly
-     *
-     * @return static
      */
     public static function deviceIds(): static
     {

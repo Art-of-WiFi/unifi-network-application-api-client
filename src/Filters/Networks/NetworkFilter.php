@@ -44,8 +44,6 @@ class NetworkFilter extends Filter
      * Filter by network management type
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function management(): static
     {
@@ -56,8 +54,6 @@ class NetworkFilter extends Filter
      * Filter by network ID (UUID)
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function id(): static
     {
@@ -68,8 +64,6 @@ class NetworkFilter extends Filter
      * Filter by network name
      *
      * Supported operators: eq, ne, in, notIn, like
-     *
-     * @return static
      */
     public static function name(): static
     {
@@ -80,8 +74,6 @@ class NetworkFilter extends Filter
      * Filter by enabled status
      *
      * Supported operators: eq, ne
-     *
-     * @return static
      */
     public static function enabled(): static
     {
@@ -92,8 +84,6 @@ class NetworkFilter extends Filter
      * Filter by VLAN ID
      *
      * Supported operators: eq, ne, gt, ge, lt, le, in, notIn
-     *
-     * @return static
      */
     public static function vlanId(): static
     {
@@ -104,8 +94,6 @@ class NetworkFilter extends Filter
      * Filter by device ID
      *
      * Supported operators: eq, ne, in, notIn, isNull, isNotNull
-     *
-     * @return static
      */
     public static function deviceId(): static
     {
@@ -116,8 +104,6 @@ class NetworkFilter extends Filter
      * Filter by metadata origin
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function metadataOrigin(): static
     {
@@ -128,8 +114,6 @@ class NetworkFilter extends Filter
 
     /**
      * Filter for enabled networks only
-     *
-     * @return static
      */
     public static function enabledOnly(): static
     {
@@ -138,8 +122,6 @@ class NetworkFilter extends Filter
 
     /**
      * Filter for disabled networks only
-     *
-     * @return static
      */
     public static function disabledOnly(): static
     {
@@ -148,8 +130,6 @@ class NetworkFilter extends Filter
 
     /**
      * Filter for guest networks (by name pattern)
-     *
-     * @return static
      */
     public static function guestNetworks(): static
     {
@@ -158,8 +138,6 @@ class NetworkFilter extends Filter
 
     /**
      * Filter for IoT networks (by name pattern)
-     *
-     * @return static
      */
     public static function iotNetworks(): static
     {
@@ -168,8 +146,6 @@ class NetworkFilter extends Filter
 
     /**
      * Filter for networks without assigned devices
-     *
-     * @return static
      */
     public static function unassignedNetworks(): static
     {

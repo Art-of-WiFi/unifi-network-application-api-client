@@ -7,6 +7,9 @@ namespace ArtOfWiFi\UnifiNetworkApplicationApi\Requests\WifiBroadcasts;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
+/**
+ * Retrieves detailed information about a specific WiFi broadcast.
+ */
 class GetWifiBroadcastDetailsRequest extends Request
 {
     protected Method $method = Method::GET;
@@ -14,8 +17,7 @@ class GetWifiBroadcastDetailsRequest extends Request
     public function __construct(
         protected string $siteId,
         protected string $wifiBroadcastId
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

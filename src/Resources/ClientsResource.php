@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace ArtOfWiFi\UnifiNetworkApplicationApi\Resources;
 
 use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Filter;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Clients\GetConnectedClientsRequest;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Clients\GetClientDetailsRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Clients\ExecuteClientActionRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Clients\GetClientDetailsRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Clients\GetConnectedClientsRequest;
 use RuntimeException;
 use Saloon\Exceptions\Request\ClientException;
 use Saloon\Exceptions\Request\FatalRequestException;
@@ -28,10 +28,10 @@ class ClientsResource extends BaseResource
      *
      * Retrieves a paginated list of all connected clients on the specified site.
      *
-     * @param int|null $offset Pagination offset (optional)
-     * @param int|null $limit Number of results per page (optional)
-     * @param string|Filter|null $filter Filter expression or Filter object (optional)
-     * @return Response
+     * @param  int|null  $offset  Pagination offset (optional)
+     * @param  int|null  $limit  Number of results per page (optional)
+     * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -40,6 +40,7 @@ class ClientsResource extends BaseResource
     public function list(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new GetConnectedClientsRequest($siteId, $offset, $limit, $filter));
     }
 
@@ -48,8 +49,8 @@ class ClientsResource extends BaseResource
      *
      * Retrieves detailed information about a specific connected client.
      *
-     * @param string $clientId The client UUID or MAC address
-     * @return Response
+     * @param  string  $clientId  The client UUID or MAC address
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -58,6 +59,7 @@ class ClientsResource extends BaseResource
     public function get(string $clientId): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new GetClientDetailsRequest($siteId, $clientId));
     }
 
@@ -68,9 +70,9 @@ class ClientsResource extends BaseResource
      * the only officially documented actions are AUTHORIZE_GUEST_ACCESS and
      * UNAUTHORIZE_GUEST_ACCESS.
      *
-     * @param string $clientId The client UUID or MAC address
-     * @param array $action The action payload (e.g., ['action' => 'AUTHORIZE_GUEST_ACCESS', 'timeLimitMinutes' => 480])
-     * @return Response
+     * @param  string  $clientId  The client UUID or MAC address
+     * @param  array  $action  The action payload (e.g., ['action' => 'AUTHORIZE_GUEST_ACCESS', 'timeLimitMinutes' => 480])
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (not found, bad request, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -79,6 +81,7 @@ class ClientsResource extends BaseResource
     public function executeAction(string $clientId, array $action): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new ExecuteClientActionRequest($siteId, $clientId, $action));
     }
 }

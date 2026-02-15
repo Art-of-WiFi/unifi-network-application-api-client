@@ -34,8 +34,6 @@ class SitesFilter extends Filter
      * Filter by site ID (UUID)
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function id(): static
     {
@@ -46,8 +44,6 @@ class SitesFilter extends Filter
      * Filter by internal reference
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function internalReference(): static
     {
@@ -58,8 +54,6 @@ class SitesFilter extends Filter
      * Filter by site name
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function name(): static
     {

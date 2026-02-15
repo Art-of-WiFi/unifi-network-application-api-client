@@ -8,9 +8,7 @@ use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
 /**
- * Get Application Info Request
- *
- * Retrieves general information about the UniFi Network application.
+ * Retrieves application information and version details from the UniFi Network Application.
  */
 class GetInfoRequest extends Request
 {

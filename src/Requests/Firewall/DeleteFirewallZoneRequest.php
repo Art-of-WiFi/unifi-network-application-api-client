@@ -7,6 +7,9 @@ namespace ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Firewall;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
+/**
+ * Deletes a firewall zone from a specific site.
+ */
 class DeleteFirewallZoneRequest extends Request
 {
     protected Method $method = Method::DELETE;
@@ -15,8 +18,7 @@ class DeleteFirewallZoneRequest extends Request
         protected string $siteId,
         protected string $zoneId,
         protected bool $force = false
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

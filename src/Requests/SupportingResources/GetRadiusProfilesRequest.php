@@ -8,6 +8,9 @@ use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Filter;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
+/**
+ * Retrieves a paginated list of RADIUS profiles for a specific site.
+ */
 class GetRadiusProfilesRequest extends Request
 {
     protected Method $method = Method::GET;
@@ -17,8 +20,7 @@ class GetRadiusProfilesRequest extends Request
         protected ?int $offset = null,
         protected ?int $limit = null,
         protected string|Filter|null $filter = null
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

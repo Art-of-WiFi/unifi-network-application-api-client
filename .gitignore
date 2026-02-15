@@ -4,6 +4,7 @@ open-api-docs/*
 
 # Claude code files
 .claude
+.claude/*
 CLAUDE*.md
 PROJECT_SUMMARY.md
 
@@ -56,3 +57,4 @@ Desktop.ini
 
 # Config files
 /examples/config.php
+/tests/config.php

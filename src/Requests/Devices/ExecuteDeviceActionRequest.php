@@ -9,6 +9,9 @@ use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Traits\Body\HasJsonBody;
 
+/**
+ * Executes an action on a specific device (e.g., restart, locate, upgrade firmware).
+ */
 class ExecuteDeviceActionRequest extends Request implements HasBody
 {
     use HasJsonBody;
@@ -19,8 +22,7 @@ class ExecuteDeviceActionRequest extends Request implements HasBody
         protected string $siteId,
         protected string $deviceId,
         protected array $action
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

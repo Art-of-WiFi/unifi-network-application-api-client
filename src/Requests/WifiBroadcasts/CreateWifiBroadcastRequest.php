@@ -9,6 +9,9 @@ use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Traits\Body\HasJsonBody;
 
+/**
+ * Creates a new WiFi broadcast (SSID) on a specific site.
+ */
 class CreateWifiBroadcastRequest extends Request implements HasBody
 {
     use HasJsonBody;
@@ -18,8 +21,7 @@ class CreateWifiBroadcastRequest extends Request implements HasBody
     public function __construct(
         protected string $siteId,
         protected array $data
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

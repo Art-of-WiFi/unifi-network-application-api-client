@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace ArtOfWiFi\UnifiNetworkApplicationApi\Resources;
 
-use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources\GetWanInterfacesRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Filter;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources\GetCountriesRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources\GetDeviceTagsRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources\GetDpiApplicationsRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources\GetDpiCategoriesRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources\GetRadiusProfilesRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources\GetSiteToSiteVpnTunnelsRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources\GetVpnServersRequest;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources\GetRadiusProfilesRequest;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources\GetDeviceTagsRequest;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources\GetDpiCategoriesRequest;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources\GetDpiApplicationsRequest;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources\GetCountriesRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources\GetWanInterfacesRequest;
 use RuntimeException;
 use Saloon\Exceptions\Request\ClientException;
 use Saloon\Exceptions\Request\FatalRequestException;
@@ -33,9 +34,9 @@ class SupportingResourcesResource extends BaseResource
      * Returns available WAN interface definitions for a given site,
      * including identifiers and names. Useful for network and NAT configuration.
      *
-     * @param int|null $offset Pagination offset (optional)
-     * @param int|null $limit Number of results per page (optional)
-     * @return Response
+     * @param  int|null  $offset  Pagination offset (optional)
+     * @param  int|null  $limit  Number of results per page (optional)
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -44,6 +45,7 @@ class SupportingResourcesResource extends BaseResource
     public function listWanInterfaces(?int $offset = null, ?int $limit = null): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new GetWanInterfacesRequest($siteId, $offset, $limit));
     }
 
@@ -52,10 +54,10 @@ class SupportingResourcesResource extends BaseResource
      *
      * Retrieves a paginated list of all site-to-site VPN tunnels on a site.
      *
-     * @param int|null $offset Pagination offset (optional)
-     * @param int|null $limit Number of results per page (optional)
-     * @param string|Filter|null $filter Filter expression or Filter object (optional)
-     * @return Response
+     * @param  int|null  $offset  Pagination offset (optional)
+     * @param  int|null  $limit  Number of results per page (optional)
+     * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -64,6 +66,7 @@ class SupportingResourcesResource extends BaseResource
     public function listSiteToSiteVpnTunnels(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new GetSiteToSiteVpnTunnelsRequest($siteId, $offset, $limit, $filter));
     }
 
@@ -72,10 +75,10 @@ class SupportingResourcesResource extends BaseResource
      *
      * Retrieves a paginated list of all VPN servers on a site.
      *
-     * @param int|null $offset Pagination offset (optional)
-     * @param int|null $limit Number of results per page (optional)
-     * @param string|Filter|null $filter Filter expression or Filter object (optional)
-     * @return Response
+     * @param  int|null  $offset  Pagination offset (optional)
+     * @param  int|null  $limit  Number of results per page (optional)
+     * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -84,6 +87,7 @@ class SupportingResourcesResource extends BaseResource
     public function listVpnServers(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new GetVpnServersRequest($siteId, $offset, $limit, $filter));
     }
 
@@ -92,10 +96,10 @@ class SupportingResourcesResource extends BaseResource
      *
      * Returns available RADIUS authentication profiles, including configuration origin metadata.
      *
-     * @param int|null $offset Pagination offset (optional)
-     * @param int|null $limit Number of results per page (optional)
-     * @param string|Filter|null $filter Filter expression or Filter object (optional)
-     * @return Response
+     * @param  int|null  $offset  Pagination offset (optional)
+     * @param  int|null  $limit  Number of results per page (optional)
+     * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -104,6 +108,7 @@ class SupportingResourcesResource extends BaseResource
     public function listRadiusProfiles(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new GetRadiusProfilesRequest($siteId, $offset, $limit, $filter));
     }
 
@@ -112,10 +117,10 @@ class SupportingResourcesResource extends BaseResource
      *
      * Retrieves a paginated list of all device tags on a site.
      *
-     * @param int|null $offset Pagination offset (optional)
-     * @param int|null $limit Number of results per page (optional)
-     * @param string|Filter|null $filter Filter expression or Filter object (optional)
-     * @return Response
+     * @param  int|null  $offset  Pagination offset (optional)
+     * @param  int|null  $limit  Number of results per page (optional)
+     * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -124,6 +129,7 @@ class SupportingResourcesResource extends BaseResource
     public function listDeviceTags(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new GetDeviceTagsRequest($siteId, $offset, $limit, $filter));
     }
 
@@ -135,10 +141,10 @@ class SupportingResourcesResource extends BaseResource
      *
      * Note: This endpoint does not require a site ID.
      *
-     * @param int|null $offset Pagination offset (optional, default: 0)
-     * @param int|null $limit Number of results per page (optional)
-     * @param string|Filter|null $filter Filter expression or Filter object (optional)
-     * @return Response
+     * @param  int|null  $offset  Pagination offset (optional, default: 0)
+     * @param  int|null  $limit  Number of results per page (optional)
+     * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
+     *
      * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
@@ -156,10 +162,10 @@ class SupportingResourcesResource extends BaseResource
      *
      * Note: This endpoint does not require a site ID.
      *
-     * @param int|null $offset Pagination offset (optional, default: 0)
-     * @param int|null $limit Number of results per page (optional)
-     * @param string|Filter|null $filter Filter expression or Filter object (optional)
-     * @return Response
+     * @param  int|null  $offset  Pagination offset (optional, default: 0)
+     * @param  int|null  $limit  Number of results per page (optional)
+     * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
+     *
      * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
@@ -177,10 +183,10 @@ class SupportingResourcesResource extends BaseResource
      *
      * Note: This endpoint does not require a site ID.
      *
-     * @param int|null $offset Pagination offset (optional, default: 0)
-     * @param int|null $limit Number of results per page (optional)
-     * @param string|Filter|null $filter Filter expression or Filter object (optional)
-     * @return Response
+     * @param  int|null  $offset  Pagination offset (optional, default: 0)
+     * @param  int|null  $limit  Number of results per page (optional)
+     * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
+     *
      * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout

@@ -9,6 +9,9 @@ use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Traits\Body\HasJsonBody;
 
+/**
+ * Executes an action on a specific client (e.g., block, unblock, reconnect).
+ */
 class ExecuteClientActionRequest extends Request implements HasBody
 {
     use HasJsonBody;
@@ -19,8 +22,7 @@ class ExecuteClientActionRequest extends Request implements HasBody
         protected string $siteId,
         protected string $clientId,
         protected array $action
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

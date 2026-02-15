@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace ArtOfWiFi\UnifiNetworkApplicationApi\Requests\TrafficMatchingLists;
 
+use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Filter;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
+/**
+ * Retrieves a paginated list of traffic matching lists for a specific site.
+ */
 class GetTrafficMatchingListsRequest extends Request
 {
     protected Method $method = Method::GET;
@@ -15,9 +19,8 @@ class GetTrafficMatchingListsRequest extends Request
         protected string $siteId,
         protected ?int $offset = null,
         protected ?int $limit = null,
-        protected ?string $filter = null
-    ) {
-    }
+        protected string|Filter|null $filter = null
+    ) {}
 
     public function resolveEndpoint(): string
     {
@@ -37,7 +40,10 @@ class GetTrafficMatchingListsRequest extends Request
         }
 
         if ($this->filter !== null) {
-            $query['filter'] = $this->filter;
+            $filterString = $this->filter instanceof Filter
+                ? $this->filter->toString()
+                : $this->filter;
+            $query['filter'] = $filterString;
         }
 
         return $query;

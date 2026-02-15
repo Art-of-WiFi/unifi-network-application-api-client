@@ -7,6 +7,9 @@ namespace ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Firewall;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
+/**
+ * Retrieves detailed information about a specific firewall zone.
+ */
 class GetFirewallZoneRequest extends Request
 {
     protected Method $method = Method::GET;
@@ -14,8 +17,7 @@ class GetFirewallZoneRequest extends Request
     public function __construct(
         protected string $siteId,
         protected string $zoneId
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

@@ -24,13 +24,12 @@ class ApplicationInfoResource extends BaseResource
      * Returns details about the application, including version and runtime metadata.
      * Useful for integration validation.
      *
-     * @return Response
      * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function get(): Response
     {
-        return $this->connector->send(new GetInfoRequest());
+        return $this->connector->send(new GetInfoRequest);
     }
 }

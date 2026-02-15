@@ -7,6 +7,9 @@ namespace ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Firewall;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
+/**
+ * Retrieves detailed information about a specific firewall policy.
+ */
 class GetFirewallPolicyRequest extends Request
 {
     protected Method $method = Method::GET;
@@ -14,8 +17,7 @@ class GetFirewallPolicyRequest extends Request
     public function __construct(
         protected string $siteId,
         protected string $firewallPolicyId
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

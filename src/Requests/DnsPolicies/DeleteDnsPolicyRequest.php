@@ -7,6 +7,9 @@ namespace ArtOfWiFi\UnifiNetworkApplicationApi\Requests\DnsPolicies;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
+/**
+ * Deletes a DNS policy from a specific site.
+ */
 class DeleteDnsPolicyRequest extends Request
 {
     protected Method $method = Method::DELETE;
@@ -14,8 +17,7 @@ class DeleteDnsPolicyRequest extends Request
     public function __construct(
         protected string $siteId,
         protected string $dnsPolicyId
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

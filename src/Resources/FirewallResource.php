@@ -39,18 +39,19 @@ class FirewallResource extends BaseResource
      *
      * Retrieves a paginated list of all firewall zones on the specified site.
      *
-     * @param int|null $offset Pagination offset (optional)
-     * @param int|null $limit Number of results per page (optional)
-     * @param string|null $filter Filter expression (optional)
-     * @return Response
+     * @param  int|null  $offset  Pagination offset (optional)
+     * @param  int|null  $limit  Number of results per page (optional)
+     * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
-    public function listZones(?int $offset = null, ?int $limit = null, ?string $filter = null): Response
+    public function listZones(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new GetFirewallZonesRequest($siteId, $offset, $limit, $filter));
     }
 
@@ -59,8 +60,8 @@ class FirewallResource extends BaseResource
      *
      * Retrieves detailed information about a specific firewall zone.
      *
-     * @param string $zoneId The firewall zone UUID
-     * @return Response
+     * @param  string  $zoneId  The firewall zone UUID
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -69,6 +70,7 @@ class FirewallResource extends BaseResource
     public function getZone(string $zoneId): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new GetFirewallZoneRequest($siteId, $zoneId));
     }
 
@@ -77,8 +79,8 @@ class FirewallResource extends BaseResource
      *
      * Creates a new firewall zone on the specified site.
      *
-     * @param array $data The firewall zone configuration data
-     * @return Response
+     * @param  array  $data  The firewall zone configuration data
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (bad request, validation error, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -87,6 +89,7 @@ class FirewallResource extends BaseResource
     public function createZone(array $data): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new CreateFirewallZoneRequest($siteId, $data));
     }
 
@@ -95,9 +98,9 @@ class FirewallResource extends BaseResource
      *
      * Updates an existing firewall zone configuration.
      *
-     * @param string $zoneId The firewall zone UUID
-     * @param array $data The updated firewall zone configuration data
-     * @return Response
+     * @param  string  $zoneId  The firewall zone UUID
+     * @param  array  $data  The updated firewall zone configuration data
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (not found, bad request, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -106,6 +109,7 @@ class FirewallResource extends BaseResource
     public function updateZone(string $zoneId, array $data): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new UpdateFirewallZoneRequest($siteId, $zoneId, $data));
     }
 
@@ -114,9 +118,9 @@ class FirewallResource extends BaseResource
      *
      * Deletes an existing firewall zone from the specified site.
      *
-     * @param string $zoneId The firewall zone UUID
-     * @param bool $force Force deletion (optional)
-     * @return Response
+     * @param  string  $zoneId  The firewall zone UUID
+     * @param  bool  $force  Force deletion (optional)
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (not found, conflict, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -125,6 +129,7 @@ class FirewallResource extends BaseResource
     public function deleteZone(string $zoneId, bool $force = false): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new DeleteFirewallZoneRequest($siteId, $zoneId, $force));
     }
 
@@ -135,10 +140,10 @@ class FirewallResource extends BaseResource
      *
      * Retrieves a paginated list of all firewall policies on the specified site.
      *
-     * @param int|null $offset Pagination offset (optional)
-     * @param int|null $limit Number of results per page (optional)
-     * @param string|Filter|null $filter Filter expression or Filter object (optional)
-     * @return Response
+     * @param  int|null  $offset  Pagination offset (optional)
+     * @param  int|null  $limit  Number of results per page (optional)
+     * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -147,6 +152,7 @@ class FirewallResource extends BaseResource
     public function listPolicies(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new GetFirewallPoliciesRequest($siteId, $offset, $limit, $filter));
     }
 
@@ -155,8 +161,8 @@ class FirewallResource extends BaseResource
      *
      * Retrieves detailed information about a specific firewall policy.
      *
-     * @param string $firewallPolicyId The firewall policy UUID
-     * @return Response
+     * @param  string  $firewallPolicyId  The firewall policy UUID
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -165,6 +171,7 @@ class FirewallResource extends BaseResource
     public function getPolicy(string $firewallPolicyId): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new GetFirewallPolicyRequest($siteId, $firewallPolicyId));
     }
 
@@ -173,8 +180,8 @@ class FirewallResource extends BaseResource
      *
      * Creates a new firewall policy on the specified site.
      *
-     * @param array $data The firewall policy configuration data
-     * @return Response
+     * @param  array  $data  The firewall policy configuration data
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (bad request, validation error, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -183,6 +190,7 @@ class FirewallResource extends BaseResource
     public function createPolicy(array $data): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new CreateFirewallPolicyRequest($siteId, $data));
     }
 
@@ -191,9 +199,9 @@ class FirewallResource extends BaseResource
      *
      * Fully updates an existing firewall policy configuration (PUT).
      *
-     * @param string $firewallPolicyId The firewall policy UUID
-     * @param array $data The complete updated firewall policy configuration data
-     * @return Response
+     * @param  string  $firewallPolicyId  The firewall policy UUID
+     * @param  array  $data  The complete updated firewall policy configuration data
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (not found, bad request, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -202,6 +210,7 @@ class FirewallResource extends BaseResource
     public function updatePolicy(string $firewallPolicyId, array $data): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new UpdateFirewallPolicyRequest($siteId, $firewallPolicyId, $data));
     }
 
@@ -211,9 +220,9 @@ class FirewallResource extends BaseResource
      * Partially updates an existing firewall policy configuration (PATCH).
      * Only the fields provided in the data array will be updated.
      *
-     * @param string $firewallPolicyId The firewall policy UUID
-     * @param array $data The partial firewall policy configuration data to update
-     * @return Response
+     * @param  string  $firewallPolicyId  The firewall policy UUID
+     * @param  array  $data  The partial firewall policy configuration data to update
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (not found, bad request, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -222,6 +231,7 @@ class FirewallResource extends BaseResource
     public function patchPolicy(string $firewallPolicyId, array $data): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new PatchFirewallPolicyRequest($siteId, $firewallPolicyId, $data));
     }
 
@@ -230,8 +240,8 @@ class FirewallResource extends BaseResource
      *
      * Deletes an existing firewall policy from the specified site.
      *
-     * @param string $firewallPolicyId The firewall policy UUID
-     * @return Response
+     * @param  string  $firewallPolicyId  The firewall policy UUID
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (not found, conflict, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -240,6 +250,7 @@ class FirewallResource extends BaseResource
     public function deletePolicy(string $firewallPolicyId): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new DeleteFirewallPolicyRequest($siteId, $firewallPolicyId));
     }
 
@@ -248,9 +259,9 @@ class FirewallResource extends BaseResource
      *
      * Retrieves the ordering of firewall policies between two zones.
      *
-     * @param string $sourceFirewallZoneId The source firewall zone UUID
-     * @param string $destinationFirewallZoneId The destination firewall zone UUID
-     * @return Response
+     * @param  string  $sourceFirewallZoneId  The source firewall zone UUID
+     * @param  string  $destinationFirewallZoneId  The destination firewall zone UUID
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -259,6 +270,7 @@ class FirewallResource extends BaseResource
     public function getPolicyOrdering(string $sourceFirewallZoneId, string $destinationFirewallZoneId): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new GetFirewallPolicyOrderingRequest($siteId, $sourceFirewallZoneId, $destinationFirewallZoneId));
     }
 
@@ -267,10 +279,10 @@ class FirewallResource extends BaseResource
      *
      * Updates the ordering of firewall policies between two zones.
      *
-     * @param string $sourceFirewallZoneId The source firewall zone UUID
-     * @param string $destinationFirewallZoneId The destination firewall zone UUID
-     * @param array $data The ordering data (e.g., ['orderedFirewallPolicyIds' => [...]])
-     * @return Response
+     * @param  string  $sourceFirewallZoneId  The source firewall zone UUID
+     * @param  string  $destinationFirewallZoneId  The destination firewall zone UUID
+     * @param  array  $data  The ordering data (e.g., ['orderedFirewallPolicyIds' => [...]])
+     *
      * @throws RuntimeException If site ID is not set
      * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
@@ -279,6 +291,7 @@ class FirewallResource extends BaseResource
     public function updatePolicyOrdering(string $sourceFirewallZoneId, string $destinationFirewallZoneId, array $data): Response
     {
         $siteId = $this->requireSiteId();
+
         return $this->connector->send(new UpdateFirewallPolicyOrderingRequest($siteId, $sourceFirewallZoneId, $destinationFirewallZoneId, $data));
     }
 }

@@ -39,8 +39,6 @@ class FirewallPolicyFilter extends Filter
      * Filter by policy ID (UUID)
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function id(): static
     {
@@ -51,8 +49,6 @@ class FirewallPolicyFilter extends Filter
      * Filter by policy name
      *
      * Supported operators: eq, ne, in, notIn, like
-     *
-     * @return static
      */
     public static function name(): static
     {
@@ -63,8 +59,6 @@ class FirewallPolicyFilter extends Filter
      * Filter by source zone ID
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function sourceZoneId(): static
     {
@@ -75,8 +69,6 @@ class FirewallPolicyFilter extends Filter
      * Filter by destination zone ID
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function destinationZoneId(): static
     {
@@ -87,8 +79,6 @@ class FirewallPolicyFilter extends Filter
      * Filter by metadata origin
      *
      * Supported operators: eq, ne, in, notIn
-     *
-     * @return static
      */
     public static function metadataOrigin(): static
     {
