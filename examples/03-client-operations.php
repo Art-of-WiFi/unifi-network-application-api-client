@@ -65,17 +65,15 @@ try {
 
             for ($i = 0; $i < $displayCount; $i++) {
                 $client   = $wirelessClients[$i];
-                $hostname = $client['hostname'] ?? $client['mac'] ?? 'Unknown';
-                $mac      = $client['mac'] ?? 'Unknown';
-                $ip       = $client['ip'] ?? 'No IP';
-                $ssid     = $client['essid'] ?? 'Unknown SSID';
-                $signal   = $client['signal'] ?? 0;
+                $name        = $client['name'] ?? $client['macAddress'] ?? 'Unknown';
+                $mac         = $client['macAddress'] ?? 'Unknown';
+                $ip          = $client['ipAddress'] ?? 'No IP';
+                $connectedAt = $client['connectedAt'] ?? 'Unknown';
 
-                echo "   Client: {$hostname}\n";
+                echo "   Client: {$name}\n";
                 echo "   - MAC: {$mac}\n";
                 echo "   - IP: {$ip}\n";
-                echo "   - SSID: {$ssid}\n";
-                echo "   - Signal: {$signal} dBm\n";
+                echo "   - Connected at: {$connectedAt}\n";
                 echo "\n";
             }
         }

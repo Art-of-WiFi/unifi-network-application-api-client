@@ -34,8 +34,8 @@ try {
         foreach ($devices['data'] as $device) {
             $name  = $device['name'] ?? 'Unnamed';
             $model = $device['model'] ?? 'Unknown';
-            $mac   = $device['mac'] ?? 'Unknown';
-            $ip    = $device['ip'] ?? 'No IP';
+            $mac   = $device['macAddress'] ?? 'Unknown';
+            $ip    = $device['ipAddress'] ?? 'No IP';
             $state = $device['state'] ?? 'Unknown';
 
             echo "   Device: {$name}\n";
@@ -66,9 +66,9 @@ try {
         $statsResponse = $apiClient->devices()->getStatistics($deviceId);
         $stats         = $statsResponse->json();
 
-        echo "   CPU Usage: " . ($stats['cpu_usage'] ?? 'N/A') . "%\n";
-        echo "   Memory Usage: " . ($stats['mem_usage'] ?? 'N/A') . "%\n";
-        echo "   Temperature: " . ($stats['temperature'] ?? 'N/A') . "°C\n";
+        echo "   CPU Usage: " . ($stats['cpuUtilizationPct'] ?? 'N/A') . "%\n";
+        echo "   Memory Usage: " . ($stats['memoryUtilizationPct'] ?? 'N/A') . "%\n";
+        echo "   Uptime: " . ($stats['uptimeSec'] ?? 'N/A') . "s\n";
         echo "\n";
 
     } else {
@@ -81,7 +81,7 @@ try {
     echo "   Pending devices: {$pendingCount}\n";
     if ($pendingCount > 0) {
         foreach ($pending['data'] as $device) {
-            $mac   = $device['mac'] ?? 'Unknown';
+            $mac   = $device['macAddress'] ?? 'Unknown';
             $model = $device['model'] ?? 'Unknown';
             echo "   - {$model} (MAC: {$mac})\n";
         }

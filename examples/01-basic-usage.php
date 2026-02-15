@@ -82,8 +82,8 @@ try {
                 $displayCount = min(5, $clientCount);
                 for ($i = 0; $i < $displayCount; $i++) {
                     $client     = $clients['data'][$i];
-                    $hostname   = $client['hostname'] ?? $client['mac'] ?? 'Unknown';
-                    $connection = ($client['is_wired'] ?? null) ? 'Wired' : 'Wireless';
+                    $hostname   = $client['name'] ?? $client['macAddress'] ?? 'Unknown';
+                    $connection = $client['type'] ?? 'Unknown';
                     echo "     - {$hostname} ({$connection})\n";
                 }
                 if ($clientCount > 5) {
