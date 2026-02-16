@@ -55,6 +55,9 @@ yarn-error.log*
 ehthumbs.db
 Desktop.ini
 
+# Temp files
+tmpclaude-*
+
 # Config files
 /examples/config.php
 /tests/config.php

@@ -13,12 +13,18 @@
         "unifi-network"
     ],
     "license": "MIT",
+    "homepage": "https://github.com/Art-of-WiFi/unifi-network-application-api-client",
     "authors": [
         {
             "name": "Art of WiFi",
-            "email": "info@artofwifi.net"
+            "email": "info@artofwifi.net",
+            "homepage": "https://artofwifi.net"
         }
     ],
+    "support": {
+        "issues": "https://github.com/Art-of-WiFi/unifi-network-application-api-client/issues",
+        "source": "https://github.com/Art-of-WiFi/unifi-network-application-api-client"
+    },
     "require": {
         "php": "^8.1",
         "ext-curl": "*",
