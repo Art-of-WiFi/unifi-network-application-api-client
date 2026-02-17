@@ -18,6 +18,11 @@ class UnifiConnector extends Connector
     use AcceptsJson;
 
     /**
+     * The version of the API client library
+     */
+    public const VERSION = '1.0.0';
+
+    /**
      * Create a new UniFi API connector instance
      *
      * @param  string  $baseUrl  The base URL of your UniFi controller (e.g., 'https://192.168.1.1')
@@ -47,6 +52,7 @@ class UnifiConnector extends Connector
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
             'X-API-KEY' => $this->apiKey,
+            'User-Agent' => 'unifi-api-client-php/'.self::VERSION,
         ];
     }
 

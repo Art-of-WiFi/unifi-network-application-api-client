@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Example 3: Client Operations
  *
@@ -6,17 +7,17 @@
  * including listing clients, filtering, and performing client actions.
  */
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
 use ArtOfWiFi\UnifiNetworkApplicationApi\UnifiClient;
 
-$config = require_once __DIR__ . '/config.php';
+$config = require_once __DIR__.'/config.php';
 
 // Configuration - Update the values in the config.php file
 $controllerUrl = $config['base_url'];
-$apiKey        = $config['api_key'];
-$siteId        = $config['site_id'];
-$verifySsl     = $config['verify_ssl'];
+$apiKey = $config['api_key'];
+$siteId = $config['site_id'];
+$verifySsl = $config['verify_ssl'];
 
 try {
     // Initialize the API client
@@ -24,20 +25,20 @@ try {
     $apiClient->setSiteId($siteId);
 
     echo "UniFi API Client - Client Operations Example\n";
-    echo str_repeat('=', 50) . "\n\n";// 1. List all connected clients
+    echo str_repeat('=', 50)."\n\n"; // 1. List all connected clients
     echo "1. Listing all connected clients...\n";
 
     $clientsResponse = $apiClient->clients()->list();
-    $clients         = $clientsResponse->json();
-    $totalClients    = isset($clients['data']) ? count($clients['data']) : 0;
+    $clients = $clientsResponse->json();
+    $totalClients = isset($clients['data']) ? count($clients['data']) : 0;
 
     echo "   Total connected clients: {$totalClients}\n\n";
 
     if ($totalClients > 0) {
         // Categorize clients
-        $wiredClients    = [];
+        $wiredClients = [];
         $wirelessClients = [];
-        $vpnClients      = [];
+        $vpnClients = [];
         $teleportClients = [];
 
         foreach ($clients['data'] as $clientData) {
@@ -53,10 +54,10 @@ try {
         }
 
         echo "   Breakdown:\n";
-        echo "   - Wired clients: " . count($wiredClients) . "\n";
-        echo "   - Wireless clients: " . count($wirelessClients) . "\n";
-        echo "   - VPN clients: " . count($vpnClients) . "\n";
-        echo "   - Teleport clients: " . count($teleportClients) . "\n\n";
+        echo '   - Wired clients: '.count($wiredClients)."\n";
+        echo '   - Wireless clients: '.count($wirelessClients)."\n";
+        echo '   - VPN clients: '.count($vpnClients)."\n";
+        echo '   - Teleport clients: '.count($teleportClients)."\n\n";
 
         // 2. Display wireless client details
         if (count($wirelessClients) > 0) {
@@ -64,10 +65,10 @@ try {
             $displayCount = min(5, count($wirelessClients));
 
             for ($i = 0; $i < $displayCount; $i++) {
-                $client   = $wirelessClients[$i];
-                $name        = $client['name'] ?? $client['macAddress'] ?? 'Unknown';
-                $mac         = $client['macAddress'] ?? 'Unknown';
-                $ip          = $client['ipAddress'] ?? 'No IP';
+                $client = $wirelessClients[$i];
+                $name = $client['name'] ?? $client['macAddress'] ?? 'Unknown';
+                $mac = $client['macAddress'] ?? 'Unknown';
+                $ip = $client['ipAddress'] ?? 'No IP';
                 $connectedAt = $client['connectedAt'] ?? 'Unknown';
 
                 echo "   Client: {$name}\n";
@@ -81,7 +82,7 @@ try {
         // 3. Get specific client details
         if ($totalClients > 0) {
             $firstClient = $clients['data'][0];
-            $clientId    = $firstClient['id'];
+            $clientId = $firstClient['id'];
 
             echo "3. Getting detailed information for a specific client...\n";
             echo "   Client ID: {$clientId}\n";
@@ -90,13 +91,13 @@ try {
             try {
                 $details = $detailResponse->json();
             } catch (Exception $e) {
-                echo "   Error: " . $e->getMessage() . "\n";
+                echo '   Error: '.$e->getMessage()."\n";
             }
 
-            echo "   Hostname: " . ($details['name'] ?? 'Unknown') . "\n";
-            echo "   IP: " . ($details['ipAddress'] ?? 'No IP') . "\n";
-            echo "   Connected at: " . ($details['connectedAt'] ?? 'Unknown') . "\n";
-            echo "   Access type: " . ($details['access']['type'] ?? 'Unknown') . "\n";
+            echo '   Hostname: '.($details['name'] ?? 'Unknown')."\n";
+            echo '   IP: '.($details['ipAddress'] ?? 'No IP')."\n";
+            echo '   Connected at: '.($details['connectedAt'] ?? 'Unknown')."\n";
+            echo '   Access type: '.($details['access']['type'] ?? 'Unknown')."\n";
 
             echo "\n";
         }
@@ -117,13 +118,13 @@ try {
 
     $timestamp = (new DateTime('-1 hour'))->format('Y-m-d\\TH:i:s\\Z');
 
-    echo "   \$apiClient->clients()->list(filter: \"connectedAt.gt(\\$timestamp)\");\n\n";// Example: Get only wireless clients
+    echo "   \$apiClient->clients()->list(filter: \"connectedAt.gt(\\$timestamp)\");\n\n"; // Example: Get only wireless clients
 
     $wirelessResponse = $apiClient->clients()->list(filter: 'type.eq("WIRELESS")');
-    $wirelessData     = $wirelessResponse->json();
-    $wirelessCount    = isset($wirelessData['data']) ? count($wirelessData['data']) : 0;
+    $wirelessData = $wirelessResponse->json();
+    $wirelessCount = isset($wirelessData['data']) ? count($wirelessData['data']) : 0;
 
-    echo "   Filtered wireless clients: {$wirelessCount}\n\n";// 5. Client actions
+    echo "   Filtered wireless clients: {$wirelessCount}\n\n"; // 5. Client actions
     echo "5. Client Actions (examples - commented out for safety)\n";
     echo "   According to the official API specification, the only documented actions are:\n";
     echo "   - Authorize a guest client:\n";
@@ -140,8 +141,8 @@ try {
     echo "         'action' => 'UNAUTHORIZE_GUEST_ACCESS'\n";
     echo "     ]);\n";
     echo "\n";
-    echo str_repeat('=', 50) . "\n";
+    echo str_repeat('=', 50)."\n";
     echo "Example completed successfully!\n";
 } catch (Exception $e) {
-    echo "ERROR: " . $e->getMessage() . "\n";
+    echo 'ERROR: '.$e->getMessage()."\n";
 }

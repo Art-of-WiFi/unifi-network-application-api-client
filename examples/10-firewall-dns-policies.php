@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Example 10: Firewall Policies, ACL Rule Ordering, and DNS Policies
  *
@@ -6,19 +7,17 @@
  * ACL rule ordering, and DNS policies (CRUD) including the use of filter builders.
  */
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
 use ArtOfWiFi\UnifiNetworkApplicationApi\UnifiClient;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Firewall\FirewallPolicyFilter;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\DnsPolicies\DnsPolicyFilter;
 
-$config = require_once __DIR__ . '/config.php';
+$config = require_once __DIR__.'/config.php';
 
 // Configuration - Update the values in the config.php file
 $controllerUrl = $config['base_url'];
-$apiKey        = $config['api_key'];
-$siteId        = $config['site_id'];
-$verifySsl     = $config['verify_ssl'];
+$apiKey = $config['api_key'];
+$siteId = $config['site_id'];
+$verifySsl = $config['verify_ssl'];
 
 try {
     // Initialize the API client
@@ -26,26 +25,26 @@ try {
     $apiClient->setSiteId($siteId);
 
     echo "UniFi API Client - Firewall Policies, ACL Ordering & DNS Policies Example\n";
-    echo str_repeat('=', 70) . "\n\n";
+    echo str_repeat('=', 70)."\n\n";
 
     // ========================================================================
     // PART 1: FIREWALL POLICIES
     // ========================================================================
     echo "PART 1: FIREWALL POLICIES\n";
-    echo str_repeat('-', 50) . "\n\n";
+    echo str_repeat('-', 50)."\n\n";
 
     // 1. List all firewall policies
     echo "1. Listing all firewall policies...\n";
     $policiesResponse = $apiClient->firewall()->listPolicies();
-    $policies         = $policiesResponse->json();
+    $policies = $policiesResponse->json();
 
     if (isset($policies['data']) && count($policies['data']) > 0) {
-        echo "   Total policies: " . ($policies['totalCount'] ?? count($policies['data'])) . "\n";
+        echo '   Total policies: '.($policies['totalCount'] ?? count($policies['data']))."\n";
         foreach ($policies['data'] as $policy) {
-            $name    = $policy['name'] ?? 'Unnamed';
-            $id      = $policy['id'] ?? 'N/A';
+            $name = $policy['name'] ?? 'Unnamed';
+            $id = $policy['id'] ?? 'N/A';
             $enabled = ($policy['enabled'] ?? false) ? 'Enabled' : 'Disabled';
-            $action  = $policy['action'] ?? 'N/A';
+            $action = $policy['action'] ?? 'N/A';
 
             echo "   - {$name} (ID: {$id})\n";
             echo "     Action: {$action}, Status: {$enabled}\n";
@@ -53,17 +52,17 @@ try {
 
         // Use the first policy for detailed example
         $firstPolicy = $policies['data'][0];
-        $policyId    = $firstPolicy['id'];
-        $policyName  = $firstPolicy['name'] ?? 'Unnamed';
+        $policyId = $firstPolicy['id'];
+        $policyName = $firstPolicy['name'] ?? 'Unnamed';
 
         // 2. Get details for a specific firewall policy
         echo "\n2. Getting details for policy: {$policyName}\n";
         $detailResponse = $apiClient->firewall()->getPolicy($policyId);
-        $detail         = $detailResponse->json();
+        $detail = $detailResponse->json();
 
-        echo "   Name: " . ($detail['name'] ?? 'N/A') . "\n";
-        echo "   Action: " . ($detail['action'] ?? 'N/A') . "\n";
-        echo "   Enabled: " . (($detail['enabled'] ?? false) ? 'Yes' : 'No') . "\n";
+        echo '   Name: '.($detail['name'] ?? 'N/A')."\n";
+        echo '   Action: '.($detail['action'] ?? 'N/A')."\n";
+        echo '   Enabled: '.(($detail['enabled'] ?? false) ? 'Yes' : 'No')."\n";
         echo "\n";
     } else {
         echo "   No firewall policies found.\n\n";
@@ -148,12 +147,12 @@ try {
     // PART 2: ACL RULE ORDERING
     // ========================================================================
     echo "PART 2: ACL RULE ORDERING\n";
-    echo str_repeat('-', 50) . "\n\n";
+    echo str_repeat('-', 50)."\n\n";
 
     // 8. Get ACL rule ordering
     echo "8. Getting ACL rule ordering...\n";
     $orderingResponse = $apiClient->aclRules()->getOrdering();
-    $ordering         = $orderingResponse->json();
+    $ordering = $orderingResponse->json();
 
     echo "   Current ordering retrieved successfully.\n";
     if (isset($ordering['orderedAclRuleIds'])) {
@@ -177,20 +176,20 @@ try {
     // PART 3: DNS POLICIES
     // ========================================================================
     echo "PART 3: DNS POLICIES\n";
-    echo str_repeat('-', 50) . "\n\n";
+    echo str_repeat('-', 50)."\n\n";
 
     // 10. List all DNS policies
     echo "10. Listing all DNS policies...\n";
     $dnsPoliciesResponse = $apiClient->dnsPolicies()->list();
-    $dnsPolicies         = $dnsPoliciesResponse->json();
+    $dnsPolicies = $dnsPoliciesResponse->json();
 
     if (isset($dnsPolicies['data']) && count($dnsPolicies['data']) > 0) {
-        echo "    Total DNS policies: " . ($dnsPolicies['totalCount'] ?? count($dnsPolicies['data'])) . "\n";
+        echo '    Total DNS policies: '.($dnsPolicies['totalCount'] ?? count($dnsPolicies['data']))."\n";
         foreach ($dnsPolicies['data'] as $policy) {
-            $type    = $policy['type'] ?? 'Unknown';
-            $domain  = $policy['domain'] ?? 'N/A';
+            $type = $policy['type'] ?? 'Unknown';
+            $domain = $policy['domain'] ?? 'N/A';
             $enabled = ($policy['enabled'] ?? false) ? 'Enabled' : 'Disabled';
-            $id      = $policy['id'] ?? 'N/A';
+            $id = $policy['id'] ?? 'N/A';
 
             echo "    - [{$type}] {$domain} ({$enabled})\n";
             echo "      ID: {$id}\n";
@@ -199,17 +198,17 @@ try {
 
         // Use the first DNS policy for detailed example
         $firstDnsPolicy = $dnsPolicies['data'][0];
-        $dnsPolicyId    = $firstDnsPolicy['id'];
+        $dnsPolicyId = $firstDnsPolicy['id'];
 
         // 11. Get details for a specific DNS policy
         echo "11. Getting details for DNS policy: {$dnsPolicyId}\n";
         $dnsDetailResponse = $apiClient->dnsPolicies()->get($dnsPolicyId);
-        $dnsDetail         = $dnsDetailResponse->json();
+        $dnsDetail = $dnsDetailResponse->json();
 
-        echo "    Type: " . ($dnsDetail['type'] ?? 'N/A') . "\n";
-        echo "    Domain: " . ($dnsDetail['domain'] ?? 'N/A') . "\n";
-        echo "    Enabled: " . (($dnsDetail['enabled'] ?? false) ? 'Yes' : 'No') . "\n";
-        echo "    TTL: " . ($dnsDetail['ttlSeconds'] ?? 'N/A') . " seconds\n";
+        echo '    Type: '.($dnsDetail['type'] ?? 'N/A')."\n";
+        echo '    Domain: '.($dnsDetail['domain'] ?? 'N/A')."\n";
+        echo '    Enabled: '.(($dnsDetail['enabled'] ?? false) ? 'Yes' : 'No')."\n";
+        echo '    TTL: '.($dnsDetail['ttlSeconds'] ?? 'N/A')." seconds\n";
         echo "\n";
     } else {
         echo "    No DNS policies found.\n\n";
@@ -300,8 +299,8 @@ try {
     // Uncomment to actually delete:
     // $apiClient->dnsPolicies()->delete($dnsPolicyId);
 
-    echo str_repeat('=', 70) . "\n";
+    echo str_repeat('=', 70)."\n";
     echo "Example completed successfully!\n";
 } catch (Exception $e) {
-    echo "ERROR: " . $e->getMessage() . "\n";
+    echo 'ERROR: '.$e->getMessage()."\n";
 }

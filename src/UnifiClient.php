@@ -51,6 +51,14 @@ class UnifiClient
     }
 
     /**
+     * Get the version of the API client library
+     */
+    public function getVersion(): string
+    {
+        return UnifiConnector::VERSION;
+    }
+
+    /**
      * Get the underlying Saloon connector
      */
     public function getConnector(): UnifiConnector

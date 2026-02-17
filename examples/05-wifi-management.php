@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Example 5: WiFi Management
  *
@@ -6,17 +7,17 @@
  * including listing, creating, updating, and deleting WiFi networks.
  */
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
 use ArtOfWiFi\UnifiNetworkApplicationApi\UnifiClient;
 
-$config = require_once __DIR__ . '/config.php';
+$config = require_once __DIR__.'/config.php';
 
 // Configuration - Update the values in the config.php file
 $controllerUrl = $config['base_url'];
-$apiKey        = $config['api_key'];
-$siteId        = $config['site_id'];
-$verifySsl     = $config['verify_ssl'];
+$apiKey = $config['api_key'];
+$siteId = $config['site_id'];
+$verifySsl = $config['verify_ssl'];
 
 try {
     // Initialize the API client
@@ -24,7 +25,7 @@ try {
     $apiClient->setSiteId($siteId);
 
     echo "UniFi API Client - WiFi Management Example\n";
-    echo str_repeat('=', 50) . "\n\n";// 1. List all WiFi broadcasts (SSIDs)
+    echo str_repeat('=', 50)."\n\n"; // 1. List all WiFi broadcasts (SSIDs)
     echo "1. Listing all WiFi broadcasts...\n";
 
     $wifiResponse = $apiClient->wifiBroadcasts()->list();
@@ -32,10 +33,10 @@ try {
 
     if (isset($wifiNetworks['data']) && count($wifiNetworks['data']) > 0) {
         foreach ($wifiNetworks['data'] as $wifi) {
-            $name     = $wifi['name'] ?? 'Unnamed SSID';
-            $enabled  = ($wifi['enabled'] ?? false) ? 'Enabled' : 'Disabled';
+            $name = $wifi['name'] ?? 'Unnamed SSID';
+            $enabled = ($wifi['enabled'] ?? false) ? 'Enabled' : 'Disabled';
             $security = $wifi['security'] ?? 'Unknown';
-            $hidden   = ($wifi['is_hidden'] ?? false) ? 'Yes' : 'No';
+            $hidden = ($wifi['is_hidden'] ?? false) ? 'Yes' : 'No';
 
             echo "   WiFi: {$name}\n";
             echo "   - Status: {$enabled}\n";
@@ -47,18 +48,18 @@ try {
         // Use the first WiFi network for detailed example
         if (count($wifiNetworks['data']) > 0) {
             $firstWifi = $wifiNetworks['data'][0];
-            $wifiId    = $firstWifi['id'];
-            $wifiName  = $firstWifi['name'] ?? 'Unnamed';
+            $wifiId = $firstWifi['id'];
+            $wifiName = $firstWifi['name'] ?? 'Unnamed';
 
             // 2. Get detailed WiFi information
             echo "2. Getting detailed information for: {$wifiName}\n";
             $detailResponse = $apiClient->wifiBroadcasts()->get($wifiId);
-            $details        = $detailResponse->json();
+            $details = $detailResponse->json();
 
-            echo "   Enabled: " . (($details['enabled'] ?? false) ? 'Yes' : 'No') . "\n";
-            echo "   Security: " . ($details['security'] ?? 'Unknown') . "\n";
-            echo "   WPA Mode: " . ($details['wpa_mode'] ?? 'N/A') . "\n";
-            echo "   Guest Network: " . (($details['is_guest'] ?? false) ? 'Yes' : 'No') . "\n";
+            echo '   Enabled: '.(($details['enabled'] ?? false) ? 'Yes' : 'No')."\n";
+            echo '   Security: '.($details['security'] ?? 'Unknown')."\n";
+            echo '   WPA Mode: '.($details['wpa_mode'] ?? 'N/A')."\n";
+            echo '   Guest Network: '.(($details['is_guest'] ?? false) ? 'Yes' : 'No')."\n";
             echo "\n";
         }
     } else {
@@ -80,7 +81,7 @@ try {
     echo "   - broadcastingFrequenciesGHz (for STANDARD type)\n\n";
     echo "   Due to the complexity, we recommend using the UniFi Network Application UI\n";
     echo "   to create WiFi networks, or refer to the OpenAPI specification for the\n";
-    echo "   complete securityConfiguration schema structure.\n\n";// Creating WiFi broadcasts requires complex nested objects - see API docs
+    echo "   complete securityConfiguration schema structure.\n\n"; // Creating WiFi broadcasts requires complex nested objects - see API docs
     // $createResponse = $apiClient->wifiBroadcasts()->create([
     //     'type' => 'STANDARD',
     //     'name' => 'My WiFi',
@@ -104,7 +105,7 @@ try {
     echo "   Example code to change the WiFi name:\n";
     echo "   \$apiClient->wifiBroadcasts()->update(\$wifiId, [\n";
     echo "       'name' => 'Updated WiFi Name'\n";
-    echo "   ]);\n\n";// Uncomment to actually update a WiFi network:
+    echo "   ]);\n\n"; // Uncomment to actually update a WiFi network:
     // if (isset($wifiId)) {
     //     $updateResponse = $apiClient->wifiBroadcasts()->update($wifiId, [
     //         'enabled' => false
@@ -115,7 +116,7 @@ try {
     echo "   Example code to delete a WiFi network:\n";
     echo "   \$apiClient->wifiBroadcasts()->delete(\$wifiId);\n\n";
     echo "   To force delete (skip dependency checks):\n";
-    echo "   \$apiClient->wifiBroadcasts()->delete(\$wifiId, force: true);\n\n";// Uncomment to actually delete a WiFi network:
+    echo "   \$apiClient->wifiBroadcasts()->delete(\$wifiId, force: true);\n\n"; // Uncomment to actually delete a WiFi network:
     // $apiClient->wifiBroadcasts()->delete($wifiId);
     // 6. Notes on WiFi configuration
     echo "6. Notes on WiFi Configuration:\n\n";
@@ -129,8 +130,8 @@ try {
     echo "   - Hotspot: Captive portal or Passpoint configuration\n\n";
     echo "   For full schema details including security configuration and all\n";
     echo "   available options, please refer to the OpenAPI specification document.\n\n";
-    echo str_repeat('=', 50) . "\n";
+    echo str_repeat('=', 50)."\n";
     echo "Example completed successfully!\n";
 } catch (Exception $e) {
-    echo "ERROR: " . $e->getMessage() . "\n";
+    echo 'ERROR: '.$e->getMessage()."\n";
 }

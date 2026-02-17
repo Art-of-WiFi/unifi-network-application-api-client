@@ -28,6 +28,7 @@ client. For a richer set of features, we currently recommend using the [legacy U
 - Easy to use for beginners, flexible for advanced users
 - Well-documented with inline PHPDoc for IDE auto-completion
 - PSR-4 autoloading
+- Sends a `User-Agent` header with every request for easy troubleshooting
 
 
 ## Requirements
@@ -744,6 +745,21 @@ $apiClient = new UnifiClient(
     verifySsl: false  // Skip SSL verification (not recommended for production)
 );
 ```
+
+### Version Information
+
+You can retrieve the client library version at runtime, which is useful for troubleshooting and logging:
+
+```php
+<?php
+
+echo $apiClient->getVersion(); // e.g., "1.0.0"
+```
+
+The version is also sent with every API request as a `User-Agent` header (`unifi-api-client-php/1.0.0`), which can help
+when debugging API issues in controller logs. The version constant is also available directly
+via `UnifiConnector::VERSION`.
+
 
 ## Available Resources
 

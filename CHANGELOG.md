@@ -27,6 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Port parameters**: Changed `portId` (string) to `portIdx` (int) to match API spec requirement for port index
 
 ### Added
+- Library version constant (`UnifiConnector::VERSION`) and `UnifiClient::getVersion()` accessor
+- `User-Agent` header (`unifi-api-client-php/{version}`) sent with every API request for troubleshooting
 - Supporting Resources endpoints for reference data:
   - WAN interfaces listing
   - Site-to-site VPN tunnels listing

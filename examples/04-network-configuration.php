@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Example 4: Network Configuration
  *
@@ -6,17 +7,17 @@
  * listing, creating, updating, and deleting network configurations.
  */
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
 use ArtOfWiFi\UnifiNetworkApplicationApi\UnifiClient;
 
-$config = require_once __DIR__ . '/config.php';
+$config = require_once __DIR__.'/config.php';
 
 // Configuration - Update the values in the config.php file
 $controllerUrl = $config['base_url'];
-$apiKey        = $config['api_key'];
-$siteId        = $config['site_id'];
-$verifySsl     = $config['verify_ssl'];
+$apiKey = $config['api_key'];
+$siteId = $config['site_id'];
+$verifySsl = $config['verify_ssl'];
 
 try {
     // Initialize the API client
@@ -24,7 +25,7 @@ try {
     $apiClient->setSiteId($siteId);
 
     echo "UniFi API Client - Network Configuration Example\n";
-    echo str_repeat('=', 50) . "\n\n";// 1. List all networks
+    echo str_repeat('=', 50)."\n\n"; // 1. List all networks
     echo "1. Listing all networks...\n";
 
     $networksResponse = $apiClient->networks()->list();
@@ -32,15 +33,15 @@ try {
     try {
         $networks = $networksResponse->json();
     } catch (Exception $e) {
-        echo "   Error: " . $e->getMessage() . "\n";
+        echo '   Error: '.$e->getMessage()."\n";
     }
 
     if (isset($networks['data']) && count($networks['data']) > 0) {
         foreach ($networks['data'] as $network) {
-            $name       = $network['name'] ?? 'Unnamed Network';
+            $name = $network['name'] ?? 'Unnamed Network';
             $management = $network['management'] ?? 'Unknown';
-            $vlan       = $network['vlanId'] ?? 'None';
-            $networkId  = $network['id'] ?? 'None...';
+            $vlan = $network['vlanId'] ?? 'None';
+            $networkId = $network['id'] ?? 'None...';
 
             echo "   Network: {$name}\n";
             echo "   - Management: {$management}\n";
@@ -52,18 +53,18 @@ try {
         // Use the first network for detailed example
         if (count($networks['data']) > 0) {
             $firstNetwork = $networks['data'][0];
-            $networkId    = $firstNetwork['id'];
-            $networkName  = $firstNetwork['name'] ?? 'Unnamed';
+            $networkId = $firstNetwork['id'];
+            $networkName = $firstNetwork['name'] ?? 'Unnamed';
 
             // 2. Get detailed network information
             echo "2. Getting detailed information for: {$networkName}\n";
             $detailResponse = $apiClient->networks()->get($networkId);
-            $details        = $detailResponse->json();
+            $details = $detailResponse->json();
 
-            echo "   Enabled: " . (($details['enabled'] ?? false) ? 'Yes' : 'No') . "\n";
-            echo "   Gateway: " . ($details['ipv4Configuration']['hostIpAddress'] ?? 'N/A') . "\n";
-            echo "   Internet Access Enabled: " . (($details['internetAccessEnabled'] ?? false) ? 'Yes' : 'No') . "\n";
-            echo "   dhcpConfiguration mode: " . ($details['ipv4Configuration']['dhcpConfiguration']['mode'] ?? 'N/A') . "\n";
+            echo '   Enabled: '.(($details['enabled'] ?? false) ? 'Yes' : 'No')."\n";
+            echo '   Gateway: '.($details['ipv4Configuration']['hostIpAddress'] ?? 'N/A')."\n";
+            echo '   Internet Access Enabled: '.(($details['internetAccessEnabled'] ?? false) ? 'Yes' : 'No')."\n";
+            echo '   dhcpConfiguration mode: '.($details['ipv4Configuration']['dhcpConfiguration']['mode'] ?? 'N/A')."\n";
             echo "\n";
         }
     } else {
@@ -97,7 +98,7 @@ try {
     echo "           'hostIpAddress' => '192.168.20.1',\n";
     echo "           'prefixLength' => 24\n";
     echo "       ]\n";
-    echo "   ]);\n\n";// Uncomment to actually create a network:
+    echo "   ]);\n\n"; // Uncomment to actually create a network:
     // $createResponse = $apiClient->networks()->create([
     //     'management' => 'UNMANAGED',
     //     'name' => 'Test VLAN',
@@ -113,7 +114,7 @@ try {
     echo "   Example code to update network name:\n";
     echo "   \$apiClient->networks()->update(\$networkId, [\n";
     echo "       'name' => 'Updated Network Name'\n";
-    echo "   ]);\n\n";// Uncomment to actually update a network:
+    echo "   ]);\n\n"; // Uncomment to actually update a network:
     // if (isset($networkId)) {
     //     $updateResponse = $apiClient->networks()->update($networkId, [
     //         'enabled' => false
@@ -124,7 +125,7 @@ try {
     echo "   Example code to delete a network:\n";
     echo "   \$apiClient->networks()->delete(\$networkId);\n\n";
     echo "   To force delete (skip dependency checks):\n";
-    echo "   \$apiClient->networks()->delete(\$networkId, force: true);\n\n";// Uncomment to actually delete a network:
+    echo "   \$apiClient->networks()->delete(\$networkId, force: true);\n\n"; // Uncomment to actually delete a network:
     // $apiClient->networks()->delete($networkId);
     // 6. Pagination example
     echo "6. Pagination Example:\n";
@@ -132,10 +133,10 @@ try {
     echo "   \$apiClient->networks()->list(offset: 0, limit: 10);\n\n";
 
     $paginatedResponse = $apiClient->networks()->list(offset: 0, limit: 10);
-    $paginated         = $paginatedResponse->json();
-    $count             = isset($paginated['data']) ? count($paginated['data']) : 0;
+    $paginated = $paginatedResponse->json();
+    $count = isset($paginated['data']) ? count($paginated['data']) : 0;
 
-    echo "   Retrieved {$count} networks\n\n";// 7. Filtering examples
+    echo "   Retrieved {$count} networks\n\n"; // 7. Filtering examples
     echo "7. Filtering Examples (based on official API filterable properties):\n";
     echo "   Available filterable properties:\n";
     echo "   - management (STRING), id (UUID), name (STRING), enabled (BOOLEAN)\n";
@@ -148,8 +149,8 @@ try {
     echo "   \$apiClient->networks()->list(filter: 'enabled.eq(true)');\n\n";
     echo "   Get networks by VLAN range:\n";
     echo "   \$apiClient->networks()->list(filter: 'and(vlanId.ge(10), vlanId.le(20))');\n\n";
-    echo str_repeat('=', 50) . "\n";
+    echo str_repeat('=', 50)."\n";
     echo "Example completed successfully!\n";
 } catch (Exception $e) {
-    echo "ERROR: " . $e->getMessage() . "\n";
+    echo 'ERROR: '.$e->getMessage()."\n";
 }

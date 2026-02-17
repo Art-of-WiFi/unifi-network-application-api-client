@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Example 09: Using Filter Builders
  *
@@ -6,22 +7,22 @@
  * for more readable and maintainable filtering.
  */
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
-use ArtOfWiFi\UnifiNetworkApplicationApi\UnifiClient;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\SupportingResources\CountriesFilter;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Devices\DeviceFilter;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Clients\ClientFilter;
-use ArtOfWiFi\UnifiNetworkApplicationApi\Enums\ClientType;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Enums\ClientAccessType;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Enums\ClientType;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Clients\ClientFilter;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Devices\DeviceFilter;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\SupportingResources\CountriesFilter;
+use ArtOfWiFi\UnifiNetworkApplicationApi\UnifiClient;
 
-$config = require_once __DIR__ . '/config.php';
+$config = require_once __DIR__.'/config.php';
 
 // Configuration - Update the values in the config.php file
 $controllerUrl = $config['base_url'];
-$apiKey        = $config['api_key'];
-$siteId        = $config['site_id'];
-$verifySsl     = $config['verify_ssl'];
+$apiKey = $config['api_key'];
+$siteId = $config['site_id'];
+$verifySsl = $config['verify_ssl'];
 
 // Initialize the API client
 $apiClient = new UnifiClient($controllerUrl, $apiKey, $verifySsl);
@@ -32,7 +33,7 @@ echo "=== Filter Builders Example ===\n\n";
 // 1. COUNTRIES FILTER - Simple Example
 // ============================================================================
 echo "1. Countries Filter Examples:\n";
-echo str_repeat('-', 50) . "\n\n";
+echo str_repeat('-', 50)."\n\n";
 
 try {
     // Example 1a: Find United States
@@ -84,7 +85,7 @@ try {
     echo "\n";
 
 } catch (\Exception $e) {
-    echo "Error: " . $e->getMessage() . "\n\n";
+    echo 'Error: '.$e->getMessage()."\n\n";
 }
 
 // ============================================================================
@@ -222,7 +223,7 @@ try {
 // 4. COMPARISON: Raw Strings vs Filter Builders
 // ============================================================================
 echo "4. Comparison: Raw Strings vs Filter Builders:\n";
-echo str_repeat('-', 50) . "\n\n";
+echo str_repeat('-', 50)."\n\n";
 
 echo "Old way (raw strings):\n";
 echo "  \$client->supportingResources()->listCountries(\n";
