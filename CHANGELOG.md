@@ -65,6 +65,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Inline PHPDoc comments for IDE auto-completion
 - Migration guide from legacy API client
 
-## [1.0.0] - TBD
+## [1.0.0] - 2026-02-17
 
 Initial public release.
