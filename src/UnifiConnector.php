@@ -20,7 +20,7 @@ class UnifiConnector extends Connector
     /**
      * The version of the API client library
      */
-    public const VERSION = '1.0.0';
+    public const VERSION = '1.1.0';
 
     /**
      * Create a new UniFi API connector instance
