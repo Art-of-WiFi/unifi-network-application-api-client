@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Hotspot;
 
+use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Filter;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
@@ -16,7 +17,7 @@ class DeleteVouchersRequest extends Request
 
     public function __construct(
         protected string $siteId,
-        protected string $filter
+        protected string|Filter $filter
     ) {}
 
     public function resolveEndpoint(): string
@@ -26,6 +27,10 @@ class DeleteVouchersRequest extends Request
 
     protected function defaultQuery(): array
     {
-        return ['filter' => $this->filter];
+        return [
+            'filter' => $this->filter instanceof Filter
+                ? $this->filter->toString()
+                : $this->filter,
+        ];
     }
 }

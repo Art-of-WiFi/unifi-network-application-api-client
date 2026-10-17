@@ -933,30 +933,61 @@ echo $device['ipAddress'];      // ✓ Correct
 
 ### Error Handling
 
-Handle API errors gracefully using try-catch blocks:
+By default, a failed request (HTTP 4xx/5xx) is **returned** like any other response, not thrown. Check the
+response, or call `throw()` to turn it into an exception:
 
 ```php
 <?php
 
-use Saloon\Exceptions\Request\RequestException;
+$response = $apiClient->devices()->get('550e8400-e29b-41d4-a716-446655440000');
+
+if ($response->failed()) {
+    // The body follows the API's error format
+    echo $response->status();           // 404
+    echo $response->json('code');       // api.resource-not-found
+    echo $response->json('message');    // Requested resource does not exist
+    echo $response->json('requestId');  // useful when looking up 500 errors in the controller logs
+}
+
+// Or throw a ClientException (4xx) / ServerException (5xx) for a failed response
+$device = $response->throw()->json();
+```
+
+To have **every** failed response throw, enable `throwOnErrors` (opt-in, available since 1.2.0):
+
+```php
+<?php
+
 use Saloon\Exceptions\Request\ClientException;
+use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Exceptions\Request\ServerException;
+use Saloon\Exceptions\Request\Statuses\NotFoundException;
+
+$apiClient = new UnifiClient('https://192.168.1.1', 'your-api-key', throwOnErrors: true);
+// or on an existing client: $apiClient->throwOnErrors();
 
 try {
-    $response = $apiClient->devices()->get('invalid-uuid-here');
-    $device = $response->json();
+    $device = $apiClient->devices()->get('550e8400-e29b-41d4-a716-446655440000')->json();
+} catch (NotFoundException $e) {
+    // Specific 4xx subclasses exist, e.g. UnauthorizedException, ForbiddenException, TooManyRequestsException
+    echo $e->getResponse()->json('message');
 } catch (ClientException $e) {
-    // 4xx errors (client errors like 404 Not Found)
-    echo "Client error: " . $e->getMessage();
-    echo "Status code: " . $e->getResponse()->status();
+    // Any other 4xx error
+    echo 'Client error: ' . $e->getResponse()->status();
 } catch (ServerException $e) {
-    // 5xx errors (server errors)
-    echo "Server error: " . $e->getMessage();
-} catch (RequestException $e) {
-    // General request errors
-    echo "Request failed: " . $e->getMessage();
+    // 5xx errors
+    echo 'Server error: ' . $e->getResponse()->status();
+} catch (FatalRequestException $e) {
+    // Network issues, timeouts, SSL errors
+    echo 'Connection failed: ' . $e->getMessage();
 }
 ```
+
+Regardless of this setting:
+- **Network problems** (connection refused, DNS failures, timeouts, SSL errors) always throw a `FatalRequestException`.
+- A missing site ID throws a `RuntimeException` **before** any request is sent.
+- An invalid API key is rejected by UniFi OS itself with `401` and a different body (`{"error": {"code": 401, ...}}`)
+  than the API's own error format.
 
 ### SSL Certificate Verification
 

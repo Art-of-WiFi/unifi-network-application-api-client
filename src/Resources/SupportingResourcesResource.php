@@ -38,8 +38,8 @@ class SupportingResourcesResource extends BaseResource
      * @param  int|null  $limit  Number of results per page (optional)
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function listWanInterfaces(?int $offset = null, ?int $limit = null): Response
@@ -59,8 +59,8 @@ class SupportingResourcesResource extends BaseResource
      * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function listSiteToSiteVpnTunnels(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
@@ -80,8 +80,8 @@ class SupportingResourcesResource extends BaseResource
      * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function listVpnServers(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
@@ -101,8 +101,8 @@ class SupportingResourcesResource extends BaseResource
      * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function listRadiusProfiles(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
@@ -122,8 +122,8 @@ class SupportingResourcesResource extends BaseResource
      * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function listDeviceTags(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
@@ -145,8 +145,8 @@ class SupportingResourcesResource extends BaseResource
      * @param  int|null  $limit  Number of results per page (optional)
      * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
      *
-     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function listDpiCategories(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
@@ -166,8 +166,8 @@ class SupportingResourcesResource extends BaseResource
      * @param  int|null  $limit  Number of results per page (optional)
      * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
      *
-     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function listDpiApplications(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
@@ -187,8 +187,8 @@ class SupportingResourcesResource extends BaseResource
      * @param  int|null  $limit  Number of results per page (optional)
      * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
      *
-     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function listCountries(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response

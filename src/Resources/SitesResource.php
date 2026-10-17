@@ -29,8 +29,8 @@ class SitesResource extends BaseResource
      * @param  int|null  $limit  Number of results per page (optional)
      * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
      *
-     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function list(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
@@ -45,8 +45,8 @@ class SitesResource extends BaseResource
      * @param  int|null  $limit  Number of results per page (optional)
      * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
      *
-     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function all(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response

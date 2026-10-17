@@ -37,8 +37,8 @@ class NetworksResource extends BaseResource
      * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function list(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
@@ -56,8 +56,8 @@ class NetworksResource extends BaseResource
      * @param  string  $networkId  The network UUID
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function get(string $networkId): Response
@@ -76,8 +76,8 @@ class NetworksResource extends BaseResource
      * @param  string  $networkId  The network UUID
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function getReferences(string $networkId): Response
@@ -95,8 +95,8 @@ class NetworksResource extends BaseResource
      * @param  array  $data  The network configuration data
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (bad request, validation error, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function create(array $data): Response
@@ -115,8 +115,8 @@ class NetworksResource extends BaseResource
      * @param  array  $data  The updated network configuration data
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (not found, bad request, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function update(string $networkId, array $data): Response
@@ -135,8 +135,8 @@ class NetworksResource extends BaseResource
      * @param  bool  $force  Force deletion (optional)
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (not found, conflict, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function delete(string $networkId, bool $force = false): Response

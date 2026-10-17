@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace ArtOfWiFi\UnifiNetworkApplicationApi;
 
 use InvalidArgumentException;
+use Saloon\Enums\PipeOrder;
 use Saloon\Http\Connector;
+use Saloon\Http\PendingRequest;
+use Saloon\Http\Response;
 use Saloon\Traits\Plugins\AcceptsJson;
 
 /**
@@ -43,12 +46,52 @@ class UnifiConnector extends Connector
      * @param  string  $baseUrl  The base URL of your UniFi controller (e.g., 'https://192.168.1.1')
      * @param  string  $apiKey  Your UniFi API key (generate this in the Integrations section of your UniFi application)
      * @param  bool  $verifySsl  Whether to verify SSL certificates (set to false for self-signed certificates)
+     * @param  bool  $throwOnErrors  Whether to throw an exception for 4xx/5xx responses instead of returning them
      */
     public function __construct(
         protected string $baseUrl,
         protected string $apiKey,
-        protected bool $verifySsl = true
+        protected bool $verifySsl = true,
+        protected bool $throwOnErrors = false
     ) {}
+
+    /**
+     * Throw an exception for 4xx/5xx responses (or stop doing so)
+     *
+     * By default failed responses are returned like any other response; check them with
+     * `$response->failed()` or call `$response->throw()`. When enabled, every failed response
+     * throws a ClientException (4xx) or ServerException (5xx) subclass instead.
+     */
+    public function throwOnErrors(bool $throwOnErrors = true): static
+    {
+        $this->throwOnErrors = $throwOnErrors;
+
+        return $this;
+    }
+
+    /**
+     * Whether 4xx/5xx responses throw an exception
+     */
+    public function isThrowingOnErrors(): bool
+    {
+        return $this->throwOnErrors;
+    }
+
+    /**
+     * Register the throw-on-error middleware when enabled
+     */
+    public function boot(PendingRequest $pendingRequest): void
+    {
+        if (! $this->throwOnErrors) {
+            return;
+        }
+
+        $pendingRequest->middleware()->onResponse(
+            callable: static fn (Response $response) => $response->throw(),
+            name: 'unifiThrowOnErrors',
+            order: PipeOrder::LAST
+        );
+    }
 
     /**
      * Create a connector that routes all requests through the Site Manager connector at api.ui.com
@@ -58,10 +101,11 @@ class UnifiConnector extends Connector
      * @param  string  $consoleId  The console (host) ID, visible in the unifi.ui.com URL:
      *                             https://unifi.ui.com/consoles/{consoleId}/...
      * @param  string  $apiKey  A Site Manager API key generated at unifi.ui.com (not a local Network API key)
+     * @param  bool  $throwOnErrors  Whether to throw an exception for 4xx/5xx responses instead of returning them
      *
      * @throws InvalidArgumentException If the console ID or API key is empty
      */
-    public static function viaSiteManager(string $consoleId, string $apiKey): static
+    public static function viaSiteManager(string $consoleId, string $apiKey, bool $throwOnErrors = false): static
     {
         $consoleId = trim($consoleId);
         $apiKey = trim($apiKey);
@@ -74,7 +118,7 @@ class UnifiConnector extends Connector
             throw new InvalidArgumentException('Site Manager API key cannot be empty');
         }
 
-        $connector = new static(self::SITE_MANAGER_BASE_URL, $apiKey, true); // @phpstan-ignore new.static
+        $connector = new static(self::SITE_MANAGER_BASE_URL, $apiKey, true, $throwOnErrors); // @phpstan-ignore new.static
         $connector->siteManagerConsoleId = $consoleId;
 
         return $connector;

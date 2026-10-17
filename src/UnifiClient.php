@@ -43,13 +43,16 @@ class UnifiClient
      * @param  string  $baseUrl  The base URL of your UniFi controller (e.g., 'https://192.168.1.1')
      * @param  string  $apiKey  Your UniFi API key (generate this in the Integrations section of your UniFi application)
      * @param  bool  $verifySsl  Whether to verify SSL certificates (set to false for self-signed certificates)
+     * @param  bool  $throwOnErrors  Whether to throw an exception for 4xx/5xx responses instead of returning them
+     *                               (default false: check `$response->failed()` or call `$response->throw()`)
      */
     public function __construct(
         string $baseUrl,
         string $apiKey,
-        bool $verifySsl = true
+        bool $verifySsl = true,
+        bool $throwOnErrors = false
     ) {
-        $this->connector = new UnifiConnector($baseUrl, $apiKey, $verifySsl);
+        $this->connector = new UnifiConnector($baseUrl, $apiKey, $verifySsl, $throwOnErrors);
     }
 
     /**
@@ -68,17 +71,34 @@ class UnifiClient
      * @param  string  $consoleId  The console (host) ID, visible in the unifi.ui.com URL:
      *                             https://unifi.ui.com/consoles/{consoleId}/...
      * @param  string  $apiKey  A Site Manager API key generated at unifi.ui.com (not a local Network API key)
+     * @param  bool  $throwOnErrors  Whether to throw an exception for 4xx/5xx responses instead of returning them
      *
      * @throws InvalidArgumentException If the console ID or API key is empty
      */
-    public static function connectViaSiteManager(string $consoleId, string $apiKey): static
+    public static function connectViaSiteManager(string $consoleId, string $apiKey, bool $throwOnErrors = false): static
     {
-        $connector = UnifiConnector::viaSiteManager($consoleId, $apiKey);
+        $connector = UnifiConnector::viaSiteManager($consoleId, $apiKey, $throwOnErrors);
 
         $client = new static($connector->resolveBaseUrl(), $apiKey); // @phpstan-ignore new.static
         $client->connector = $connector;
 
         return $client;
+    }
+
+    /**
+     * Throw an exception for 4xx/5xx responses (or stop doing so)
+     *
+     * By default failed responses are returned like any other response. When enabled, every
+     * failed response throws a ClientException (4xx) or ServerException (5xx) subclass, such as
+     * NotFoundException or UnauthorizedException.
+     *
+     * @return self Returns the client instance for method chaining
+     */
+    public function throwOnErrors(bool $throwOnErrors = true): self
+    {
+        $this->connector->throwOnErrors($throwOnErrors);
+
+        return $this;
     }
 
     /**

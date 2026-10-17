@@ -41,8 +41,8 @@ class SwitchingResource extends BaseResource
      * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function listSwitchStacks(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
@@ -60,8 +60,8 @@ class SwitchingResource extends BaseResource
      * @param  string  $switchStackId  The switch stack UUID
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function getSwitchStack(string $switchStackId): Response
@@ -84,8 +84,8 @@ class SwitchingResource extends BaseResource
      * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function listMcLagDomains(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
@@ -103,8 +103,8 @@ class SwitchingResource extends BaseResource
      * @param  string  $mcLagDomainId  The MC-LAG domain UUID
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function getMcLagDomain(string $mcLagDomainId): Response
@@ -128,8 +128,8 @@ class SwitchingResource extends BaseResource
      * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function listLags(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
@@ -148,8 +148,8 @@ class SwitchingResource extends BaseResource
      * @param  string  $lagId  The LAG UUID
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function getLag(string $lagId): Response

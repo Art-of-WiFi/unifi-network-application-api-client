@@ -38,8 +38,8 @@ class DevicesResource extends BaseResource
      * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function listAdopted(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
@@ -59,8 +59,8 @@ class DevicesResource extends BaseResource
      * @param  int|null  $limit  Number of results per page (optional)
      * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
      *
-     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function listPending(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
@@ -76,8 +76,8 @@ class DevicesResource extends BaseResource
      * @param  string  $deviceId  The device UUID
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function get(string $deviceId): Response
@@ -95,8 +95,8 @@ class DevicesResource extends BaseResource
      * @param  string  $deviceId  The device UUID
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function getStatistics(string $deviceId): Response
@@ -116,8 +116,8 @@ class DevicesResource extends BaseResource
      * @param  array  $action  The action payload (e.g., ['action' => 'RESTART'])
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (not found, bad request, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function executeAction(string $deviceId, array $action): Response
@@ -137,8 +137,8 @@ class DevicesResource extends BaseResource
      * @param  array  $action  The action payload
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (not found, bad request, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function executePortAction(string $deviceId, int $portIdx, array $action): Response
@@ -157,8 +157,8 @@ class DevicesResource extends BaseResource
      * @param  bool  $ignoreDeviceLimit  Whether to ignore the device limit for the site (optional)
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function adopt(string $macAddress, bool $ignoreDeviceLimit = false): Response
@@ -176,8 +176,8 @@ class DevicesResource extends BaseResource
      * @param  string  $deviceId  The device UUID
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function remove(string $deviceId): Response

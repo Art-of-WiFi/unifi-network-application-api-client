@@ -38,8 +38,8 @@ class AclRulesResource extends BaseResource
      * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function list(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
@@ -57,8 +57,8 @@ class AclRulesResource extends BaseResource
      * @param  string  $ruleId  The ACL rule UUID
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function get(string $ruleId): Response
@@ -76,8 +76,8 @@ class AclRulesResource extends BaseResource
      * @param  array  $data  The ACL rule configuration data
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (bad request, validation error, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function create(array $data): Response
@@ -96,8 +96,8 @@ class AclRulesResource extends BaseResource
      * @param  array  $data  The updated ACL rule configuration data
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (not found, bad request, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function update(string $ruleId, array $data): Response
@@ -113,11 +113,11 @@ class AclRulesResource extends BaseResource
      * Deletes an existing ACL rule from the specified site.
      *
      * @param  string  $ruleId  The ACL rule UUID
-     * @param  bool  $force  Force deletion (optional)
+     * @param  bool  $force  Sends `force=true` (optional). Not defined for this endpoint in the API specification, so the controller may ignore it
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (not found, conflict, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function delete(string $ruleId, bool $force = false): Response
@@ -135,8 +135,8 @@ class AclRulesResource extends BaseResource
      * Retrieves the current ordering of ACL rules on the specified site.
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function getOrdering(): Response
@@ -154,8 +154,8 @@ class AclRulesResource extends BaseResource
      * @param  array  $data  The ordering data (e.g., ['orderedAclRuleIds' => [...]])
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function updateOrdering(array $data): Response

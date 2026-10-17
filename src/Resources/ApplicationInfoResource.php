@@ -24,8 +24,8 @@ class ApplicationInfoResource extends BaseResource
      * Returns details about the application, including version and runtime metadata.
      * Useful for integration validation.
      *
-     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function get(): Response

@@ -36,8 +36,8 @@ class HotspotResource extends BaseResource
      * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function listVouchers(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
@@ -55,8 +55,8 @@ class HotspotResource extends BaseResource
      * @param  string  $voucherId  The voucher UUID
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (not found, unauthorized, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function getVoucher(string $voucherId): Response
@@ -74,8 +74,8 @@ class HotspotResource extends BaseResource
      * @param  array  $data  The voucher configuration data
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (bad request, validation error, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function createVouchers(array $data): Response
@@ -93,8 +93,8 @@ class HotspotResource extends BaseResource
      * @param  string  $voucherId  The voucher UUID
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (not found, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
     public function deleteVoucher(string $voucherId): Response
@@ -110,14 +110,14 @@ class HotspotResource extends BaseResource
      * Deletes (revokes) multiple vouchers matching a filter.
      * A filter is required by the API to prevent accidental deletion of all vouchers.
      *
-     * @param  string  $filter  Filter expression (required)
+     * @param  string|Filter  $filter  Filter expression or Filter object, e.g. VoucherFilter::expiredOnly() (required)
      *
      * @throws RuntimeException If site ID is not set
-     * @throws ClientException If the request fails with a 4xx error (bad request, etc.)
-     * @throws ServerException If the request fails with a 5xx error (server error)
+     * @throws ClientException If the request fails with a 4xx error and throw-on-errors is enabled
+     * @throws ServerException If the request fails with a 5xx error and throw-on-errors is enabled
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
-    public function deleteVouchers(string $filter): Response
+    public function deleteVouchers(string|Filter $filter): Response
     {
         $siteId = $this->requireSiteId();
 

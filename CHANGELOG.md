@@ -31,6 +31,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Site Manager connector support: `UnifiClient::connectViaSiteManager($consoleId, $apiKey)` reaches a console's
   Network API remotely through `api.ui.com` (`UnifiConnector::viaSiteManager()`, `isSiteManagerProxy()` and
   `getSiteManagerConsoleId()` on the connector). SSL verification is always enabled in this mode
+- Opt-in `throwOnErrors` to throw a `ClientException` (4xx) or `ServerException` (5xx) subclass for every failed
+  response: a new constructor argument (`new UnifiClient($url, $key, throwOnErrors: true)`), `$client->throwOnErrors()`
+  and a `throwOnErrors` argument on `connectViaSiteManager()`. The default behaviour is unchanged
+- `hotspot()->deleteVouchers()` accepts a `VoucherFilter` object, e.g. `deleteVouchers(VoucherFilter::expiredOnly())`
+- Mocked request tests for every resource method (HTTP method, path, query and body per the API specification) and
+  error handling tests for both the default and the `throwOnErrors` behaviour
 
 ### Changed
 - `Filter::contains()` now accepts `string|int|float|DateTimeInterface`, and `equals()`, `notEquals()`,
@@ -61,6 +67,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (and `reportFlowEnabled` on Network 11.0+), DNS policy types use the `*_RECORD` values, WiFi broadcast
   frequencies are numbers, and PUT updates must send all required fields
 - WiFi example read legacy field names (`security`, `wpa_mode`, `is_guest`) that do not exist in the official API
+- Error handling documentation (README, example 06, docblocks) claimed 4xx/5xx responses throw a `ClientException`/
+  `ServerException`. They are returned as responses unless `throwOnErrors` is enabled; the try/catch examples never
+  caught anything. The docs now show `$response->failed()` / `$response->throw()` and the new opt-in
+- The `force` parameter of `aclRules()->delete()`, `firewall()->deleteZone()` and `trafficMatchingLists()->delete()`
+  is now documented as not being defined for these endpoints in the API specification
 
 ### Documentation
 - API version compatibility table listing the minimum Network Application version per feature
