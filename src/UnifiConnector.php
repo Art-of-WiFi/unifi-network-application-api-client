@@ -28,7 +28,7 @@ class UnifiConnector extends Connector
     /**
      * The version of the API client library
      */
-    public const VERSION = '1.1.0';
+    public const VERSION = '1.2.0';
 
     /**
      * The base URL of the Site Manager API

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-10-17
+
+Supports UniFi Network Application API version 10.6.106 (the latest public specification on developer.ui.com),
+verified against Network Application 11.0.89. See "Upgrading to 1.2.0" in the README for behaviour changes.
+
 ### Added
 - Switching resource (`$client->switching()`) with read-only access to switch stacks, MC-LAG domains and LAGs
   (`listSwitchStacks()`, `getSwitchStack()`, `listMcLagDomains()`, `getMcLagDomain()`, `listLags()`, `getLag()`)

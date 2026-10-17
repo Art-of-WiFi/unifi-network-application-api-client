@@ -1054,10 +1054,10 @@ You can retrieve the client library version at runtime, which is useful for trou
 ```php
 <?php
 
-echo $apiClient->getVersion(); // e.g., "1.0.0"
+echo $apiClient->getVersion(); // e.g., "1.2.0"
 ```
 
-The version is also sent with every API request as a `User-Agent` header (`unifi-api-client-php/1.0.0`), which can help
+The version is also sent with every API request as a `User-Agent` header (`unifi-api-client-php/1.2.0`), which can help
 when debugging API issues in controller logs. The version constant is also available directly
 via `UnifiConnector::VERSION`.
 
@@ -1095,11 +1095,44 @@ See the [`examples/`](examples/) directory for complete working examples:
 - [Error Handling](examples/06-error-handling.php) - Proper exception handling
 - [Firewall Policies & DNS Policies](examples/10-firewall-dns-policies.php) - Firewall policies, ACL ordering, and DNS policies
 
+## Upgrading to 1.2.0
+
+1.2.0 is backward compatible for normal use: no public methods were removed or renamed, and the default
+error handling is unchanged. A few behaviours changed because they never worked against the API:
+
+| Change | Before | Now |
+|--------|--------|-----|
+| UUID values in filters | quoted: `id.eq('550e8400-…')`, rejected by the API | unquoted: `id.eq(550e8400-…)` |
+| Single quotes in filter values | escaped as `\'`, rejected by the API | escaped as `''` (`'Erik''s Lab'`) |
+| `DnsPolicyFilter` presets (`aRecords()`, …) | filtered on `A`, `CNAME`, …, never matched | filter on `A_RECORD`, `CNAME_RECORD`, … |
+| Timestamp filters | only possible as raw strings | pass a `DateTimeInterface` to the builders |
+
+If your code compared filter strings produced by the builders (e.g. in your own tests), update the expected
+strings for UUID values and single quotes.
+
+**Deprecated** (still available, removed in 2.0): `FirewallZoneFilter::networkIds()`,
+`FirewallZoneFilter::emptyZones()` and `TrafficMatchingListFilter::type()`. The API rejects these properties as
+filters (`400 api.request.invalid-filter`), so any code using them did not work before either.
+
+**Wider parameter types:** the `Filter` comparison methods (`equals()`, `greaterThan()`, `contains()`, …) accept
+`float` and `DateTimeInterface`, and `sites()->list()`, `devices()->listPending()` and `hotspot()->deleteVouchers()`
+accept Filter objects. This only affects you if you **extend** these classes and override those methods: widen
+the parameter types in your overrides accordingly.
+
+**Error handling:** failed responses (4xx/5xx) were always returned rather than thrown, even though earlier
+documentation said otherwise. That behaviour is unchanged; to get exceptions, enable the new `throwOnErrors`
+option (see [Error Handling](#error-handling)).
+
+**Network Application 10.6.106+:** the API specification marks `channel2gLockedTo6` and `dtimPeriod2gLockedTo3`
+as required for WiFi broadcast create/update requests on these versions. Add both fields (e.g. `false`) to existing
+create/update payloads.
+
+
 ## Migrating from the Legacy Client
 
 If you're migrating from the [legacy UniFi API client](https://github.com/Art-of-WiFi/UniFi-API-client), this new Saloon-based client offers:
 
-- Modern PHP 8.1+ syntax with typed properties
+- Modern PHP 8.2+ syntax with typed properties
 - Fluent interface for more readable code
 - Better error handling with exceptions
 - Comprehensive IDE support through PHPDoc
