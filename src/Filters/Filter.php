@@ -253,9 +253,12 @@ abstract class Filter
      * CONTAINS operator - for set operations
      * Checks if a set contains the specified value
      *
-     * @param  string  $value  Value to check
+     * Accepts integers and decimals for SET(INTEGER) and SET(DECIMAL) properties,
+     * e.g. port indexes or broadcasting frequencies.
+     *
+     * @param  string|int|float  $value  Value to check
      */
-    public function contains(string $value): static
+    public function contains(string|int|float $value): static
     {
         return $this->addCondition('contains', $value);
     }

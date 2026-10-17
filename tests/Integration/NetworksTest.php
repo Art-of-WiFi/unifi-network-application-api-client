@@ -57,16 +57,29 @@ test('can get network details', function () {
 })->group('integration');
 
 test('can get network references', function () {
-    $listResponse = $this->client->networks()->list(limit: 1);
+    $listResponse = $this->client->networks()->list(limit: 200);
     $list = $listResponse->json();
 
     if (empty($list['data'])) {
         $this->markTestSkipped('No networks available for testing.');
     }
 
-    $networkId = $list['data'][0]['id'];
-    $response = $this->client->networks()->getReferences($networkId);
+    // Prefer a non-default network: some controller versions (e.g. 11.0.89) return a 500
+    // api.unexpected-error when fetching references for the default network
+    $nonDefaultNetworks = array_values(array_filter($list['data'], fn (array $network) => ! ($network['default'] ?? false)));
+    $network = $nonDefaultNetworks[0] ?? $list['data'][0];
+
+    $response = $this->client->networks()->getReferences($network['id']);
+
+    if ($response->status() === 500 && ($network['default'] ?? false)) {
+        $this->markTestSkipped('Controller returns a server error for references of the default network.');
+    }
 
     expect($response->successful())->toBeTrue();
-    expect($response->json())->toBeArray();
+
+    $data = $response->json();
+    expect($data)
+        ->toBeArray()
+        ->toHaveKey('referenceResources');
+    expect($data['referenceResources'])->toBeArray();
 })->group('integration');

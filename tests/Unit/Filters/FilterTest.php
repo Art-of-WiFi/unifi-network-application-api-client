@@ -101,6 +101,16 @@ test('contains() produces contains operator', function () {
         ->toBe("features.contains('wifi6')");
 });
 
+test('contains() accepts an integer for SET(INTEGER) properties', function () {
+    expect(DeviceFilter::where('members.portIdxs')->contains(5)->toString())
+        ->toBe('members.portIdxs.contains(5)');
+});
+
+test('contains() accepts a decimal for SET(DECIMAL) properties', function () {
+    expect(DeviceFilter::where('broadcastingFrequenciesGHz')->contains(2.4)->toString())
+        ->toBe('broadcastingFrequenciesGHz.contains(2.4)');
+});
+
 test('containsAny() produces containsAny operator', function () {
     expect(DeviceFilter::features()->containsAny(['wifi6', 'poe'])->toString())
         ->toBe("features.containsAny('wifi6', 'poe')");
