@@ -99,3 +99,34 @@ test('switching() returns SwitchingResource', function () {
 test('supportingResources() returns SupportingResourcesResource', function () {
     expect($this->client->supportingResources())->toBeInstanceOf(SupportingResourcesResource::class);
 });
+
+test('connectViaSiteManager() returns a client using the Site Manager connector', function () {
+    $client = UnifiClient::connectViaSiteManager('console-id', 'site-manager-key');
+
+    expect($client)->toBeInstanceOf(UnifiClient::class);
+    expect($client->getConnector()->isSiteManagerProxy())->toBeTrue();
+    expect($client->getConnector()->resolveBaseUrl())
+        ->toBe('https://api.ui.com/v1/connector/consoles/console-id/network/integration');
+});
+
+test('connectViaSiteManager() sends requests to the Site Manager connector URL', function () {
+    $mockClient = new \Saloon\Http\Faking\MockClient([
+        \Saloon\Http\Faking\MockResponse::make(['offset' => 0, 'limit' => 25, 'count' => 0, 'totalCount' => 0, 'data' => []]),
+    ]);
+
+    $client = UnifiClient::connectViaSiteManager('console-id', 'site-manager-key');
+    $client->getConnector()->withMockClient($mockClient);
+
+    $response = $client->sites()->list();
+
+    expect($response->getPendingRequest()->getUrl())
+        ->toBe('https://api.ui.com/v1/connector/consoles/console-id/network/integration/v1/sites');
+    expect($response->getPendingRequest()->headers()->get('X-API-KEY'))->toBe('site-manager-key');
+});
+
+test('connectViaSiteManager() supports site context like a direct client', function () {
+    $client = UnifiClient::connectViaSiteManager('console-id', 'site-manager-key')
+        ->setSiteId('550e8400-e29b-41d4-a716-446655440000');
+
+    expect($client->getSiteId())->toBe('550e8400-e29b-41d4-a716-446655440000');
+});

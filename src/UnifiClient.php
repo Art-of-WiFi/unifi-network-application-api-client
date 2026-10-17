@@ -17,6 +17,7 @@ use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\SupportingResourcesResource;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\SwitchingResource;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\TrafficMatchingListsResource;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\WifiBroadcastsResource;
+use InvalidArgumentException;
 
 /**
  * UniFi API Client - Main Entry Point
@@ -49,6 +50,35 @@ class UnifiClient
         bool $verifySsl = true
     ) {
         $this->connector = new UnifiConnector($baseUrl, $apiKey, $verifySsl);
+    }
+
+    /**
+     * Create a client that reaches the console through the Site Manager connector at api.ui.com
+     *
+     * Use this when there is no direct network path to the console. Requests are proxied by
+     * Ubiquiti's cloud, which adds latency and is subject to Site Manager limits (100 requests
+     * per minute per console, 25 second request timeout, 10 MB response size).
+     *
+     * Example usage:
+     * ```php
+     * $apiClient = UnifiClient::connectViaSiteManager('your-console-id', 'your-site-manager-api-key');
+     * $sites = $apiClient->sites()->list();
+     * ```
+     *
+     * @param  string  $consoleId  The console (host) ID, visible in the unifi.ui.com URL:
+     *                             https://unifi.ui.com/consoles/{consoleId}/...
+     * @param  string  $apiKey  A Site Manager API key generated at unifi.ui.com (not a local Network API key)
+     *
+     * @throws InvalidArgumentException If the console ID or API key is empty
+     */
+    public static function connectViaSiteManager(string $consoleId, string $apiKey): static
+    {
+        $connector = UnifiConnector::viaSiteManager($consoleId, $apiKey);
+
+        $client = new static($connector->resolveBaseUrl(), $apiKey); // @phpstan-ignore new.static
+        $client->connector = $connector;
+
+        return $client;
     }
 
     /**

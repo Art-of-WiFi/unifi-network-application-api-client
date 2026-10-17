@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ArtOfWiFi\UnifiNetworkApplicationApi;
 
+use InvalidArgumentException;
 use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\AcceptsJson;
 
@@ -12,6 +13,10 @@ use Saloon\Traits\Plugins\AcceptsJson;
  *
  * This connector handles the base configuration and authentication for the UniFi Network API.
  * The UniFi Network API uses API keys for authentication, which are passed via the X-API-KEY header.
+ *
+ * Requests either go directly to a console ({baseUrl}/proxy/network/integration), or through the
+ * Site Manager connector at api.ui.com, which forwards them to the console's /proxy path
+ * (https://api.ui.com/v1/connector/consoles/{consoleId}/network/integration).
  */
 class UnifiConnector extends Connector
 {
@@ -21,6 +26,16 @@ class UnifiConnector extends Connector
      * The version of the API client library
      */
     public const VERSION = '1.1.0';
+
+    /**
+     * The base URL of the Site Manager API
+     */
+    public const SITE_MANAGER_BASE_URL = 'https://api.ui.com';
+
+    /**
+     * The console (host) ID when requests are routed through the Site Manager connector
+     */
+    protected ?string $siteManagerConsoleId = null;
 
     /**
      * Create a new UniFi API connector instance
@@ -36,10 +51,60 @@ class UnifiConnector extends Connector
     ) {}
 
     /**
+     * Create a connector that routes all requests through the Site Manager connector at api.ui.com
+     *
+     * SSL verification is always enabled because api.ui.com uses a publicly trusted certificate.
+     *
+     * @param  string  $consoleId  The console (host) ID, visible in the unifi.ui.com URL:
+     *                             https://unifi.ui.com/consoles/{consoleId}/...
+     * @param  string  $apiKey  A Site Manager API key generated at unifi.ui.com (not a local Network API key)
+     *
+     * @throws InvalidArgumentException If the console ID or API key is empty
+     */
+    public static function viaSiteManager(string $consoleId, string $apiKey): static
+    {
+        $consoleId = trim($consoleId);
+        $apiKey = trim($apiKey);
+
+        if ($consoleId === '') {
+            throw new InvalidArgumentException('Console ID cannot be empty');
+        }
+
+        if ($apiKey === '') {
+            throw new InvalidArgumentException('Site Manager API key cannot be empty');
+        }
+
+        $connector = new static(self::SITE_MANAGER_BASE_URL, $apiKey, true); // @phpstan-ignore new.static
+        $connector->siteManagerConsoleId = $consoleId;
+
+        return $connector;
+    }
+
+    /**
+     * Whether requests are routed through the Site Manager connector
+     */
+    public function isSiteManagerProxy(): bool
+    {
+        return $this->siteManagerConsoleId !== null;
+    }
+
+    /**
+     * Get the console (host) ID used for the Site Manager connector, or null for direct connections
+     */
+    public function getSiteManagerConsoleId(): ?string
+    {
+        return $this->siteManagerConsoleId;
+    }
+
+    /**
      * Define the base URL for the connector
      */
     public function resolveBaseUrl(): string
     {
+        if ($this->siteManagerConsoleId !== null) {
+            return self::SITE_MANAGER_BASE_URL.'/v1/connector/consoles/'.$this->siteManagerConsoleId.'/network/integration';
+        }
+
         return rtrim($this->baseUrl, '/').'/proxy/network/integration';
     }
 

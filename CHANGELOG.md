@@ -28,6 +28,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ISO 8601 UTC timestamps (e.g. `connectedAt.gt(2026-01-29T12:39:11Z)`)
 - `sites()->list()` and `devices()->listPending()` now accept Filter objects, like all other list methods
 - Integration tests that send filter builder output to a live controller to verify the API accepts it
+- Site Manager connector support: `UnifiClient::connectViaSiteManager($consoleId, $apiKey)` reaches a console's
+  Network API remotely through `api.ui.com` (`UnifiConnector::viaSiteManager()`, `isSiteManagerProxy()` and
+  `getSiteManagerConsoleId()` on the connector). SSL verification is always enabled in this mode
 
 ### Changed
 - `Filter::contains()` now accepts `string|int|float|DateTimeInterface`, and `equals()`, `notEquals()`,

@@ -9,7 +9,7 @@ use ArtOfWiFi\UnifiNetworkApplicationApi\UnifiClient;
 /**
  * Load test configuration from tests/config.php
  *
- * @return array{base_url: string, api_key: string, site_id: string, verify_ssl: bool}|null
+ * @return array{base_url: string, api_key: string, site_id: string, verify_ssl: bool, site_manager_console_id?: string, site_manager_api_key?: string}|null
  */
 function getTestConfig(): ?array
 {

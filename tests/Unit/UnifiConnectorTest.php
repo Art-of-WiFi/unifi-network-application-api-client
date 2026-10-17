@@ -52,6 +52,49 @@ test('SSL verification can be disabled', function () {
     expect($config)->toHaveKey('verify', false);
 });
 
+test('direct connections are not Site Manager proxied', function () {
+    $connector = new UnifiConnector('https://192.168.1.1', 'test-key');
+
+    expect($connector->isSiteManagerProxy())->toBeFalse();
+    expect($connector->getSiteManagerConsoleId())->toBeNull();
+});
+
+test('viaSiteManager() routes requests through the Site Manager connector', function () {
+    $connector = UnifiConnector::viaSiteManager('245A4CA2341500000000:48913759', 'site-manager-key');
+
+    expect($connector->resolveBaseUrl())
+        ->toBe('https://api.ui.com/v1/connector/consoles/245A4CA2341500000000:48913759/network/integration');
+    expect($connector->isSiteManagerProxy())->toBeTrue();
+    expect($connector->getSiteManagerConsoleId())->toBe('245A4CA2341500000000:48913759');
+});
+
+test('viaSiteManager() sends the Site Manager key in the X-API-KEY header', function () {
+    $connector = UnifiConnector::viaSiteManager('console-id', 'site-manager-key');
+
+    expect($connector->headers()->all())->toHaveKey('X-API-KEY', 'site-manager-key');
+});
+
+test('viaSiteManager() always verifies SSL', function () {
+    $connector = UnifiConnector::viaSiteManager('console-id', 'site-manager-key');
+
+    expect($connector->config()->all())->toHaveKey('verify', true);
+});
+
+test('viaSiteManager() trims the console ID and API key', function () {
+    $connector = UnifiConnector::viaSiteManager('  console-id  ', '  site-manager-key  ');
+
+    expect($connector->getSiteManagerConsoleId())->toBe('console-id');
+    expect($connector->headers()->all())->toHaveKey('X-API-KEY', 'site-manager-key');
+});
+
+test('viaSiteManager() rejects an empty console ID', function () {
+    UnifiConnector::viaSiteManager('  ', 'site-manager-key');
+})->throws(InvalidArgumentException::class, 'Console ID cannot be empty');
+
+test('viaSiteManager() rejects an empty API key', function () {
+    UnifiConnector::viaSiteManager('console-id', '');
+})->throws(InvalidArgumentException::class, 'Site Manager API key cannot be empty');
+
 test('timeout is set to 30 seconds', function () {
     $connector = new UnifiConnector('https://192.168.1.1', 'test-key');
 

@@ -24,6 +24,7 @@ client. For a richer set of features, we currently recommend using the [legacy U
 - Fluent interface with method chaining for elegant code
 - Full support for the official UniFi Network Application API (v10.1.84+, verified against v10.6.106 and v11.0.89)
 - Comprehensive coverage of all API endpoints
+- Connects directly to a console or remotely through the Site Manager connector at `api.ui.com`
 - Strongly typed using PHP 8.2+ features
 - Easy to use for beginners, flexible for advanced users
 - Well-documented with inline PHPDoc for IDE auto-completion
@@ -36,7 +37,7 @@ client. For a richer set of features, we currently recommend using the [legacy U
 - PHP 8.2 or higher
 - Composer
 - A UniFi OS Server or UniFi OS console with API key access to the Network Application
-- Network access to your UniFi Controller
+- Network access to your UniFi Controller, or remote access through the [Site Manager connector](#site-manager-connector-remote-access)
 
 
 ## API Version Compatibility
@@ -982,6 +983,38 @@ $apiClient = new UnifiClient(
     verifySsl: false  // Skip SSL verification (not recommended for production)
 );
 ```
+
+### Site Manager Connector (Remote Access)
+
+If there is no direct network path to your console, you can reach its Network API through the
+[Site Manager API](https://developer.ui.com/site-manager/v1.0.0/gettingstarted) connector at `api.ui.com`. Requests
+are proxied by Ubiquiti's cloud to the console, without a VPN or port forwarding:
+
+```php
+<?php
+
+$apiClient = UnifiClient::connectViaSiteManager(
+    consoleId: 'your-console-id',
+    apiKey: 'your-site-manager-api-key'
+);
+
+// Use the client exactly like a direct connection
+$sites = $apiClient->sites()->list();
+$apiClient->setSiteId('your-site-uuid');
+$devices = $apiClient->devices()->listAdopted();
+```
+
+Requests are sent to `https://api.ui.com/v1/connector/consoles/{consoleId}/network/integration/...`, which the
+connector forwards to `/proxy/network/integration/...` on the console.
+
+- **API key:** use a Site Manager API key generated at [unifi.ui.com](https://unifi.ui.com), not a key from the
+  Network Application's Integrations page. Non-organization keys can only reach consoles owned by the key's owner;
+  organization keys can reach any console in the organization.
+- **Console ID:** the host ID shown in the console URL on unifi.ui.com (`https://unifi.ui.com/consoles/{consoleId}/...`).
+- **Console firmware:** UniFi OS 5.0.3 or later, and the console must be online and connected to UI.com.
+- **SSL:** always verified, since `api.ui.com` uses a publicly trusted certificate.
+- **Limits:** 100 requests per minute per console, a 25 second timeout per request and a 10 MB response size limit,
+  so use pagination with a sensible `limit` for large lists. Expect extra latency compared to direct access.
 
 ### Version Information
 
