@@ -12,6 +12,7 @@ use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\HotspotResource;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\NetworksResource;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\SitesResource;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\SupportingResourcesResource;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\SwitchingResource;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\TrafficMatchingListsResource;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\WifiBroadcastsResource;
 use ArtOfWiFi\UnifiNetworkApplicationApi\UnifiClient;
@@ -89,6 +90,10 @@ test('trafficMatchingLists() returns TrafficMatchingListsResource', function () 
 
 test('dnsPolicies() returns DnsPoliciesResource', function () {
     expect($this->client->dnsPolicies())->toBeInstanceOf(DnsPoliciesResource::class);
+});
+
+test('switching() returns SwitchingResource', function () {
+    expect($this->client->switching())->toBeInstanceOf(SwitchingResource::class);
 });
 
 test('supportingResources() returns SupportingResourcesResource', function () {

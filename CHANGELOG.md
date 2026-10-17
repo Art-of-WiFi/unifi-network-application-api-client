@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Switching resource (`$client->switching()`) with read-only access to switch stacks, MC-LAG domains and LAGs
+  (`listSwitchStacks()`, `getSwitchStack()`, `listMcLagDomains()`, `getMcLagDomain()`, `listLags()`, `getLag()`)
+- `SwitchStackFilter`, `McLagDomainFilter` and `LagFilter` filter builders, including `LagFilter::localLags()`,
+  `switchStackLags()` and `mcLags()` presets
+
+### Changed
+- `Filter::contains()` now accepts `string|int|float`, so SET(INTEGER) and SET(DECIMAL) properties such as
+  `members.portIdxs`, `units.id` and `broadcastingFrequenciesGHz` can be filtered. Note: subclasses of `Filter`
+  that override `contains(string $value)` must widen their parameter type accordingly
+
+### Fixed
+- Single quotes in filter values are now escaped by doubling them (`'Erik''s Lab'`), as required by the API
+  filtering syntax. Previously a backslash was used, which made the API reject any filter value containing
+  an apostrophe with `400 api.request.invalid-filter`
+
 ## [1.1.0] - 2026-03-26
 
 ### Changed

@@ -14,6 +14,7 @@ use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\HotspotResource;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\NetworksResource;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\SitesResource;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\SupportingResourcesResource;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\SwitchingResource;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\TrafficMatchingListsResource;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Resources\WifiBroadcastsResource;
 
@@ -176,6 +177,17 @@ class UnifiClient
     public function dnsPolicies(): DnsPoliciesResource
     {
         return new DnsPoliciesResource($this->connector, $this->siteId);
+    }
+
+    /**
+     * Access switching feature endpoints
+     *
+     * Provides access to switch stacks, MC-LAG domains, and LAGs (Link Aggregation Groups).
+     * All endpoints in this resource are read-only.
+     */
+    public function switching(): SwitchingResource
+    {
+        return new SwitchingResource($this->connector, $this->siteId);
     }
 
     /**

@@ -70,6 +70,12 @@ use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources\GetSiteToS
 // DNS Policies
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources\GetVpnServersRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\SupportingResources\GetWanInterfacesRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Switching\GetLagRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Switching\GetLagsRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Switching\GetMcLagDomainRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Switching\GetMcLagDomainsRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Switching\GetSwitchStackRequest;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Switching\GetSwitchStacksRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\TrafficMatchingLists\CreateTrafficMatchingListRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\TrafficMatchingLists\DeleteTrafficMatchingListRequest;
 use ArtOfWiFi\UnifiNetworkApplicationApi\Requests\TrafficMatchingLists\GetTrafficMatchingListRequest;
@@ -533,5 +539,45 @@ test('GetVpnServersRequest resolves correct endpoint', function () use ($siteId)
 test('GetWanInterfacesRequest resolves correct endpoint', function () use ($siteId) {
     $request = new GetWanInterfacesRequest($siteId);
     expect($request->resolveEndpoint())->toBe("/v1/sites/{$siteId}/wans");
+    expect($request->getMethod())->toBe(Method::GET);
+});
+
+// ============================================================
+// Switching
+// ============================================================
+
+test('GetSwitchStacksRequest resolves correct endpoint', function () use ($siteId) {
+    $request = new GetSwitchStacksRequest($siteId);
+    expect($request->resolveEndpoint())->toBe("/v1/sites/{$siteId}/switching/switch-stacks");
+    expect($request->getMethod())->toBe(Method::GET);
+});
+
+test('GetSwitchStackRequest resolves correct endpoint', function () use ($siteId, $itemId) {
+    $request = new GetSwitchStackRequest($siteId, $itemId);
+    expect($request->resolveEndpoint())->toBe("/v1/sites/{$siteId}/switching/switch-stacks/{$itemId}");
+    expect($request->getMethod())->toBe(Method::GET);
+});
+
+test('GetMcLagDomainsRequest resolves correct endpoint', function () use ($siteId) {
+    $request = new GetMcLagDomainsRequest($siteId);
+    expect($request->resolveEndpoint())->toBe("/v1/sites/{$siteId}/switching/mc-lag-domains");
+    expect($request->getMethod())->toBe(Method::GET);
+});
+
+test('GetMcLagDomainRequest resolves correct endpoint', function () use ($siteId, $itemId) {
+    $request = new GetMcLagDomainRequest($siteId, $itemId);
+    expect($request->resolveEndpoint())->toBe("/v1/sites/{$siteId}/switching/mc-lag-domains/{$itemId}");
+    expect($request->getMethod())->toBe(Method::GET);
+});
+
+test('GetLagsRequest resolves correct endpoint', function () use ($siteId) {
+    $request = new GetLagsRequest($siteId);
+    expect($request->resolveEndpoint())->toBe("/v1/sites/{$siteId}/switching/lags");
+    expect($request->getMethod())->toBe(Method::GET);
+});
+
+test('GetLagRequest resolves correct endpoint', function () use ($siteId, $itemId) {
+    $request = new GetLagRequest($siteId, $itemId);
+    expect($request->resolveEndpoint())->toBe("/v1/sites/{$siteId}/switching/lags/{$itemId}");
     expect($request->getMethod())->toBe(Method::GET);
 });

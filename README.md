@@ -367,6 +367,40 @@ $apiClient->dnsPolicies()->update('dns-policy-uuid', [
 $apiClient->dnsPolicies()->delete('dns-policy-uuid');
 ```
 
+### Switching (Switch Stacks, MC-LAG, LAGs)
+
+All switching endpoints are read-only.
+
+```php
+<?php
+
+use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Switching\LagFilter;
+use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Switching\SwitchStackFilter;
+
+// List switch stacks and get the details of one
+$stacks = $apiClient->switching()->listSwitchStacks();
+$stack = $apiClient->switching()->getSwitchStack('switch-stack-uuid');
+
+// Find the stack that contains a specific switch
+$stacks = $apiClient->switching()->listSwitchStacks(
+    filter: SwitchStackFilter::unitsMacAddress()->contains('94:2a:6f:26:c6:ca')
+);
+
+// List MC-LAG domains and get the details of one
+$domains = $apiClient->switching()->listMcLagDomains();
+$domain = $apiClient->switching()->getMcLagDomain('mc-lag-domain-uuid');
+
+// List LAGs (type is LOCAL, SWITCH_STACK or MULTI_CHASSIS)
+$lags = $apiClient->switching()->listLags();
+$localLags = $apiClient->switching()->listLags(filter: LagFilter::localLags());
+
+// Find LAGs that include port 5 on any member
+$lags = $apiClient->switching()->listLags(filter: LagFilter::membersPortIdxs()->contains(5));
+
+// Get the details of a single LAG
+$lag = $apiClient->switching()->getLag('lag-uuid');
+```
+
 
 ## Advanced Usage
 
@@ -612,6 +646,32 @@ According to the official API specification, the following properties are filter
 - `port` (INTEGER) - `eq`, `ne`, `gt`, `ge`, `lt`, `le`
 - `weight` (INTEGER) - `eq`, `ne`, `gt`, `ge`, `lt`, `le`
 
+#### Switching Filterable Properties
+
+According to the official API specification, the following properties are filterable:
+
+**Switch stacks** (`SwitchStackFilter`):
+- `id` (UUID) - `eq`, `ne`, `in`, `notIn`
+- `name` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`
+- `units.id` (SET(INTEGER)) - `contains`, `containsAny`, `containsAll`, `containsExactly`
+- `units.macAddress` (SET(STRING)) - `contains`, `containsAny`, `containsAll`, `containsExactly`
+- `metadata.origin` (STRING) - `eq`, `ne`, `in`, `notIn`
+
+**MC-LAG domains** (`McLagDomainFilter`):
+- `id` (UUID) - `eq`, `ne`, `in`, `notIn`
+- `name` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`
+- `peers.deviceId` (SET(UUID)) - `contains`, `containsAny`, `containsAll`, `containsExactly`
+- `metadata.origin` (STRING) - `eq`, `ne`, `in`, `notIn`
+
+**LAGs** (`LagFilter`):
+- `id` (UUID) - `eq`, `ne`, `in`, `notIn`
+- `type` (STRING) - `eq`, `ne`, `in`, `notIn` (Valid values: `LOCAL`, `SWITCH_STACK`, `MULTI_CHASSIS`)
+- `switchStackId` (UUID) - `eq`, `ne`, `in`, `notIn`, `isNull`, `isNotNull`
+- `mcLagDomainId` (UUID) - `eq`, `ne`, `in`, `notIn`, `isNull`, `isNotNull`
+- `members.deviceId` (SET(UUID)) - `contains`, `containsAny`, `containsAll`, `containsExactly`
+- `members.portIdxs` (SET(INTEGER)) - `contains`, `containsAny`, `containsAll`, `containsExactly`
+- `metadata.origin` (STRING) - `eq`, `ne`, `in`, `notIn`
+
 For full filtering syntax documentation, see the Network Application API documentation in your controller.
 
 ### Working with Responses
@@ -778,6 +838,7 @@ The client provides access to the following resources:
 | `aclRules()` | Access Control List (ACL) rule management, including rule ordering |
 | `dnsPolicies()` | DNS policy management (A, AAAA, CNAME, MX, TXT, SRV, forward domains) |
 | `trafficMatchingLists()` | Port and IP address lists for firewall policies |
+| `switching()` | Read-only switching topology: switch stacks, MC-LAG domains and LAGs |
 | `supportingResources()` | Reference data (WAN interfaces, DPI categories, countries, RADIUS profiles, device tags) |
 
 
