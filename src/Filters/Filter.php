@@ -452,8 +452,8 @@ abstract class Filter
             return (string) $value;
         }
 
-        // String - escape single quotes and wrap in single quotes
-        $escaped = str_replace("'", "\\'", (string) $value);
+        // String - escape single quotes by doubling them (per API filtering syntax) and wrap in single quotes
+        $escaped = str_replace("'", "''", (string) $value);
 
         return "'{$escaped}'";
     }

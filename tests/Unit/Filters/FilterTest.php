@@ -171,9 +171,19 @@ test('integer values are formatted correctly', function () {
         ->toBe('vlanId.eq(100)');
 });
 
-test('string values with single quotes are escaped', function () {
+test('string values with single quotes are escaped by doubling them', function () {
     expect(DeviceFilter::name()->equals("it's a test")->toString())
-        ->toBe("name.eq('it\\'s a test')");
+        ->toBe("name.eq('it''s a test')");
+});
+
+test('like() patterns with single quotes are escaped by doubling them', function () {
+    expect(DeviceFilter::name()->like("*'*")->toString())
+        ->toBe("name.like('*''*')");
+});
+
+test('array values with single quotes are escaped by doubling them', function () {
+    expect(DeviceFilter::name()->in(["Erik's AP", 'AP-2'])->toString())
+        ->toBe("name.in('Erik''s AP', 'AP-2')");
 });
 
 test('backed enum values are extracted', function () {
