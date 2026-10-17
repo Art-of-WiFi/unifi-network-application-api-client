@@ -12,7 +12,7 @@ use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Filter;
  * Provides a type-safe, fluent interface for building DNS policy filters.
  *
  * Filterable Properties (per UniFi API specification):
- * - type (STRING) - eq, ne, in, notIn
+ * - type (STRING) - eq, ne, in, notIn (Values: A_RECORD, AAAA_RECORD, CNAME_RECORD, MX_RECORD, TXT_RECORD, SRV_RECORD, FORWARD_DOMAIN)
  * - id (UUID) - eq, ne, in, notIn
  * - enabled (BOOLEAN) - eq, ne
  * - domain (STRING) - eq, ne, in, notIn, like
@@ -33,7 +33,7 @@ use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Filter;
  * @example
  * ```php
  * // Find A records
- * DnsPolicyFilter::type()->equals('A')
+ * DnsPolicyFilter::type()->equals('A_RECORD')
  *
  * // Find enabled policies for a domain
  * DnsPolicyFilter::and(
@@ -45,7 +45,7 @@ use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Filter;
 class DnsPolicyFilter extends Filter
 {
     /**
-     * Filter by record type (A, AAAA, CNAME, MX, TXT, SRV, FORWARD_DOMAIN)
+     * Filter by record type (A_RECORD, AAAA_RECORD, CNAME_RECORD, MX_RECORD, TXT_RECORD, SRV_RECORD, FORWARD_DOMAIN)
      *
      * Supported operators: eq, ne, in, notIn
      */
@@ -221,7 +221,7 @@ class DnsPolicyFilter extends Filter
      */
     public static function aRecords(): static
     {
-        return static::type()->equals('A');
+        return static::type()->equals('A_RECORD');
     }
 
     /**
@@ -229,7 +229,7 @@ class DnsPolicyFilter extends Filter
      */
     public static function aaaaRecords(): static
     {
-        return static::type()->equals('AAAA');
+        return static::type()->equals('AAAA_RECORD');
     }
 
     /**
@@ -237,7 +237,7 @@ class DnsPolicyFilter extends Filter
      */
     public static function cnameRecords(): static
     {
-        return static::type()->equals('CNAME');
+        return static::type()->equals('CNAME_RECORD');
     }
 
     /**
@@ -245,7 +245,7 @@ class DnsPolicyFilter extends Filter
      */
     public static function mxRecords(): static
     {
-        return static::type()->equals('MX');
+        return static::type()->equals('MX_RECORD');
     }
 
     /**
@@ -253,7 +253,7 @@ class DnsPolicyFilter extends Filter
      */
     public static function txtRecords(): static
     {
-        return static::type()->equals('TXT');
+        return static::type()->equals('TXT_RECORD');
     }
 
     /**
@@ -261,7 +261,7 @@ class DnsPolicyFilter extends Filter
      */
     public static function srvRecords(): static
     {
-        return static::type()->equals('SRV');
+        return static::type()->equals('SRV_RECORD');
     }
 
     /**
