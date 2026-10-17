@@ -1,7 +1,3 @@
-# Open-api docs
-open-api-docs
-open-api-docs/*
-
 # Claude code files
 .claude
 .claude/*
