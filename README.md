@@ -20,11 +20,11 @@ client. For a richer set of features, we currently recommend using the [legacy U
 
 ## Features
 
-- Built on Saloon v3 for robust HTTP communication
+- Built on Saloon v4 for robust HTTP communication
 - Fluent interface with method chaining for elegant code
-- Full support for the official UniFi Network Application API (v10.1.84+)
+- Full support for the official UniFi Network Application API (v10.1.84+, verified against v10.6.106 and v11.0.89)
 - Comprehensive coverage of all API endpoints
-- Strongly typed using PHP 8.1+ features
+- Strongly typed using PHP 8.2+ features
 - Easy to use for beginners, flexible for advanced users
 - Well-documented with inline PHPDoc for IDE auto-completion
 - PSR-4 autoloading
@@ -33,10 +33,28 @@ client. For a richer set of features, we currently recommend using the [legacy U
 
 ## Requirements
 
-- PHP 8.1 or higher
+- PHP 8.2 or higher
 - Composer
 - A UniFi OS Server or UniFi OS console with API key access to the Network Application
 - Network access to your UniFi Controller
+
+
+## API Version Compatibility
+
+The official API documentation is published at [developer.ui.com](https://developer.ui.com/network/v10.6.106/gettingstarted).
+The version in the documentation URL is the UniFi Network Application version the API belongs to; the REST paths
+themselves stay under `/v1/...`. Newer Network Application versions add endpoints and fields over time, so some
+features require a minimum version on your console:
+
+| Feature | Minimum Network version |
+|---------|-------------------------|
+| All endpoints in this client except the ones listed below | 10.1.84 |
+| Switching endpoints (`switching()`) | 10.2.x |
+| WiFi `channel2gLockedTo6`, `dtimPeriod2gLockedTo3` (required), `dnsAssistanceConfiguration`, `handoffSuggestionsConfiguration`, Enhanced Open `encryption` | 10.6.106 |
+| Firewall policy `reportFlowEnabled` (create, update and patch) | 11.0.89 |
+| Device radio `txPowerMode`, `802.11ah` standard and `0.9` GHz frequency | 11.0.89 |
+
+Use `$apiClient->applicationInfo()->get()` to check which version your console runs.
 
 
 ## Installation
@@ -206,16 +224,49 @@ $apiClient->networks()->delete('network-uuid-here');
 // List all WiFi broadcasts (SSIDs)
 $wifiNetworks = $apiClient->wifiBroadcasts()->list();
 
-// Create a new WiFi network (requires complex nested structure - see examples)
-// Refer to examples/05-wifi-management.php for complete structure
-
-// Update WiFi settings
-$apiClient->wifiBroadcasts()->update('wifi-uuid', [
-    'name' => 'Updated WiFi Name'
+// Create a standard WPA2/WPA3 WiFi network
+$apiClient->wifiBroadcasts()->create([
+    'type' => 'STANDARD',                         // or 'IOT_OPTIMIZED'
+    'name' => 'My WiFi',
+    'enabled' => true,
+    'network' => ['type' => 'NATIVE'],            // or ['type' => 'SPECIFIC', 'networkId' => 'network-uuid']
+    'securityConfiguration' => [
+        'type' => 'WPA2_WPA3_PERSONAL',
+        'passphrase' => 'a-strong-passphrase',
+        'pmfMode' => 'OPTIONAL',
+        'wpa3FastRoamingEnabled' => false,
+        'saeConfiguration' => ['anticloggingThresholdSeconds' => 5, 'syncTimeSeconds' => 5],
+    ],
+    'broadcastingFrequenciesGHz' => [2.4, 5],     // numbers, not strings
+    'hideName' => false,
+    'clientIsolationEnabled' => false,
+    'multicastToUnicastConversionEnabled' => false,
+    'uapsdEnabled' => false,
+    'advertiseDeviceName' => false,
+    'arpProxyEnabled' => false,
+    'bssTransitionEnabled' => true,
+    'channel2gLockedTo6' => false,                // required as of Network 10.6.106
+    'dtimPeriod2gLockedTo3' => false,             // required as of Network 10.6.106
 ]);
 
 // Delete a WiFi network
 $apiClient->wifiBroadcasts()->delete('wifi-uuid-here');
+```
+
+Updating a WiFi broadcast uses `PUT`, so the body must contain all required fields (the same as for
+`create()`), not only the fields you want to change.
+
+Optional settings for `STANDARD` broadcasts added in Network 10.6:
+
+```php
+// DNS assistance: AUTO, or MANUAL with up to two failover DNS servers
+'dnsAssistanceConfiguration' => ['mode' => 'MANUAL', 'servers' => ['1.1.1.1', '8.8.8.8']],
+
+// Suggest low-signal clients to roam to a better AP (RSSI thresholds in dBm, null disables a band)
+'handoffSuggestionsConfiguration' => ['band5GHzRssiThreshold' => -70, 'band6GHzRssiThreshold' => -80],
+
+// Enhanced Open (OWE) for open networks
+'securityConfiguration' => ['type' => 'OPEN', 'encryption' => 'ENHANCED_OPEN'], // or ENHANCED_OPEN_WITH_TRANSITION
 ```
 
 ### Hotspot Vouchers
@@ -290,14 +341,27 @@ $policies = $apiClient->firewall()->listPolicies();
 $apiClient->firewall()->createPolicy([
     'name' => 'Block IoT to LAN',
     'enabled' => true,
-    'action' => 'BLOCK',
+    'action' => ['type' => 'BLOCK'],                    // ALLOW (requires 'allowReturnTraffic'), BLOCK or REJECT
     'source' => ['zoneId' => 'source-zone-uuid'],
     'destination' => ['zoneId' => 'destination-zone-uuid'],
+    'ipProtocolScope' => ['ipVersion' => 'IPV4_AND_IPV6'], // IPV4, IPV6 or IPV4_AND_IPV6
+    'loggingEnabled' => false,
 ]);
 
-// Partially update a firewall policy (PATCH - only send changed fields)
+// Patch a firewall policy (PATCH only accepts loggingEnabled, and reportFlowEnabled on Network 11.0+)
 $apiClient->firewall()->patchPolicy('policy-uuid', [
-    'enabled' => false
+    'loggingEnabled' => true,
+]);
+
+// Full update (PUT) - send all required fields, not just the changed ones
+$apiClient->firewall()->updatePolicy('policy-uuid', [
+    'name' => 'Block IoT to LAN',
+    'enabled' => false,
+    'action' => ['type' => 'BLOCK'],
+    'source' => ['zoneId' => 'source-zone-uuid'],
+    'destination' => ['zoneId' => 'destination-zone-uuid'],
+    'ipProtocolScope' => ['ipVersion' => 'IPV4_AND_IPV6'],
+    'loggingEnabled' => false,
 ]);
 
 // Get/update firewall policy ordering between two zones
@@ -314,15 +378,24 @@ $apiClient->firewall()->updatePolicyOrdering(
 // List ACL rules
 $rules = $apiClient->aclRules()->list();
 
-// Create an ACL rule (requires complex structure - see API docs)
+// Create an IPv4 ACL rule
 $apiClient->aclRules()->create([
-    'type' => 'IPV4',  // or 'MAC'
-    'name' => 'Block Social Media',
+    'type' => 'IPV4',                       // or 'MAC' (which requires 'networkIdFilter')
+    'name' => 'Block guest subnet to NAS',
     'enabled' => true,
-    'action' => 'BLOCK',  // or 'ALLOW'
-    'index' => 1000,
-    // ... additional filters required
+    'action' => 'BLOCK',                    // or 'ALLOW'
+    'sourceFilter' => [
+        'type' => 'IP_ADDRESSES_OR_SUBNETS', // or NETWORKS / PORTS
+        'ipAddressesOrSubnets' => ['192.168.50.0/24'],
+    ],
+    'destinationFilter' => [
+        'type' => 'IP_ADDRESSES_OR_SUBNETS',
+        'ipAddressesOrSubnets' => ['192.168.1.10'],
+        'portFilter' => [445],
+    ],
+    'protocolFilter' => ['TCP'],            // omit to apply to all protocols
 ]);
+// Note: the 'index' field is deprecated and has no effect - use updateOrdering() instead
 
 // Get/update ACL rule ordering
 $ordering = $apiClient->aclRules()->getOrdering();
@@ -340,8 +413,9 @@ $apiClient->aclRules()->updateOrdering([
 $policies = $apiClient->dnsPolicies()->list();
 
 // Create a DNS A record
+// Types: A_RECORD, AAAA_RECORD, CNAME_RECORD, MX_RECORD, TXT_RECORD, SRV_RECORD, FORWARD_DOMAIN
 $apiClient->dnsPolicies()->create([
-    'type' => 'A',
+    'type' => 'A_RECORD',
     'enabled' => true,
     'domain' => 'myapp.local',
     'ipv4Address' => '192.168.1.100',
@@ -350,17 +424,20 @@ $apiClient->dnsPolicies()->create([
 
 // Create a DNS CNAME record
 $apiClient->dnsPolicies()->create([
-    'type' => 'CNAME',
+    'type' => 'CNAME_RECORD',
     'enabled' => true,
     'domain' => 'alias.local',
     'targetDomain' => 'myapp.local',
     'ttlSeconds' => 3600,
 ]);
 
-// Update a DNS policy
+// Update a DNS policy (PUT) - send all required fields for the record type
 $apiClient->dnsPolicies()->update('dns-policy-uuid', [
+    'type' => 'A_RECORD',
     'enabled' => false,
+    'domain' => 'myapp.local',
     'ipv4Address' => '192.168.1.200',
+    'ttlSeconds' => 3600,
 ]);
 
 // Delete a DNS policy
@@ -657,7 +734,7 @@ According to the official API specification, the following properties are filter
 
 According to the official API specification, the following properties are filterable for DNS policies:
 
-- `type` (STRING) - `eq`, `ne`, `in`, `notIn` (Valid values: `A`, `AAAA`, `CNAME`, `MX`, `TXT`, `SRV`, `FORWARD_DOMAIN`)
+- `type` (STRING) - `eq`, `ne`, `in`, `notIn` (Valid values: `A_RECORD`, `AAAA_RECORD`, `CNAME_RECORD`, `MX_RECORD`, `TXT_RECORD`, `SRV_RECORD`, `FORWARD_DOMAIN`)
 - `id` (UUID) - `eq`, `ne`, `in`, `notIn`
 - `enabled` (BOOLEAN) - `eq`, `ne`
 - `domain` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`

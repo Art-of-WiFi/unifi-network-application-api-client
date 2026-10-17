@@ -50,6 +50,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `broadcastingFrequenciesGHz`) could not be filtered with `contains()`, which only accepted strings
 - Operator documentation for `DnsPolicyFilter` now matches the API specification (`like` on address
   properties, `in`/`notIn` on integer properties)
+- `DnsPolicyFilter` record type presets (`aRecords()`, `aaaaRecords()`, `cnameRecords()`, `mxRecords()`,
+  `txtRecords()`, `srvRecords()`) now use the type values defined by the API (`A_RECORD`, `AAAA_RECORD`, …);
+  they previously filtered on `A`, `AAAA`, etc. and could never match a policy
+- README and example payloads corrected to match the API specification: firewall policy `action` is an object
+  and `ipProtocolScope`/`loggingEnabled` are required, firewall policy PATCH only accepts `loggingEnabled`
+  (and `reportFlowEnabled` on Network 11.0+), DNS policy types use the `*_RECORD` values, WiFi broadcast
+  frequencies are numbers, and PUT updates must send all required fields
+- WiFi example read legacy field names (`security`, `wpa_mode`, `is_guest`) that do not exist in the official API
+
+### Documentation
+- API version compatibility table listing the minimum Network Application version per feature
+- WiFi broadcast fields added in Network 10.6.106 (`channel2gLockedTo6`, `dtimPeriod2gLockedTo3`,
+  `dnsAssistanceConfiguration`, `handoffSuggestionsConfiguration`, Enhanced Open `encryption`) and
+  Network 11.0.89 additions (firewall policy `reportFlowEnabled`, device radio `txPowerMode`)
+- Requirements updated to PHP 8.2 and Saloon v4
 
 ## [1.1.0] - 2026-03-26
 

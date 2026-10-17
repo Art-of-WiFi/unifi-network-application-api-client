@@ -44,7 +44,7 @@ try {
             $name = $policy['name'] ?? 'Unnamed';
             $id = $policy['id'] ?? 'N/A';
             $enabled = ($policy['enabled'] ?? false) ? 'Enabled' : 'Disabled';
-            $action = $policy['action'] ?? 'N/A';
+            $action = $policy['action']['type'] ?? 'N/A';
 
             echo "   - {$name} (ID: {$id})\n";
             echo "     Action: {$action}, Status: {$enabled}\n";
@@ -61,8 +61,13 @@ try {
         $detail = $detailResponse->json();
 
         echo '   Name: '.($detail['name'] ?? 'N/A')."\n";
-        echo '   Action: '.($detail['action'] ?? 'N/A')."\n";
+        echo '   Action: '.($detail['action']['type'] ?? 'N/A')."\n";
         echo '   Enabled: '.(($detail['enabled'] ?? false) ? 'Yes' : 'No')."\n";
+        echo '   Logging: '.(($detail['loggingEnabled'] ?? false) ? 'Yes' : 'No')."\n";
+        // reportFlowEnabled is available as of Network 11.0.89
+        if (array_key_exists('reportFlowEnabled', $detail)) {
+            echo '   Report in Insights Flows: '.($detail['reportFlowEnabled'] ? 'Yes' : 'No')."\n";
+        }
         echo "\n";
     } else {
         echo "   No firewall policies found.\n\n";
@@ -91,36 +96,43 @@ try {
     echo "   \$apiClient->firewall()->createPolicy([\n";
     echo "       'name' => 'Block IoT to LAN',\n";
     echo "       'enabled' => true,\n";
-    echo "       'action' => 'BLOCK',\n";
+    echo "       'action' => ['type' => 'BLOCK'],\n";
     echo "       'source' => ['zoneId' => 'iot-zone-uuid'],\n";
     echo "       'destination' => ['zoneId' => 'lan-zone-uuid'],\n";
+    echo "       'ipProtocolScope' => ['ipVersion' => 'IPV4_AND_IPV6'],\n";
+    echo "       'loggingEnabled' => false,\n";
     echo "   ]);\n\n";
 
     // Uncomment to actually create a policy:
     // $createResponse = $apiClient->firewall()->createPolicy([
     //     'name' => 'Block IoT to LAN',
     //     'enabled' => true,
-    //     'action' => 'BLOCK',
+    //     'action' => ['type' => 'BLOCK'],
     //     'source' => ['zoneId' => 'iot-zone-uuid'],
     //     'destination' => ['zoneId' => 'lan-zone-uuid'],
+    //     'ipProtocolScope' => ['ipVersion' => 'IPV4_AND_IPV6'],
+    //     'loggingEnabled' => false,
     // ]);
 
     // 5. Update a firewall policy (commented out for safety)
     echo "5. Updating a Firewall Policy (example - commented out for safety)\n";
-    echo "   Full update (PUT):\n";
+    echo "   Full update (PUT - send all required fields):\n";
     echo "   \$apiClient->firewall()->updatePolicy(\$policyId, [\n";
     echo "       'name' => 'Updated Policy Name',\n";
     echo "       'enabled' => true,\n";
-    echo "       'action' => 'ALLOW',\n";
-    echo "       // ... all required fields\n";
+    echo "       'action' => ['type' => 'ALLOW', 'allowReturnTraffic' => true],\n";
+    echo "       'source' => ['zoneId' => 'iot-zone-uuid'],\n";
+    echo "       'destination' => ['zoneId' => 'lan-zone-uuid'],\n";
+    echo "       'ipProtocolScope' => ['ipVersion' => 'IPV4_AND_IPV6'],\n";
+    echo "       'loggingEnabled' => false,\n";
     echo "   ]);\n\n";
-    echo "   Partial update (PATCH - only changed fields):\n";
+    echo "   Patch (PATCH - only loggingEnabled, and reportFlowEnabled on Network 11.0+):\n";
     echo "   \$apiClient->firewall()->patchPolicy(\$policyId, [\n";
-    echo "       'enabled' => false\n";
+    echo "       'loggingEnabled' => true\n";
     echo "   ]);\n\n";
 
     // Uncomment to actually update:
-    // $apiClient->firewall()->patchPolicy($policyId, ['enabled' => false]);
+    // $apiClient->firewall()->patchPolicy($policyId, ['loggingEnabled' => true]);
 
     // 6. Delete a firewall policy (commented out for safety)
     echo "6. Deleting a Firewall Policy (example - commented out for safety)\n";
@@ -246,7 +258,7 @@ try {
     echo "13. Creating DNS Policies (examples - commented out for safety)\n";
     echo "    A record:\n";
     echo "    \$apiClient->dnsPolicies()->create([\n";
-    echo "        'type' => 'A',\n";
+    echo "        'type' => 'A_RECORD',\n";
     echo "        'enabled' => true,\n";
     echo "        'domain' => 'myapp.local',\n";
     echo "        'ipv4Address' => '192.168.1.100',\n";
@@ -254,7 +266,7 @@ try {
     echo "    ]);\n\n";
     echo "    CNAME record:\n";
     echo "    \$apiClient->dnsPolicies()->create([\n";
-    echo "        'type' => 'CNAME',\n";
+    echo "        'type' => 'CNAME_RECORD',\n";
     echo "        'enabled' => true,\n";
     echo "        'domain' => 'alias.local',\n";
     echo "        'targetDomain' => 'myapp.local',\n";
@@ -262,17 +274,16 @@ try {
     echo "    ]);\n\n";
     echo "    MX record:\n";
     echo "    \$apiClient->dnsPolicies()->create([\n";
-    echo "        'type' => 'MX',\n";
+    echo "        'type' => 'MX_RECORD',\n";
     echo "        'enabled' => true,\n";
     echo "        'domain' => 'example.com',\n";
     echo "        'mailServerDomain' => 'mail.example.com',\n";
     echo "        'priority' => 10,\n";
-    echo "        'ttlSeconds' => 3600,\n";
     echo "    ]);\n\n";
 
     // Uncomment to actually create:
     // $createResponse = $apiClient->dnsPolicies()->create([
-    //     'type' => 'A',
+    //     'type' => 'A_RECORD',
     //     'enabled' => true,
     //     'domain' => 'myapp.local',
     //     'ipv4Address' => '192.168.1.100',
@@ -281,15 +292,22 @@ try {
 
     // 14. Update a DNS policy (commented out for safety)
     echo "14. Updating a DNS Policy (example - commented out for safety)\n";
+    echo "    PUT - send all required fields for the record type:\n";
     echo "    \$apiClient->dnsPolicies()->update(\$dnsPolicyId, [\n";
+    echo "        'type' => 'A_RECORD',\n";
     echo "        'enabled' => false,\n";
+    echo "        'domain' => 'myapp.local',\n";
     echo "        'ipv4Address' => '192.168.1.200',\n";
+    echo "        'ttlSeconds' => 3600,\n";
     echo "    ]);\n\n";
 
     // Uncomment to actually update:
     // $apiClient->dnsPolicies()->update($dnsPolicyId, [
+    //     'type' => 'A_RECORD',
     //     'enabled' => false,
+    //     'domain' => 'myapp.local',
     //     'ipv4Address' => '192.168.1.200',
+    //     'ttlSeconds' => 3600,
     // ]);
 
     // 15. Delete a DNS policy (commented out for safety)
