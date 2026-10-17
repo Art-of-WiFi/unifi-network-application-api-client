@@ -12,16 +12,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (`listSwitchStacks()`, `getSwitchStack()`, `listMcLagDomains()`, `getMcLagDomain()`, `listLags()`, `getLag()`)
 - `SwitchStackFilter`, `McLagDomainFilter` and `LagFilter` filter builders, including `LagFilter::localLags()`,
   `switchStackLags()` and `mcLags()` presets
+- All filterable properties from the API specification are now covered by the filter builders:
+  - `AclRuleFilter`: `description()`, `index()`, `protocolFilter()`, `networkId()`, `enforcingDeviceIds()`,
+    `metadataOrigin()` and the source/destination filter properties (`sourceFilterType()`,
+    `sourceIpAddressesOrSubnets()`, `sourcePortFilter()`, `sourceNetworkIds()`, `sourceMacAddresses()`,
+    `sourcePrefixLength()` and their `destination*` counterparts)
+  - `WifiBroadcastFilter`: `broadcastingFrequenciesGHz()`, `metadataOrigin()`, `networkType()`, `networkId()`,
+    `securityType()`, `broadcastingDeviceFilterType()`, `broadcastingDeviceIds()`, `broadcastingDeviceTagIds()`,
+    `hotspotType()`
+  - `VoucherFilter`: `createdAt()`, `authorizedGuestLimit()`, `authorizedGuestCount()`, `activatedAt()`,
+    `expiresAt()`, `timeLimitMinutes()`, `dataUsageLimitMBytes()`, `rxRateLimitKbps()`, `txRateLimitKbps()` and
+    an `unused()` preset
+  - `FirewallZoneFilter`: `metadataOrigin()`, `metadataConfigurable()` and a `customZones()` preset
+- Comparison operators accept `DateTimeInterface` values for TIMESTAMP properties, formatted as unquoted
+  ISO 8601 UTC timestamps (e.g. `connectedAt.gt(2026-01-29T12:39:11Z)`)
+- `sites()->list()` and `devices()->listPending()` now accept Filter objects, like all other list methods
+- Integration tests that send filter builder output to a live controller to verify the API accepts it
 
 ### Changed
-- `Filter::contains()` now accepts `string|int|float`, so SET(INTEGER) and SET(DECIMAL) properties such as
-  `members.portIdxs`, `units.id` and `broadcastingFrequenciesGHz` can be filtered. Note: subclasses of `Filter`
-  that override `contains(string $value)` must widen their parameter type accordingly
+- `Filter::contains()` now accepts `string|int|float|DateTimeInterface`, and `equals()`, `notEquals()`,
+  `greaterThan()`, `greaterThanOrEqual()`, `lessThan()`, `lessThanOrEqual()` (and their shorthands) also accept
+  `float` and `DateTimeInterface`. Note: subclasses of `Filter` that override these methods must widen their
+  parameter types accordingly
+
+### Deprecated
+- `FirewallZoneFilter::networkIds()`, `FirewallZoneFilter::emptyZones()` and `TrafficMatchingListFilter::type()`:
+  these target properties the API does not accept as filters (`400 api.request.invalid-filter`). They will be
+  removed in 2.0
 
 ### Fixed
+- UUID values in filters are no longer quoted. The API rejected quoted UUIDs (`expected UUID, actual STRING`),
+  so filters on `id`, zone IDs, network IDs, device IDs and similar properties never worked with the builders
 - Single quotes in filter values are now escaped by doubling them (`'Erik''s Lab'`), as required by the API
   filtering syntax. Previously a backslash was used, which made the API reject any filter value containing
   an apostrophe with `400 api.request.invalid-filter`
+- `SET(INTEGER)` and `SET(DECIMAL)` properties (e.g. `members.portIdxs`, `units.id`,
+  `broadcastingFrequenciesGHz`) could not be filtered with `contains()`, which only accepted strings
+- Operator documentation for `DnsPolicyFilter` now matches the API specification (`like` on address
+  properties, `in`/`notIn` on integer properties)
 
 ## [1.1.0] - 2026-03-26
 

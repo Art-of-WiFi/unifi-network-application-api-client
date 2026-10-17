@@ -35,3 +35,39 @@ test('expiredOnly() preset', function () {
     expect(VoucherFilter::expiredOnly()->toString())
         ->toBe('expired.eq(true)');
 });
+
+test('unused() preset', function () {
+    expect(VoucherFilter::unused()->toString())
+        ->toBe('authorizedGuestCount.eq(0)');
+});
+
+test('createdAt() accepts a DateTimeInterface', function () {
+    $date = new DateTimeImmutable('2025-01-01 00:00:00', new DateTimeZone('UTC'));
+
+    expect(VoucherFilter::createdAt()->greaterThan($date)->toString())
+        ->toBe('createdAt.gt(2025-01-01T00:00:00Z)');
+});
+
+test('timestamp properties map to the correct names', function () {
+    $date = new DateTimeImmutable('2025-06-30 12:00:00', new DateTimeZone('UTC'));
+
+    expect(VoucherFilter::activatedAt()->lessThan($date)->toString())
+        ->toBe('activatedAt.lt(2025-06-30T12:00:00Z)');
+    expect(VoucherFilter::expiresAt()->lessThanOrEqual($date)->toString())
+        ->toBe('expiresAt.le(2025-06-30T12:00:00Z)');
+});
+
+test('numeric properties map to the correct names', function () {
+    expect(VoucherFilter::authorizedGuestLimit()->isNull()->toString())
+        ->toBe('authorizedGuestLimit.isNull()');
+    expect(VoucherFilter::authorizedGuestCount()->greaterThan(0)->toString())
+        ->toBe('authorizedGuestCount.gt(0)');
+    expect(VoucherFilter::timeLimitMinutes()->equals(1440)->toString())
+        ->toBe('timeLimitMinutes.eq(1440)');
+    expect(VoucherFilter::dataUsageLimitMBytes()->isNotNull()->toString())
+        ->toBe('dataUsageLimitMBytes.isNotNull()');
+    expect(VoucherFilter::rxRateLimitKbps()->greaterThanOrEqual(1000)->toString())
+        ->toBe('rxRateLimitKbps.ge(1000)');
+    expect(VoucherFilter::txRateLimitKbps()->lessThan(500)->toString())
+        ->toBe('txRateLimitKbps.lt(500)');
+});

@@ -57,13 +57,13 @@ class DevicesResource extends BaseResource
      *
      * @param  int|null  $offset  Pagination offset (optional, default: 0)
      * @param  int|null  $limit  Number of results per page (optional)
-     * @param  string|null  $filter  Filter expression (optional)
+     * @param  string|Filter|null  $filter  Filter expression or Filter object (optional)
      *
      * @throws ClientException If the request fails with a 4xx error (bad request, unauthorized, etc.)
      * @throws ServerException If the request fails with a 5xx error (server error)
      * @throws RequestException|FatalRequestException If the request fails due to network issues or timeout
      */
-    public function listPending(?int $offset = null, ?int $limit = null, ?string $filter = null): Response
+    public function listPending(?int $offset = null, ?int $limit = null, string|Filter|null $filter = null): Response
     {
         return $this->connector->send(new GetPendingDevicesRequest($offset, $limit, $filter));
     }

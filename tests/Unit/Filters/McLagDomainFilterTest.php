@@ -16,7 +16,7 @@ test('name() sets name property', function () {
 
 test('peersDeviceId() sets peers.deviceId property', function () {
     expect(McLagDomainFilter::peersDeviceId()->contains('550e8400-e29b-41d4-a716-446655440000')->toString())
-        ->toBe("peers.deviceId.contains('550e8400-e29b-41d4-a716-446655440000')");
+        ->toBe('peers.deviceId.contains(550e8400-e29b-41d4-a716-446655440000)');
 });
 
 test('peersDeviceId() containsAll', function () {

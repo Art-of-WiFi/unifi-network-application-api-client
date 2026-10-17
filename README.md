@@ -486,9 +486,19 @@ $clients = $apiClient->clients()->list(
     filter: ClientFilter::ipAddress()->isNotNull()
 );
 
-// Set operations - devices with WiFi 6
+// Set operations - devices with the access point feature
 $devices = $apiClient->devices()->listAdopted(
-    filter: DeviceFilter::features()->contains('wifi6')
+    filter: DeviceFilter::features()->contains('accessPoint')
+);
+
+// UUID values - passed as plain strings
+$devices = $apiClient->devices()->listAdopted(
+    filter: DeviceFilter::id()->in(['550e8400-e29b-41d4-a716-446655440000', '6ba7b810-9dad-11d1-80b4-00c04fd430c8'])
+);
+
+// Timestamp values - pass a DateTimeInterface
+$recentClients = $apiClient->clients()->list(
+    filter: ClientFilter::connectedAt()->greaterThan(new DateTimeImmutable('-1 hour'))
 );
 
 // Preset filters for common use cases
@@ -543,6 +553,25 @@ $countries = $apiClient->supportingResources()->listCountries(
 - `VpnServersFilter` - For VPN server filtering
 - `RadiusProfilesFilter` - For RADIUS profile filtering
 - `DeviceTagsFilter` - For device tag filtering
+- `AclRuleFilter` - For ACL rule filtering (incl. source/destination filter properties)
+- `WifiBroadcastFilter` - For WiFi broadcast (SSID) filtering
+- `VoucherFilter` - For hotspot voucher filtering (also usable for bulk voucher deletion)
+- `FirewallZoneFilter` - For firewall zone filtering
+- `TrafficMatchingListFilter` - For traffic matching list filtering
+- `SwitchStackFilter`, `McLagDomainFilter`, `LagFilter` - For switching filtering
+
+**Value Formatting:**
+
+The filter builders format values the way the API expects them, so you can pass native PHP values:
+
+| PHP value | Sent to the API as | Example |
+|-----------|--------------------|---------|
+| String | Single-quoted, `'` escaped as `''` | `name.eq('Erik''s Lab')` |
+| UUID string | Unquoted | `id.eq(550e8400-e29b-41d4-a716-446655440000)` |
+| `int` / `float` | Unquoted | `vlanId.eq(10)`, `broadcastingFrequenciesGHz.contains(2.4)` |
+| `bool` | `true` / `false` | `enabled.eq(true)` |
+| `DateTimeInterface` | Unquoted ISO 8601 in UTC | `connectedAt.gt(2026-01-29T12:39:11Z)` |
+| Backed enum | Its value, formatted as above | `type.eq('WIRELESS')` |
 
 **Available Enums:**
 - `ClientType` - WIRED, WIRELESS, VPN, TELEPORT
@@ -632,19 +661,90 @@ According to the official API specification, the following properties are filter
 - `id` (UUID) - `eq`, `ne`, `in`, `notIn`
 - `enabled` (BOOLEAN) - `eq`, `ne`
 - `domain` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`
-- `ipv4Address` (STRING) - `eq`, `ne`, `in`, `notIn`
-- `ipv6Address` (STRING) - `eq`, `ne`, `in`, `notIn`
+- `ipv4Address` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`
+- `ipv6Address` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`
 - `targetDomain` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`
 - `mailServerDomain` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`
 - `text` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`
 - `serverDomain` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`
-- `ipAddress` (STRING) - `eq`, `ne`, `in`, `notIn`
-- `ttlSeconds` (INTEGER) - `eq`, `ne`, `gt`, `ge`, `lt`, `le`
-- `priority` (INTEGER) - `eq`, `ne`, `gt`, `ge`, `lt`, `le`
+- `ipAddress` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`
+- `ttlSeconds` (INTEGER) - `eq`, `ne`, `gt`, `ge`, `lt`, `le`, `in`, `notIn`
+- `priority` (INTEGER) - `eq`, `ne`, `gt`, `ge`, `lt`, `le`, `in`, `notIn`
 - `service` (STRING) - `eq`, `ne`, `in`, `notIn`
 - `protocol` (STRING) - `eq`, `ne`, `in`, `notIn`
-- `port` (INTEGER) - `eq`, `ne`, `gt`, `ge`, `lt`, `le`
-- `weight` (INTEGER) - `eq`, `ne`, `gt`, `ge`, `lt`, `le`
+- `port` (INTEGER) - `eq`, `ne`, `gt`, `ge`, `lt`, `le`, `in`, `notIn`
+- `weight` (INTEGER) - `eq`, `ne`, `gt`, `ge`, `lt`, `le`, `in`, `notIn`
+
+#### ACL Rule Filterable Properties
+
+According to the official API specification, the following properties are filterable for ACL rules (`AclRuleFilter`):
+
+- `type` (STRING) - `eq`, `ne`, `in`, `notIn` (Valid values: `IPV4`, `MAC`)
+- `id` (UUID) - `eq`, `ne`, `in`, `notIn`
+- `enabled` (BOOLEAN) - `eq`, `ne`
+- `name` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`
+- `description` (STRING) - `isNull`, `isNotNull`, `eq`, `ne`, `in`, `notIn`, `like`
+- `action` (STRING) - `eq`, `ne`, `in`, `notIn` (Valid values: `ALLOW`, `BLOCK`)
+- `index` (INTEGER) - `eq`, `ne`, `gt`, `ge`, `lt`, `le`, `in`, `notIn`
+- `protocolFilter` (SET(STRING)) - `isNull`, `isNotNull`, `contains`, `containsAny`, `containsAll`, `containsExactly`
+- `networkId` (UUID) - `isNull`, `isNotNull`, `eq`, `ne`, `in`, `notIn`
+- `enforcingDeviceFilter.deviceIds` (SET(UUID)) - `isNull`, `isNotNull`, `contains`, `containsAny`, `containsAll`, `containsExactly`
+- `metadata.origin` (STRING) - `eq`, `ne`, `in`, `notIn`
+- `sourceFilter.type` / `destinationFilter.type` (STRING) - `isNull`, `isNotNull`, `eq`, `ne`, `in`, `notIn`
+- `sourceFilter.ipAddressesOrSubnets` / `destinationFilter.ipAddressesOrSubnets` (SET(STRING)) - `contains`, `containsAny`, `containsAll`, `containsExactly`
+- `sourceFilter.portFilter` / `destinationFilter.portFilter` (SET(INTEGER)) - `isNull`, `isNotNull`, `contains`, `containsAny`, `containsAll`, `containsExactly`
+- `sourceFilter.networkIds` / `destinationFilter.networkIds` (SET(UUID)) - `contains`, `containsAny`, `containsAll`, `containsExactly`
+- `sourceFilter.macAddresses` / `destinationFilter.macAddresses` (SET(STRING)) - `contains`, `containsAny`, `containsAll`, `containsExactly`
+- `sourceFilter.prefixLength` / `destinationFilter.prefixLength` (INTEGER) - `isNull`, `isNotNull`, `eq`, `ne`, `gt`, `ge`, `lt`, `le`, `in`, `notIn`
+
+#### WiFi Broadcast Filterable Properties
+
+According to the official API specification, the following properties are filterable for WiFi broadcasts (`WifiBroadcastFilter`):
+
+- `type` (STRING) - `eq`, `ne`, `in`, `notIn` (Valid values: `STANDARD`, `IOT_OPTIMIZED`)
+- `id` (UUID) - `eq`, `ne`, `in`, `notIn`
+- `enabled` (BOOLEAN) - `eq`, `ne`
+- `name` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`
+- `broadcastingFrequenciesGHz` (SET(DECIMAL)) - `contains`, `containsAny`, `containsAll`, `containsExactly`
+- `metadata.origin` (STRING) - `eq`, `ne`, `in`, `notIn`
+- `network.type` (STRING) - `eq`, `ne`, `in`, `notIn`, `isNull`, `isNotNull`
+- `network.networkId` (UUID) - `eq`, `ne`, `in`, `notIn`
+- `securityConfiguration.type` (STRING) - `eq`, `ne`, `in`, `notIn`
+- `broadcastingDeviceFilter.type` (STRING) - `eq`, `ne`, `in`, `notIn`, `isNull`, `isNotNull`
+- `broadcastingDeviceFilter.deviceIds` (SET(UUID)) - `contains`, `containsAny`, `containsAll`, `containsExactly`
+- `broadcastingDeviceFilter.deviceTagIds` (SET(UUID)) - `contains`, `containsAny`, `containsAll`, `containsExactly`
+- `hotspotConfiguration.type` (STRING) - `eq`, `ne`, `in`, `notIn`
+
+#### Hotspot Voucher Filterable Properties
+
+According to the official API specification, the following properties are filterable for vouchers (`VoucherFilter`), both when listing and when deleting vouchers:
+
+- `id` (UUID) - `eq`, `ne`, `in`, `notIn`
+- `createdAt` (TIMESTAMP) - `eq`, `ne`, `gt`, `ge`, `lt`, `le`
+- `name` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`
+- `code` (STRING) - `eq`, `ne`, `in`, `notIn`
+- `authorizedGuestLimit` (INTEGER) - `isNull`, `isNotNull`, `eq`, `ne`, `gt`, `ge`, `lt`, `le`
+- `authorizedGuestCount` (INTEGER) - `eq`, `ne`, `gt`, `ge`, `lt`, `le`
+- `activatedAt` (TIMESTAMP) - `eq`, `ne`, `gt`, `ge`, `lt`, `le`
+- `expiresAt` (TIMESTAMP) - `eq`, `ne`, `gt`, `ge`, `lt`, `le`
+- `expired` (BOOLEAN) - `eq`, `ne`
+- `timeLimitMinutes` (INTEGER) - `eq`, `ne`, `gt`, `ge`, `lt`, `le`
+- `dataUsageLimitMBytes` (INTEGER) - `isNull`, `isNotNull`, `eq`, `ne`, `gt`, `ge`, `lt`, `le`
+- `rxRateLimitKbps` (INTEGER) - `isNull`, `isNotNull`, `eq`, `ne`, `gt`, `ge`, `lt`, `le`
+- `txRateLimitKbps` (INTEGER) - `isNull`, `isNotNull`, `eq`, `ne`, `gt`, `ge`, `lt`, `le`
+
+#### Firewall Zone Filterable Properties
+
+According to the official API specification, the following properties are filterable for firewall zones (`FirewallZoneFilter`):
+
+- `id` (UUID) - `eq`, `ne`, `in`, `notIn`
+- `name` (STRING) - `eq`, `ne`, `in`, `notIn`, `like`
+- `metadata.origin` (STRING) - `eq`, `ne`, `in`, `notIn`
+- `metadata.configurable` (BOOLEAN) - `eq`, `ne`, `isNull`, `isNotNull`
+
+> **Deprecated:** `FirewallZoneFilter::networkIds()`, `FirewallZoneFilter::emptyZones()` and
+> `TrafficMatchingListFilter::type()` target properties the API does not accept as filters (it responds with
+> `400 api.request.invalid-filter`). They are kept for backward compatibility and will be removed in 2.0.
 
 #### Switching Filterable Properties
 

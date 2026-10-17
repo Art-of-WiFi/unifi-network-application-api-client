@@ -16,19 +16,19 @@ use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Filter;
  * - id (UUID) - eq, ne, in, notIn
  * - enabled (BOOLEAN) - eq, ne
  * - domain (STRING) - eq, ne, in, notIn, like
- * - ipv4Address (STRING) - eq, ne, in, notIn
- * - ipv6Address (STRING) - eq, ne, in, notIn
+ * - ipv4Address (STRING) - eq, ne, in, notIn, like
+ * - ipv6Address (STRING) - eq, ne, in, notIn, like
  * - targetDomain (STRING) - eq, ne, in, notIn, like
  * - mailServerDomain (STRING) - eq, ne, in, notIn, like
  * - text (STRING) - eq, ne, in, notIn, like
  * - serverDomain (STRING) - eq, ne, in, notIn, like
- * - ipAddress (STRING) - eq, ne, in, notIn
- * - ttlSeconds (INTEGER) - eq, ne, gt, ge, lt, le
- * - priority (INTEGER) - eq, ne, gt, ge, lt, le
+ * - ipAddress (STRING) - eq, ne, in, notIn, like
+ * - ttlSeconds (INTEGER) - eq, ne, gt, ge, lt, le, in, notIn
+ * - priority (INTEGER) - eq, ne, gt, ge, lt, le, in, notIn
  * - service (STRING) - eq, ne, in, notIn
  * - protocol (STRING) - eq, ne, in, notIn
- * - port (INTEGER) - eq, ne, gt, ge, lt, le
- * - weight (INTEGER) - eq, ne, gt, ge, lt, le
+ * - port (INTEGER) - eq, ne, gt, ge, lt, le, in, notIn
+ * - weight (INTEGER) - eq, ne, gt, ge, lt, le, in, notIn
  *
  * @example
  * ```php
@@ -87,7 +87,7 @@ class DnsPolicyFilter extends Filter
     /**
      * Filter by IPv4 address
      *
-     * Supported operators: eq, ne, in, notIn
+     * Supported operators: eq, ne, in, notIn, like
      */
     public static function ipv4Address(): static
     {
@@ -97,7 +97,7 @@ class DnsPolicyFilter extends Filter
     /**
      * Filter by IPv6 address
      *
-     * Supported operators: eq, ne, in, notIn
+     * Supported operators: eq, ne, in, notIn, like
      */
     public static function ipv6Address(): static
     {
@@ -147,7 +147,7 @@ class DnsPolicyFilter extends Filter
     /**
      * Filter by IP address
      *
-     * Supported operators: eq, ne, in, notIn
+     * Supported operators: eq, ne, in, notIn, like
      */
     public static function ipAddress(): static
     {
@@ -157,7 +157,7 @@ class DnsPolicyFilter extends Filter
     /**
      * Filter by TTL in seconds
      *
-     * Supported operators: eq, ne, gt, ge, lt, le
+     * Supported operators: eq, ne, gt, ge, lt, le, in, notIn
      */
     public static function ttlSeconds(): static
     {
@@ -167,7 +167,7 @@ class DnsPolicyFilter extends Filter
     /**
      * Filter by priority (MX/SRV records)
      *
-     * Supported operators: eq, ne, gt, ge, lt, le
+     * Supported operators: eq, ne, gt, ge, lt, le, in, notIn
      */
     public static function priority(): static
     {
@@ -197,7 +197,7 @@ class DnsPolicyFilter extends Filter
     /**
      * Filter by port number (SRV records)
      *
-     * Supported operators: eq, ne, gt, ge, lt, le
+     * Supported operators: eq, ne, gt, ge, lt, le, in, notIn
      */
     public static function port(): static
     {
@@ -207,7 +207,7 @@ class DnsPolicyFilter extends Filter
     /**
      * Filter by weight (SRV records)
      *
-     * Supported operators: eq, ne, gt, ge, lt, le
+     * Supported operators: eq, ne, gt, ge, lt, le, in, notIn
      */
     public static function weight(): static
     {

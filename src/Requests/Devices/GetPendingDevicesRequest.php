@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ArtOfWiFi\UnifiNetworkApplicationApi\Requests\Devices;
 
+use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Filter;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
@@ -17,7 +18,7 @@ class GetPendingDevicesRequest extends Request
     public function __construct(
         protected ?int $offset = null,
         protected ?int $limit = null,
-        protected ?string $filter = null
+        protected string|Filter|null $filter = null
     ) {}
 
     public function resolveEndpoint(): string
@@ -38,7 +39,9 @@ class GetPendingDevicesRequest extends Request
         }
 
         if ($this->filter !== null) {
-            $query['filter'] = $this->filter;
+            $query['filter'] = $this->filter instanceof Filter
+                ? $this->filter->toString()
+                : $this->filter;
         }
 
         return $query;

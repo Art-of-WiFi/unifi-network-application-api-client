@@ -14,15 +14,11 @@ use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Filter;
  * Filterable Properties (per UniFi API specification):
  * - id (UUID) - eq, ne, in, notIn
  * - name (STRING) - eq, ne, in, notIn, like
- * - type (STRING) - eq, ne, in, notIn
  *
  * @example
  * ```php
  * // Find traffic matching lists by name
  * TrafficMatchingListFilter::name()->like('Blocked*')
- *
- * // Find by type
- * TrafficMatchingListFilter::type()->equals('IP_ADDRESS')
  * ```
  */
 class TrafficMatchingListFilter extends Filter
@@ -50,7 +46,9 @@ class TrafficMatchingListFilter extends Filter
     /**
      * Filter by traffic matching list type
      *
-     * Supported operators: eq, ne, in, notIn
+     * @deprecated `type` is not a filterable property in the UniFi API; the API rejects it with
+     *             `400 api.request.invalid-filter`. Will be removed in 2.0. Fetch the lists and
+     *             inspect their `type` field instead.
      */
     public static function type(): static
     {

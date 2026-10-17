@@ -32,6 +32,11 @@ namespace ArtOfWiFi\UnifiNetworkApplicationApi\Filters;
  */
 abstract class Filter
 {
+    /**
+     * Matches a UUID in 8-4-4-4-12 hexadecimal format
+     */
+    protected const UUID_PATTERN = '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i';
+
     protected array $conditions = [];
 
     protected ?string $currentProperty = null;
@@ -86,9 +91,9 @@ abstract class Filter
     /**
      * Equals operator (eq)
      *
-     * @param  string|int|bool|\BackedEnum  $value  Value to compare
+     * @param  string|int|float|bool|\BackedEnum|\DateTimeInterface  $value  Value to compare
      */
-    public function equals(string|int|bool|\BackedEnum $value): static
+    public function equals(string|int|float|bool|\BackedEnum|\DateTimeInterface $value): static
     {
         return $this->addCondition('eq', $value);
     }
@@ -96,9 +101,9 @@ abstract class Filter
     /**
      * Shorthand for equals()
      *
-     * @param  string|int|bool|\BackedEnum  $value  Value to compare
+     * @param  string|int|float|bool|\BackedEnum|\DateTimeInterface  $value  Value to compare
      */
-    public function eq(string|int|bool|\BackedEnum $value): static
+    public function eq(string|int|float|bool|\BackedEnum|\DateTimeInterface $value): static
     {
         return $this->equals($value);
     }
@@ -106,9 +111,9 @@ abstract class Filter
     /**
      * Not equals operator (ne)
      *
-     * @param  string|int|bool|\BackedEnum  $value  Value to compare
+     * @param  string|int|float|bool|\BackedEnum|\DateTimeInterface  $value  Value to compare
      */
-    public function notEquals(string|int|bool|\BackedEnum $value): static
+    public function notEquals(string|int|float|bool|\BackedEnum|\DateTimeInterface $value): static
     {
         return $this->addCondition('ne', $value);
     }
@@ -116,9 +121,9 @@ abstract class Filter
     /**
      * Shorthand for notEquals()
      *
-     * @param  string|int|bool|\BackedEnum  $value  Value to compare
+     * @param  string|int|float|bool|\BackedEnum|\DateTimeInterface  $value  Value to compare
      */
-    public function ne(string|int|bool|\BackedEnum $value): static
+    public function ne(string|int|float|bool|\BackedEnum|\DateTimeInterface $value): static
     {
         return $this->notEquals($value);
     }
@@ -126,9 +131,9 @@ abstract class Filter
     /**
      * Greater than operator (gt)
      *
-     * @param  string|int  $value  Value to compare
+     * @param  string|int|float|\DateTimeInterface  $value  Value to compare
      */
-    public function greaterThan(string|int $value): static
+    public function greaterThan(string|int|float|\DateTimeInterface $value): static
     {
         return $this->addCondition('gt', $value);
     }
@@ -136,9 +141,9 @@ abstract class Filter
     /**
      * Shorthand for greaterThan()
      *
-     * @param  string|int  $value  Value to compare
+     * @param  string|int|float|\DateTimeInterface  $value  Value to compare
      */
-    public function gt(string|int $value): static
+    public function gt(string|int|float|\DateTimeInterface $value): static
     {
         return $this->greaterThan($value);
     }
@@ -146,9 +151,9 @@ abstract class Filter
     /**
      * Greater than or equal operator (ge)
      *
-     * @param  string|int  $value  Value to compare
+     * @param  string|int|float|\DateTimeInterface  $value  Value to compare
      */
-    public function greaterThanOrEqual(string|int $value): static
+    public function greaterThanOrEqual(string|int|float|\DateTimeInterface $value): static
     {
         return $this->addCondition('ge', $value);
     }
@@ -156,9 +161,9 @@ abstract class Filter
     /**
      * Shorthand for greaterThanOrEqual()
      *
-     * @param  string|int  $value  Value to compare
+     * @param  string|int|float|\DateTimeInterface  $value  Value to compare
      */
-    public function gte(string|int $value): static
+    public function gte(string|int|float|\DateTimeInterface $value): static
     {
         return $this->greaterThanOrEqual($value);
     }
@@ -166,9 +171,9 @@ abstract class Filter
     /**
      * Less than operator (lt)
      *
-     * @param  string|int  $value  Value to compare
+     * @param  string|int|float|\DateTimeInterface  $value  Value to compare
      */
-    public function lessThan(string|int $value): static
+    public function lessThan(string|int|float|\DateTimeInterface $value): static
     {
         return $this->addCondition('lt', $value);
     }
@@ -176,9 +181,9 @@ abstract class Filter
     /**
      * Shorthand for lessThan()
      *
-     * @param  string|int  $value  Value to compare
+     * @param  string|int|float|\DateTimeInterface  $value  Value to compare
      */
-    public function lt(string|int $value): static
+    public function lt(string|int|float|\DateTimeInterface $value): static
     {
         return $this->lessThan($value);
     }
@@ -186,9 +191,9 @@ abstract class Filter
     /**
      * Less than or equal operator (le)
      *
-     * @param  string|int  $value  Value to compare
+     * @param  string|int|float|\DateTimeInterface  $value  Value to compare
      */
-    public function lessThanOrEqual(string|int $value): static
+    public function lessThanOrEqual(string|int|float|\DateTimeInterface $value): static
     {
         return $this->addCondition('le', $value);
     }
@@ -196,9 +201,9 @@ abstract class Filter
     /**
      * Shorthand for lessThanOrEqual()
      *
-     * @param  string|int  $value  Value to compare
+     * @param  string|int|float|\DateTimeInterface  $value  Value to compare
      */
-    public function lte(string|int $value): static
+    public function lte(string|int|float|\DateTimeInterface $value): static
     {
         return $this->lessThanOrEqual($value);
     }
@@ -256,9 +261,9 @@ abstract class Filter
      * Accepts integers and decimals for SET(INTEGER) and SET(DECIMAL) properties,
      * e.g. port indexes or broadcasting frequencies.
      *
-     * @param  string|int|float  $value  Value to check
+     * @param  string|int|float|\DateTimeInterface  $value  Value to check
      */
-    public function contains(string|int|float $value): static
+    public function contains(string|int|float|\DateTimeInterface $value): static
     {
         return $this->addCondition('contains', $value);
     }
@@ -431,6 +436,10 @@ abstract class Filter
     /**
      * Format value for filter string
      *
+     * Per the API filtering syntax, only STRING values are wrapped in single quotes.
+     * UUIDs, numbers, booleans and timestamps must be passed unquoted, so UUID-shaped
+     * strings are emitted as-is and DateTimeInterface values as ISO 8601 UTC timestamps.
+     *
      * @param  mixed  $value  Value to format
      */
     protected function formatValue(mixed $value): string
@@ -438,6 +447,12 @@ abstract class Filter
         // Handle enums - extract their value
         if ($value instanceof \BackedEnum) {
             $value = $value->value;
+        }
+
+        if ($value instanceof \DateTimeInterface) {
+            return \DateTimeImmutable::createFromInterface($value)
+                ->setTimezone(new \DateTimeZone('UTC'))
+                ->format('Y-m-d\TH:i:s\Z');
         }
 
         if (is_bool($value)) {
@@ -450,6 +465,11 @@ abstract class Filter
 
         if (is_float($value)) {
             return (string) $value;
+        }
+
+        // UUID - the API rejects quoted UUIDs ("expected UUID, actual STRING")
+        if (is_string($value) && preg_match(self::UUID_PATTERN, $value) === 1) {
+            return $value;
         }
 
         // String - escape single quotes by doubling them (per API filtering syntax) and wrap in single quotes

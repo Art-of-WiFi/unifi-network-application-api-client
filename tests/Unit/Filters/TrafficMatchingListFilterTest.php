@@ -14,6 +14,7 @@ test('name() sets name property', function () {
         ->toBe("name.like('Blocked*')");
 });
 
+// Deprecated: type is not filterable in the UniFi API, kept for backward compatibility
 test('type() sets type property', function () {
     expect(TrafficMatchingListFilter::type()->equals('IP_ADDRESS')->toString())
         ->toBe("type.eq('IP_ADDRESS')");

@@ -186,6 +186,45 @@ test('array values with single quotes are escaped by doubling them', function ()
         ->toBe("name.in('Erik''s AP', 'AP-2')");
 });
 
+test('UUID values are not quoted', function () {
+    expect(DeviceFilter::id()->equals('550e8400-e29b-41d4-a716-446655440000')->toString())
+        ->toBe('id.eq(550e8400-e29b-41d4-a716-446655440000)');
+});
+
+test('UUID detection is case-insensitive', function () {
+    expect(DeviceFilter::id()->equals('550E8400-E29B-41D4-A716-446655440000')->toString())
+        ->toBe('id.eq(550E8400-E29B-41D4-A716-446655440000)');
+});
+
+test('UUID values in arrays are not quoted', function () {
+    expect(DeviceFilter::id()->in(['550e8400-e29b-41d4-a716-446655440000', '6ba7b810-9dad-11d1-80b4-00c04fd430c8'])->toString())
+        ->toBe('id.in(550e8400-e29b-41d4-a716-446655440000, 6ba7b810-9dad-11d1-80b4-00c04fd430c8)');
+});
+
+test('strings that only resemble a UUID are still quoted', function () {
+    expect(DeviceFilter::name()->equals('550e8400-e29b-41d4-a716')->toString())
+        ->toBe("name.eq('550e8400-e29b-41d4-a716')");
+});
+
+test('DateTimeInterface values are formatted as unquoted ISO 8601 UTC timestamps', function () {
+    $date = new DateTimeImmutable('2025-01-29 14:39:11', new DateTimeZone('Europe/Amsterdam'));
+
+    expect(DeviceFilter::where('connectedAt')->greaterThan($date)->toString())
+        ->toBe('connectedAt.gt(2025-01-29T13:39:11Z)');
+});
+
+test('DateTimeInterface values work with equals()', function () {
+    $date = new DateTime('2025-01-01 00:00:00', new DateTimeZone('UTC'));
+
+    expect(DeviceFilter::where('createdAt')->equals($date)->toString())
+        ->toBe('createdAt.eq(2025-01-01T00:00:00Z)');
+});
+
+test('decimal values are not quoted', function () {
+    expect(DeviceFilter::where('frequencyGHz')->equals(2.4)->toString())
+        ->toBe('frequencyGHz.eq(2.4)');
+});
+
 test('backed enum values are extracted', function () {
     $enum = \ArtOfWiFi\UnifiNetworkApplicationApi\Enums\ClientType::WIRELESS;
     expect(DeviceFilter::where('type')->equals($enum)->toString())

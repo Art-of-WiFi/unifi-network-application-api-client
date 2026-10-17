@@ -14,18 +14,19 @@ use ArtOfWiFi\UnifiNetworkApplicationApi\Filters\Filter;
  * Filterable Properties (per UniFi API specification):
  * - id (UUID) - eq, ne, in, notIn
  * - name (STRING) - eq, ne, in, notIn, like
- * - networkIds (SET(UUID)) - contains, containsAny, containsAll, isEmpty
+ * - metadata.origin (STRING) - eq, ne, in, notIn
+ * - metadata.configurable (BOOLEAN) - eq, ne, isNull, isNotNull
  *
  * @example
  * ```php
  * // Find firewall zone by name
  * FirewallZoneFilter::name()->like('DMZ*')
  *
- * // Find zones containing a specific network
- * FirewallZoneFilter::networkIds()->contains('550e8400-e29b-41d4-a716-446655440000')
+ * // Find user-defined (custom) zones
+ * FirewallZoneFilter::customZones()
  *
- * // Find zones without assigned networks
- * FirewallZoneFilter::networkIds()->isEmpty()
+ * // Find zones whose attached networks can be configured
+ * FirewallZoneFilter::metadataConfigurable()->equals(true)
  * ```
  */
 class FirewallZoneFilter extends Filter
@@ -51,9 +52,31 @@ class FirewallZoneFilter extends Filter
     }
 
     /**
+     * Filter by metadata origin (USER_DEFINED or SYSTEM_DEFINED)
+     *
+     * Supported operators: eq, ne, in, notIn
+     */
+    public static function metadataOrigin(): static
+    {
+        return static::where('metadata.origin');
+    }
+
+    /**
+     * Filter by whether the zone is configurable
+     *
+     * Supported operators: eq, ne, isNull, isNotNull
+     */
+    public static function metadataConfigurable(): static
+    {
+        return static::where('metadata.configurable');
+    }
+
+    /**
      * Filter by network IDs (set operations)
      *
-     * Supported operators: contains, containsAny, containsAll, isEmpty
+     * @deprecated `networkIds` is not a filterable property in the UniFi API; the API rejects
+     *             it with `400 api.request.invalid-filter`. Will be removed in 2.0. Fetch the
+     *             zones and inspect their `networkIds` field instead.
      */
     public static function networkIds(): static
     {
@@ -63,7 +86,18 @@ class FirewallZoneFilter extends Filter
     // ===== Preset Filters =====
 
     /**
+     * Filter for user-defined (custom) zones only
+     */
+    public static function customZones(): static
+    {
+        return static::metadataOrigin()->equals('USER_DEFINED');
+    }
+
+    /**
      * Filter for zones without assigned networks
+     *
+     * @deprecated Relies on the `networkIds` property, which the UniFi API does not accept as a
+     *             filter. Will be removed in 2.0.
      */
     public static function emptyZones(): static
     {
