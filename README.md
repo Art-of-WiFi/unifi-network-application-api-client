@@ -18,6 +18,46 @@ than the official API. If your integration requirements can be met with the offi
 client. For a richer set of features, we currently recommend using the [legacy UniFi API client](https://github.com/Art-of-WiFi/UniFi-API-client).
 
 
+## Table of Contents
+
+- [Features](#features)
+- [Requirements](#requirements)
+- [API Version Compatibility](#api-version-compatibility)
+- [Installation](#installation)
+- [Authentication & Prerequisites](#authentication--prerequisites)
+  - [Generating an API Key](#generating-an-api-key)
+  - [Important Notes](#important-notes)
+- [Quick Start](#quick-start)
+- [Basic Usage](#basic-usage)
+  - [Setting a Site Context](#setting-a-site-context)
+  - [Working with Devices](#working-with-devices)
+  - [Managing Clients](#managing-clients)
+  - [Network Management](#network-management)
+  - [WiFi Management](#wifi-management)
+  - [Hotspot Vouchers](#hotspot-vouchers)
+  - [Supporting Resources](#supporting-resources)
+  - [Firewall & ACL Management](#firewall--acl-management)
+  - [DNS Policies](#dns-policies)
+  - [Switching (Switch Stacks, MC-LAG, LAGs)](#switching-switch-stacks-mc-lag-lags)
+- [Advanced Usage](#advanced-usage)
+  - [Pagination](#pagination)
+  - [Filtering](#filtering)
+  - [Working with Responses](#working-with-responses)
+  - [Response Structure: List vs Single Item](#response-structure-list-vs-single-item)
+  - [Error Handling](#error-handling)
+  - [SSL Certificate Verification](#ssl-certificate-verification)
+  - [Site Manager Connector (Remote Access)](#site-manager-connector-remote-access)
+  - [Version Information](#version-information)
+- [Available Resources](#available-resources)
+- [Examples](#examples)
+- [Upgrading to 1.2.0](#upgrading-to-120)
+- [Migrating from the Legacy Client](#migrating-from-the-legacy-client)
+- [Contributing](#contributing)
+- [Support](#support)
+- [Credits](#credits)
+- [License](#license)
+
+
 ## Features
 
 - Built on Saloon v4 for robust HTTP communication
